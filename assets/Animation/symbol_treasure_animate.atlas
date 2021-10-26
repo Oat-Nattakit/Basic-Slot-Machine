@@ -1,0 +1,104 @@
+
+symbol_treasure_animate.png
+size: 717,1009
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Box_TopLog_1
+  rotate: true
+  xy: 630, 525
+  size: 87, 84
+  orig: 87, 84
+  offset: 0, 0
+  index: -1
+Box_TopLog_2
+  rotate: true
+  xy: 655, 646
+  size: 80, 43
+  orig: 80, 43
+  offset: 0, 0
+  index: -1
+Box_Top_1
+  rotate: false
+  xy: 2, 716
+  size: 470, 291
+  orig: 470, 291
+  offset: 0, 0
+  index: -1
+Box_Top_2
+  rotate: false
+  xy: 2, 145
+  size: 362, 262
+  orig: 362, 262
+  offset: 0, 0
+  index: -1
+Box_Under
+  rotate: false
+  xy: 2, 409
+  size: 428, 305
+  orig: 428, 305
+  offset: 0, 0
+  index: -1
+Coin_1
+  rotate: false
+  xy: 2, 2
+  size: 341, 141
+  orig: 341, 145
+  offset: 0, 4
+  index: -1
+Coin_2
+  rotate: true
+  xy: 366, 123
+  size: 284, 150
+  orig: 284, 150
+  offset: 0, 0
+  index: -1
+lightCoin
+  rotate: false
+  xy: 655, 728
+  size: 60, 279
+  orig: 60, 279
+  offset: 0, 0
+  index: -1
+lightCoin_2
+  rotate: true
+  xy: 474, 614
+  size: 393, 179
+  orig: 393, 179
+  offset: 0, 0
+  index: -1
+star_1
+  rotate: false
+  xy: 432, 413
+  size: 196, 199
+  orig: 196, 199
+  offset: 0, 0
+  index: -1
+star_2
+  rotate: false
+  xy: 518, 103
+  size: 136, 125
+  orig: 136, 125
+  offset: 0, 0
+  index: -1
+star_3
+  rotate: false
+  xy: 630, 437
+  size: 81, 86
+  orig: 81, 86
+  offset: 0, 0
+  index: -1
+star_4
+  rotate: false
+  xy: 345, 7
+  size: 108, 114
+  orig: 108, 114
+  offset: 0, 0
+  index: -1
+star_5
+  rotate: false
+  xy: 518, 230
+  size: 180, 181
+  orig: 180, 181
+  offset: 0, 0
+  index: -1
