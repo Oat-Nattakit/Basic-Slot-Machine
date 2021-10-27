@@ -20,14 +20,14 @@ export default class Reel_Control extends cc.Component {
 
     @property(cc.SpriteFrame)
     private Picture_Symbol: cc.SpriteFrame[] = new Array();
-    
-    private SetNumber: number[] = new Array();    
 
-    private CheckPayline : Payline_Pattern;
+    private SetNumber: number[] = new Array();
+
+    private CheckPayline: Payline_Pattern;
 
     start() {
 
-        this.CheckPayline = Payline_Pattern.GetIns_();                    
+        this.CheckPayline = Payline_Pattern.GetIns_();
         this.RandomPicture();
     }
 
@@ -35,22 +35,22 @@ export default class Reel_Control extends cc.Component {
 
         for (let i = 0; i < this.SlotNode.length; i++) {
 
-            this.SetNumber.push(Math.floor(Math.random() * this.Picture_Symbol.length));            
+            this.SetNumber.push(Math.floor(Math.random() * this.Picture_Symbol.length));
             let GetSp = this.SlotNode[i].getComponent(cc.Sprite);
             GetSp.spriteFrame = this.Picture_Symbol[this.SetNumber[i]];
-        }        
+        }
     }
 
     public StartReelRun() {
 
-        
+
         let WaitingTime = 0;
         for (let i = 0; i < this.ReelAnimation.length; i++) {
             setTimeout(() => this.ReelAnimation[i].play(), WaitingTime);
             WaitingTime += 150;
         }
         for (let i = 0; i < this.SlotNode.length; i++) {
-            this.SetNumber[i] = Math.floor(Math.random() * this.Picture_Symbol.length);           
+            this.SetNumber[i] = Math.floor(Math.random() * this.Picture_Symbol.length);
         }
     }
 
@@ -64,7 +64,7 @@ export default class Reel_Control extends cc.Component {
         }
     }
 
-    private SetPicture_Slot(ReelSlot: number) {
+    async SetPicture_Slot(ReelSlot: number) {
 
         this.ReelAnimation[ReelSlot].stop();
 
@@ -76,16 +76,15 @@ export default class Reel_Control extends cc.Component {
         }
         else if (ReelSlot == 2) {
             this.RoundShowSlot(6, 9);
-            this.CheckPayline.ManagePayline(this.SetNumber);     
-
-        }
+            this.CheckPayline.ManagePayline(this.SetNumber);            
+        }        
     }
 
-    private RoundShowSlot(Min: number, Max: number) {        
+    private RoundShowSlot(Min: number, Max: number) {
         for (let i = Min; i < Max; i++) {
             let GetSp = this.SlotNode[i].getComponent(cc.Sprite);
-            GetSp.spriteFrame = this.Picture_Symbol[this.SetNumber[i]];            
-        }        
-    }    
+            GetSp.spriteFrame = this.Picture_Symbol[this.SetNumber[i]];
+        }
+    }
 }
 

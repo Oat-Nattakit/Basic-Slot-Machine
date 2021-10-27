@@ -11,17 +11,33 @@ const { ccclass, property } = cc._decorator;
 export default class UI_Manager extends cc.Component {
 
     @property(cc.Button)
-    public Spin_Button : cc.Button = null;
+    public Spin_Button: cc.Button = null;
 
-    @property(cc.Button)
-    public StopSpin : cc.Button = null;
+    @property(cc.Node)
+    private TextShowBonus: cc.Node = null;
 
     @property(sp.Skeleton)
     private Bonus_Animation: sp.Skeleton = null;
 
+    private TextBonus: cc.Label;
 
 
-    public PlayerGetBouns() {
-        this.Bonus_Animation.animation = "animate";
+    public startPlayBonusAnimation() {
+        this.TextBonus = this.TextShowBonus.getComponent(cc.Label);
+        this.TextShowBonus.active = false;
+        this.Bonus_Animation.animation = "in";
     }
+    public PlayerGetBouns() {
+
+        this.Bonus_Animation.animation = "animate";
+        this.Bonus_Animation.loop = false;
+        setTimeout(() => this.Bonus_Animation.animation = "idle", 800);
+        this.Bonus_Animation.loop = true;
+        this.TextShowBonus.active = true;
+    }
+
+    public ShowPriceBonus(Reward: number) {
+        this.TextBonus.string = "Reward : " + Reward.toString();
+    }
+
 }

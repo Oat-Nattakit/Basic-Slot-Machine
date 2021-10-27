@@ -32,8 +32,7 @@ export class Payline_Pattern {
         this.checkPayLine_2();
         this.checkPayLine_3();
         this.checkPayLine_4();
-        this.checkPayLine_5();     
-        console.log("Hoho");   
+        this.checkPayLine_5();           
     }
 
     private checkPayLine_1(){

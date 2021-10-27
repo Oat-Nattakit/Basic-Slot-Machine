@@ -20,26 +20,41 @@ export default class NewClass extends cc.Component {
     @property(Reel_Control)
     private Reel_Control: Reel_Control = null;
 
-    private Payline : Payline_Pattern;
+    private Payline: Payline_Pattern;
 
     private ReelRun: boolean = false;
 
     start() {
 
         this.Payline = Payline_Pattern.GetIns_();
-        this.UI_Manager.Spin_Button.node.on('click', this.Spin_Slot, this);
-        this.UI_Manager.StopSpin.node.on('click', this.Stop_Slot, this);
+        this.UI_Manager.Spin_Button.node.on('click', this.Spin_Slot, this);        
     }
 
     private Spin_Slot() {
         if (this.ReelRun == false) {
+            this.UI_Manager.startPlayBonusAnimation();
             this.Reel_Control.StartReelRun();
             this.ReelRun = true;
+            setTimeout(()=> this.Stop_Slot(), 1000);
         }
     }
 
-    async Stop_Slot() {
+    private Stop_Slot() {
         this.Reel_Control.StopReel();
-        this.ReelRun = false;           
+        this.ReelRun = false;       
+        setTimeout(() => this.ShowPlayerBonus(), 400);
+    }
+
+    ShowPlayerBonus() {
+        let GetPlayerPayline = this.Payline.GetPlayerPayline();
+
+        if (GetPlayerPayline.length != 0) {
+
+            for (let i = 0; i < GetPlayerPayline.length; i++) {
+                console.log(GetPlayerPayline[i]);
+            }
+            this.UI_Manager.PlayerGetBouns();
+            this.UI_Manager.ShowPriceBonus(1000);
+        }
     }
 }
