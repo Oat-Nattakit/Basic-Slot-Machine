@@ -5,7 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { Payline_Pattern } from "./Payline_Patten";
+import { Payline_Manager } from "./Payline_Manager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -23,11 +23,11 @@ export default class Reel_Control extends cc.Component {
 
     private SetNumber: number[] = new Array();
 
-    private CheckPayline: Payline_Pattern;
+    private CheckPayline: Payline_Manager;
 
     start() {
 
-        this.CheckPayline = Payline_Pattern.GetIns_();
+        this.CheckPayline = Payline_Manager.GetIns_();
         this.RandomPicture();
     }
 
