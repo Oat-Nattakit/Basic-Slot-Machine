@@ -19,6 +19,18 @@ export default class UI_Manager extends cc.Component {
     @property(sp.Skeleton)
     private Bonus_Animation: sp.Skeleton = null;
 
+    @property(cc.Label)
+    private Balance_Text : cc.Label = null;
+
+    @property(cc.Label)
+    private CurrentBet_Text : cc.Label = null;
+
+    @property(cc.Button)
+    public Add_Bet : cc.Button = null;
+
+    @property(cc.Button)
+    public Del_Bet : cc.Button = null;
+
     private TextBonus: cc.Label;
 
 
@@ -38,6 +50,14 @@ export default class UI_Manager extends cc.Component {
 
     public ShowPriceBonus(Reward: number) {
         this.TextBonus.string = "Reward : " + Reward.toString();
+    }
+
+    public ShowCurrentBalance(Currnet_Balance : string){
+        this.Balance_Text.string = Currnet_Balance;
+    }
+
+    public ShowCurrentBet(CurrentBet : string){
+        this.CurrentBet_Text.string = CurrentBet;
     }
 
 }

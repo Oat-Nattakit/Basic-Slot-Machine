@@ -5,6 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import { Bet_System } from "./Bet_System";
 import { Payline_Manager } from "./Payline_Manager";
 import Reel_Control from "./Reel_Control";
 import UI_Manager from "./UI_Manager";
@@ -21,13 +22,21 @@ export default class NewClass extends cc.Component {
     private Reel_Control: Reel_Control = null;
 
     private Payline: Payline_Manager;
+    private Bet : Bet_System
 
     private ReelRun: boolean = false;
+
+    @property(cc.Integer)
+    private StartBalance : number = 10000;
 
     start() {
 
         this.Payline = Payline_Manager.GetIns_();
+        this.Bet = Bet_System.GetIns();
         this.UI_Manager.Spin_Button.node.on('click', this.Spin_Slot, this);
+        this.UI_Manager.Add_Bet.node.on('click', this.Bet_Manager_Add, this);
+        this.UI_Manager.Del_Bet.node.on('click', this.Bet_Manager_Del, this)
+        this.UI_Manager.ShowCurrentBalance(this.StartBalance.toString());
     }
 
     private Spin_Slot() {
@@ -45,17 +54,23 @@ export default class NewClass extends cc.Component {
         setTimeout(() => this.CheckResult_Player(), 400);
     }
 
-    CheckResult_Player() {
+    private CheckResult_Player() {
         let GetPlayerPayline = this.Payline.GetPlayerPayline();
         let GetSymbolBonus = this.Payline.GetPlayerSymbol();
-        if (GetPlayerPayline.length != 0) {
-
-            for (let i = 0; i < GetPlayerPayline.length; i++) {
-                console.log(GetPlayerPayline[i]);               
-            }
+        if (GetPlayerPayline.length != 0) {            
 
             this.UI_Manager.PlayerGetBouns();
             this.UI_Manager.ShowPriceBonus(1000);
         }
+    }
+
+    private Bet_Manager_Add(){
+        let valueBet = this.Bet.Bet_Control(1);
+        this.UI_Manager.ShowCurrentBet(valueBet);
+    }
+
+    private Bet_Manager_Del(){
+        let valueBet = this.Bet.Bet_Control(-1);
+        this.UI_Manager.ShowCurrentBet(valueBet);
     }
 }
