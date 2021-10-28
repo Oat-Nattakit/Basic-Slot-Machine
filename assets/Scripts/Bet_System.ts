@@ -13,6 +13,9 @@ export class Bet_System {
     private Bet_Price: CreateBet = null;
     private CountBet: number;
 
+    private CountLine: number = 0;
+    private MaxLine: number = 0;
+
     constructor() {
         this.CountBet = 0;
         Bet_System.Ins_ = this;
@@ -25,18 +28,37 @@ export class Bet_System {
         return Bet_System.Ins_;
     }
 
-    public Bet_Control(Value: number) : string {
+    public Bet_Control(Value: number): number {
 
-        let Price_Bet : number = 0;
+        let Price_Bet: number = 0;
         this.CountBet += Value;
         if (this.CountBet <= 0) {
             this.CountBet = 0;
-        }    
-        else if(this.CountBet >= this.Bet_Price.BetStep.length){
-            this.CountBet = this.Bet_Price.BetStep.length-1;
-        }    
-        Price_Bet = this.Bet_Price.BetStep[this.CountBet];        
-        return Price_Bet.toString();
+        }
+        else if (this.CountBet >= this.Bet_Price.BetStep.length) {
+            this.CountBet = this.Bet_Price.BetStep.length - 1;
+        }
+        Price_Bet = this.Bet_Price.BetStep[this.CountBet];
+        return Price_Bet;
+    }
+
+    public LineBet_Start(MaxLine: number) : number{
+        this.CountLine = MaxLine;
+        this.MaxLine = MaxLine;
+        return this.CountLine;
+    }
+
+    public Line_Control(LineBet_Value: number = 0): number {
+
+        this.CountLine += LineBet_Value;
+
+        if (this.CountLine >= this.MaxLine) {
+            this.CountLine = this.MaxLine;
+        }
+        else if (this.CountLine <= 1) {
+            this.CountLine = 1
+        }
+        return this.CountLine;
     }
 }
 

@@ -31,6 +31,18 @@ export default class UI_Manager extends cc.Component {
     @property(cc.Button)
     public Del_Bet : cc.Button = null;
 
+    @property(cc.Label)
+    private BetLine_Text : cc.Label = null;
+
+    @property(cc.Button)
+    public Add_Line : cc.Button = null;
+
+    @property(cc.Button)
+    public Del_Line : cc.Button = null;
+
+    @property(cc.Label)
+    private TotalBet : cc.Label = null;
+
     private TextBonus: cc.Label;
 
 
@@ -56,8 +68,16 @@ export default class UI_Manager extends cc.Component {
         this.Balance_Text.string = Currnet_Balance;
     }
 
-    public ShowCurrentBet(CurrentBet : string){
-        this.CurrentBet_Text.string = CurrentBet;
+    public ShowCurrentBet(CurrentBet : number){
+        this.CurrentBet_Text.string = CurrentBet.toString();
+    }
+
+    public ShowCurrentLineBet(CurrentLineBet : number){
+        this.BetLine_Text.string = CurrentLineBet.toString();
+    }
+
+    public TotalBet_Show(value : number){
+        this.TotalBet.string = value.toString();
     }
 
 }

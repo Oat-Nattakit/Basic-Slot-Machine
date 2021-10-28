@@ -17,7 +17,7 @@ export class Payline_Manager {
     private ListPayline: number[];
     private ListSymbol: number[];
 
-    private PaylineList = new Array();
+    public PaylineList = new Array();
 
 
     constructor() {
@@ -69,7 +69,7 @@ export class Payline_Manager {
     }
     public GetPlayerSymbol(): number[] {
         return this.ListSymbol;
-    }
+    }    
 }
 
 export enum SlotLine {

@@ -22,12 +22,15 @@ export default class NewClass extends cc.Component {
     private Reel_Control: Reel_Control = null;
 
     private Payline: Payline_Manager;
-    private Bet : Bet_System
+    private Bet: Bet_System
 
     private ReelRun: boolean = false;
 
     @property(cc.Integer)
-    private StartBalance : number = 10000;
+    private StartBalance: number = 10000;
+
+    private LineBetValue : number = 0;
+    private Bet_Price : number = 0;
 
     start() {
 
@@ -37,12 +40,19 @@ export default class NewClass extends cc.Component {
         this.UI_Manager.Add_Bet.node.on('click', this.Bet_Manager_Add, this);
         this.UI_Manager.Del_Bet.node.on('click', this.Bet_Manager_Del, this)
         this.UI_Manager.ShowCurrentBalance(this.StartBalance.toString());
+        this.UI_Manager.Add_Line.node.on('click', this.LineBet_Add, this);
+        this.UI_Manager.Del_Line.node.on('click', this.LineBet_Del, this);
+        this.LineBetValue = this.Bet.LineBet_Start(this.Payline.PaylineList.length);
+        this.Bet_Price = this.Bet.Bet_Control(0);
+        this.UpdateDataBut();
+        
     }
 
     private Spin_Slot() {
         if (this.ReelRun == false) {
             this.UI_Manager.startPlayBonusAnimation();
             this.Reel_Control.StartReelRun();
+
             this.ReelRun = true;
             setTimeout(() => this.Stop_Slot(), 1000);
         }
@@ -57,20 +67,40 @@ export default class NewClass extends cc.Component {
     private CheckResult_Player() {
         let GetPlayerPayline = this.Payline.GetPlayerPayline();
         let GetSymbolBonus = this.Payline.GetPlayerSymbol();
-        if (GetPlayerPayline.length != 0) {            
+        if (GetPlayerPayline.length != 0) {
 
             this.UI_Manager.PlayerGetBouns();
-            this.UI_Manager.ShowPriceBonus(1000);
+            this.Cal_Bonus();            
         }
     }
 
-    private Bet_Manager_Add(){
-        let valueBet = this.Bet.Bet_Control(1);
-        this.UI_Manager.ShowCurrentBet(valueBet);
+    private Bet_Manager_Add() {
+        this.Bet_Price = this.Bet.Bet_Control(1);        
+        this.UpdateDataBut();
     }
 
-    private Bet_Manager_Del(){
-        let valueBet = this.Bet.Bet_Control(-1);
-        this.UI_Manager.ShowCurrentBet(valueBet);
+    private Bet_Manager_Del() {
+        this.Bet_Price = this.Bet.Bet_Control(-1);        
+        this.UpdateDataBut();
+    }
+
+    private LineBet_Add() {        
+        this.LineBetValue = this.Bet.Line_Control(1);      
+        this.UpdateDataBut();
+    }
+    private LineBet_Del() {
+        this.LineBetValue = this.Bet.Line_Control(-1);
+        this.UpdateDataBut();
+    }
+    private UpdateDataBut(){
+        this.UI_Manager.ShowCurrentBet(this.Bet_Price);
+        this.UI_Manager.ShowCurrentLineBet(this.LineBetValue);
+        let TotalBet_Value = (this.LineBetValue * this.Bet_Price);
+        this.UI_Manager.TotalBet_Show(TotalBet_Value);
+    }
+
+    private Cal_Bonus(){
+        let PlayBonuse_Value = (this.LineBetValue * this.Bet_Price);
+        //this.UI_Manager.ShowPriceBonus(PlayBonuse_Value);
     }
 }
