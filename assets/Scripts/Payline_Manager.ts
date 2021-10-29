@@ -14,8 +14,11 @@ export class Payline_Manager {
     private GetArrNUm: number[] = null;
     private Payline: CreatePayLine = null;
 
-    private ListPayline: number[];
-    private ListSymbol: number[];
+    private Payout2: CreatePayout2 = null;
+    private Payout3: CreatePayout3 = null;
+
+    private Price_Payout2: number[];
+    private Price_Payout3: number[];
 
     public PaylineList = new Array();
 
@@ -25,51 +28,71 @@ export class Payline_Manager {
     }
 
     public static GetIns_(): Payline_Manager {
-        if ( Payline_Manager.Ins_.Payline == null) {
+        if (Payline_Manager.Ins_.Payline == null) {
             Payline_Manager.Ins_.Payline = new CreatePayLine();
             Payline_Manager.Ins_.CreatePayline();
         }
         return Payline_Manager.Ins_;
     }
 
-    public ManagePayline(value: number[]) {
+    public ManagePayline(value: number[], CountLineBet: number) {
         this.GetArrNUm = value;
-        this.ListPayline = new Array();
-        this.ListSymbol = new Array();
-        this.CheckPayLine();       
+        this.Price_Payout2 = new Array();
+        this.Price_Payout3 = new Array();
+        this.CheckPayLine(CountLineBet);
     }
 
     private CreatePayline() {
         this.PaylineList = this.Payline.CreatePaylineList();
-        
+        this.Payout2 = new CreatePayout2();
+        this.Payout3 = new CreatePayout3();
+
     }
 
-    private CheckPayLine() {
+    private CheckPayLine(CountLineBet: number) {
 
-        for (let i = 0; i < this.PaylineList.length; i++) {
-            let Status = false;
-            if ((this.GetArrNUm[this.PaylineList[i][0]] == this.GetArrNUm[this.PaylineList[i][1]]) 
-            && (this.GetArrNUm[this.PaylineList[i][1]] == this.GetArrNUm[this.PaylineList[i][2]])) {
-                Status = true;
+        for (let i = 0; i < CountLineBet; i++) {
+
+            let Check_PayoutType2 = this.PayoutCheck(this.GetArrNUm[this.PaylineList[i][0]], this.GetArrNUm[this.PaylineList[i][1]]);
+            let Check_PayoutType3 = this.PayoutCheck(this.GetArrNUm[this.PaylineList[i][1]], this.GetArrNUm[this.PaylineList[i][2]]);
+
+            if (Check_PayoutType2 == true && Check_PayoutType3 == true) {
+                let Symbol = this.GetArrNUm[this.PaylineList[i][0]];
+                let Payline = (i + 1);
+                this.PayoutType3_Bonus(Symbol);
             }
-            this.ShowJackPot(Status, i + 1, this.GetArrNUm[this.PaylineList[i][0]]);
-        }
-    }    
-
-    private ShowJackPot(value: boolean, Payline: number, Symbol: number) {
-
-        if (value == true) {
-            this.ListPayline.push(Payline);
-            this.ListSymbol.push(Symbol);            
+            else if (Check_PayoutType2 == true) {
+                let Symbol = this.GetArrNUm[this.PaylineList[i][0]];
+                let Payline = (i + 1);
+                this.PayoutType2_Bonus(Symbol);
+            }
         }
     }
 
-    public GetPlayerPayline(): number[] {
-        return this.ListPayline;
+    private PayoutCheck(Number1: number, Number2: number) {
+        let Payout: boolean = false;
+        if (Number1 == Number2) {
+            Payout = true;
+        }
+        return Payout
     }
-    public GetPlayerSymbol(): number[] {
-        return this.ListSymbol;
-    }    
+
+    private PayoutType2_Bonus(Symbol: number) {
+        let GetPayout_Price: number = this.Payout2.ListPayout2[Symbol];
+        this.Price_Payout2.push(GetPayout_Price);
+    }
+
+    private PayoutType3_Bonus(Symbol: number) {
+        let GetPayout_Price: number = this.Payout3.ListPayout3[Symbol];
+        this.Price_Payout3.push(GetPayout_Price);
+    }
+
+    public Total_Payout2(): number[] {
+        return this.Price_Payout2;
+    }
+    public Total_Payout3(): number[] {
+        return this.Price_Payout3;
+    }
 }
 
 export enum SlotLine {
@@ -82,6 +105,22 @@ export enum SlotLine {
     Slot_6 = 6,
     Slot_7 = 7,
     Slot_8 = 8,
+}
+
+export enum PayoutCount2 {
+    PayoutType2_0 = 5,
+    PayoutType2_1 = 7,
+    PayoutType2_2 = 10,
+    PayoutType2_3 = 15,
+    PayoutType2_4 = 30,
+}
+
+export enum PayoutCount3 {
+    PayoutType3_0 = 10,
+    PayoutType3_1 = 20,
+    PayoutType3_2 = 50,
+    PayoutType3_3 = 100,
+    PayoutType3_4 = 500,
 }
 
 interface SlotPayLine {
@@ -128,5 +167,30 @@ class CreatePayLine extends PayLine {
         this.ListPayLine.push(this.PayLine_5);
 
         return this.ListPayLine;
+    }
+}
+class CreatePayout2 {
+
+    public ListPayout2: number[] = new Array();
+
+    constructor() {
+        this.ListPayout2.push(PayoutCount2.PayoutType2_0);
+        this.ListPayout2.push(PayoutCount2.PayoutType2_1);
+        this.ListPayout2.push(PayoutCount2.PayoutType2_2);
+        this.ListPayout2.push(PayoutCount2.PayoutType2_3);
+        this.ListPayout2.push(PayoutCount2.PayoutType2_4);
+    }
+}
+
+class CreatePayout3 {
+
+    public ListPayout3: number[] = new Array();
+
+    constructor() {
+        this.ListPayout3.push(PayoutCount3.PayoutType3_0);
+        this.ListPayout3.push(PayoutCount3.PayoutType3_1);
+        this.ListPayout3.push(PayoutCount3.PayoutType3_2);
+        this.ListPayout3.push(PayoutCount3.PayoutType3_3);
+        this.ListPayout3.push(PayoutCount3.PayoutType3_4);
     }
 }

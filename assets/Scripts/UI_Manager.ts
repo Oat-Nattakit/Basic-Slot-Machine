@@ -57,15 +57,16 @@ export default class UI_Manager extends cc.Component {
         this.Bonus_Animation.loop = false;
         setTimeout(() => this.Bonus_Animation.animation = "idle", 800);
         this.Bonus_Animation.loop = true;
-        this.TextShowBonus.active = true;
+        //this.TextShowBonus.active = true;
     }
 
     public ShowPriceBonus(Reward: number) {
-        this.TextBonus.string = "Reward : " + Reward.toString();
+        this.TextShowBonus.active = true;
+        this.TextBonus.string = "Reward : " + Reward.toString();        
     }
 
-    public ShowCurrentBalance(Currnet_Balance : string){
-        this.Balance_Text.string = Currnet_Balance;
+    public ShowCurrentBalance(Currnet_Balance : number){
+        this.Balance_Text.string = Currnet_Balance.toString();
     }
 
     public ShowCurrentBet(CurrentBet : number){

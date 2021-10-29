@@ -54,17 +54,17 @@ export default class Reel_Control extends cc.Component {
         }
     }
 
-    public StopReel() {
+    public StopReel(CountLineBet : number) {
 
         let WaitingTime = 0;
         for (let i = 0; i < this.ReelAnimation.length; i++) {
 
-            setTimeout(() => this.SetPicture_Slot(i), WaitingTime);
+            setTimeout(() => this.SetPicture_Slot(i,CountLineBet), WaitingTime);
             WaitingTime += 150;
         }
     }
 
-    async SetPicture_Slot(ReelSlot: number) {
+    private SetPicture_Slot(ReelSlot: number,CountLineBet : number) {
 
         this.ReelAnimation[ReelSlot].stop();
 
@@ -76,7 +76,7 @@ export default class Reel_Control extends cc.Component {
         }
         else if (ReelSlot == 2) {
             this.RoundShowSlot(6, 9);
-            this.CheckPayline.ManagePayline(this.SetNumber);            
+            this.CheckPayline.ManagePayline(this.SetNumber,CountLineBet);            
         }        
     }
 
