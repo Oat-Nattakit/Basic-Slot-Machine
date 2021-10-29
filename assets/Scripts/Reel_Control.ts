@@ -28,7 +28,15 @@ export default class Reel_Control extends cc.Component {
     start() {
 
         this.CheckPayline = Payline_Manager.GetIns_();
+
         this.RandomPicture();
+    }
+
+    private SetDefult_Blackground(){
+        for(let i=0 ; i<this.SlotNode.length  ; i++){
+            let ParentBg_ = this.SlotNode[i].getParent();
+            ParentBg_.color = cc.Color.BLACK;
+        }
     }
 
     private RandomPicture() {
@@ -43,8 +51,8 @@ export default class Reel_Control extends cc.Component {
 
     public StartReelRun() {
 
-
         let WaitingTime = 0;
+        this.SetDefult_Blackground();
         for (let i = 0; i < this.ReelAnimation.length; i++) {
             setTimeout(() => this.ReelAnimation[i].play(), WaitingTime);
             WaitingTime += 150;
@@ -76,8 +84,20 @@ export default class Reel_Control extends cc.Component {
         }
         else if (ReelSlot == 2) {
             this.RoundShowSlot(6, 9);
-            this.CheckPayline.ManagePayline(this.SetNumber,CountLineBet);            
+            this.CheckPayline.ManagePayline(this.SetNumber,CountLineBet);      
+            this.SlotBonus();      
         }        
+    }
+
+    private SlotBonus(){
+        let a = this.CheckPayline.PositionBonuse();
+
+        for(let i=0; i<a.length ; i++){
+            
+            let ParentBg_ = this.SlotNode[a[i]].getParent();
+            ParentBg_.color = cc.Color.YELLOW;
+            
+        }
     }
 
     private RoundShowSlot(Min: number, Max: number) {

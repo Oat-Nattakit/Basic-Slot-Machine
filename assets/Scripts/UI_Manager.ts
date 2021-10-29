@@ -44,20 +44,21 @@ export default class UI_Manager extends cc.Component {
     private TotalBet : cc.Label = null;
 
     private TextBonus: cc.Label;
+    private timer: ReturnType<typeof setTimeout> ;
 
 
     public startPlayBonusAnimation() {
         this.TextBonus = this.TextShowBonus.getComponent(cc.Label);
         this.TextShowBonus.active = false;
-        this.Bonus_Animation.animation = "in";
+        this.Bonus_Animation.animation = "in";              
+        clearTimeout(this.timer);
     }
     public PlayerGetBouns() {
 
         this.Bonus_Animation.animation = "animate";
-        this.Bonus_Animation.loop = false;
-        setTimeout(() => this.Bonus_Animation.animation = "idle", 800);
-        this.Bonus_Animation.loop = true;
-        //this.TextShowBonus.active = true;
+        this.Bonus_Animation.loop = false;        
+        this.timer = setTimeout(() => this.Bonus_Animation.animation = "idle", 800);
+        this.Bonus_Animation.loop = true;        
     }
 
     public ShowPriceBonus(Reward: number) {

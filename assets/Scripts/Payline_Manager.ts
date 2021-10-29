@@ -22,6 +22,8 @@ export class Payline_Manager {
 
     public PaylineList = new Array();
 
+    private listPo: number[];
+
 
     constructor() {
         Payline_Manager.Ins_ = this;
@@ -50,23 +52,39 @@ export class Payline_Manager {
     }
 
     private CheckPayLine(CountLineBet: number) {
-
+        this.listPo = new Array();
         for (let i = 0; i < CountLineBet; i++) {
 
             let Check_PayoutType2 = this.PayoutCheck(this.GetArrNUm[this.PaylineList[i][0]], this.GetArrNUm[this.PaylineList[i][1]]);
             let Check_PayoutType3 = this.PayoutCheck(this.GetArrNUm[this.PaylineList[i][1]], this.GetArrNUm[this.PaylineList[i][2]]);
 
             if (Check_PayoutType2 == true && Check_PayoutType3 == true) {
+
+                let Range_Payout3 = 3;
+                for (let j = 0; j < Range_Payout3; j++) {
+                    this.CollectPositionSlot_GetBonus(this.PaylineList[i][j]);
+                }
                 let Symbol = this.GetArrNUm[this.PaylineList[i][0]];
-                let Payline = (i + 1);
                 this.PayoutType3_Bonus(Symbol);
             }
             else if (Check_PayoutType2 == true) {
-                let Symbol = this.GetArrNUm[this.PaylineList[i][0]];
-                let Payline = (i + 1);
+
+                let Range_Payout2 = 2;
+                for (let j = 0; j < Range_Payout2; j++) {
+                    this.CollectPositionSlot_GetBonus(this.PaylineList[i][j]);
+                }
+
+                let Symbol = this.GetArrNUm[this.PaylineList[i][0]];                
                 this.PayoutType2_Bonus(Symbol);
             }
         }
+    }
+
+    private CollectPositionSlot_GetBonus(Slot_Position: number) {
+        this.listPo.push(Slot_Position);
+    }
+    public PositionBonuse() {
+        return this.listPo;
     }
 
     private PayoutCheck(Number1: number, Number2: number) {
