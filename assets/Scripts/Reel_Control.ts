@@ -5,7 +5,9 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import { Bet_System } from "./Bet_System";
 import { Payline_Manager } from "./Payline_Manager";
+import Reel_Description from "./Reel_Description";
 
 const { ccclass, property } = cc._decorator;
 
@@ -15,8 +17,11 @@ export default class Reel_Control extends cc.Component {
     @property(cc.Node)
     private SlotNode: cc.Node[] = new Array();
 
-    @property(cc.Animation)
-    private ReelAnimation: cc.Animation[] = new Array();
+    @property(cc.Node)
+    public ReelNode: cc.Node[] = new Array();
+
+    private ReelAnimation: cc.Animation[];
+    public Reel_Button: cc.Button[];
 
     @property(cc.SpriteFrame)
     private Picture_Symbol: cc.SpriteFrame[] = new Array();
@@ -24,16 +29,35 @@ export default class Reel_Control extends cc.Component {
     private SetNumber: number[] = new Array();
 
     private CheckPayline: Payline_Manager;
+    private BetSystem: Bet_System;
+
+    private Stack_ReelRun: number = 0;
+    private CountLineBet: number = 0;
+
+    //private StackReelRun: number[] = new Array();
+    private NumberReel_Slot : number[] = new Array();
+
 
     start() {
 
         this.CheckPayline = Payline_Manager.GetIns_();
-
+        this.BetSystem = Bet_System.GetIns();
+        this.GetComponentInNode();
         this.RandomPicture();
     }
 
-    private SetDefult_Blackground(){
-        for(let i=0 ; i<this.SlotNode.length  ; i++){
+    private GetComponentInNode() {
+
+        this.ReelAnimation = new Array(this.ReelNode.length);
+
+        for (let i = 0; i < this.ReelNode.length; i++) {
+            this.ReelNode[i].addComponent(Reel_Description).Reel_Description = (i);
+            this.ReelAnimation[i] = (this.ReelNode[i].getComponent(cc.Animation));
+        }
+    }
+
+    private SetDefult_Blackground() {
+        for (let i = 0; i < this.SlotNode.length; i++) {
             let ParentBg_ = this.SlotNode[i].getParent();
             ParentBg_.color = cc.Color.BLACK;
         }
@@ -42,37 +66,91 @@ export default class Reel_Control extends cc.Component {
     private RandomPicture() {
 
         for (let i = 0; i < this.SlotNode.length; i++) {
-
             this.SetNumber.push(Math.floor(Math.random() * this.Picture_Symbol.length));
             let GetSp = this.SlotNode[i].getComponent(cc.Sprite);
             GetSp.spriteFrame = this.Picture_Symbol[this.SetNumber[i]];
         }
     }
 
-    public StartReelRun() {
+    private RandomResult() {
+
+        if (this.Stack_ReelRun == 0) {
+            for (let i = 0; i < this.SlotNode.length; i++) {
+                this.SetNumber[i] = Math.floor(Math.random() * this.Picture_Symbol.length);
+            }
+        }
+        this.NumberReel_Slot = [Reel_Number.Reel_1, Reel_Number.Reel_2, Reel_Number.Reel_3];
+    }
+
+    public Run_Reel_Once(Button_Reel: cc.Button) {
+
+        if (this.Stack_ReelRun == 0) {
+            this.SetDefult_Blackground();
+            this.RandomResult();
+            this.CountLineBet = this.BetSystem.Current_LineBet();
+        }
+        this.Stack_ReelRun++;
+        let GetNum = Button_Reel.node.getComponent(Reel_Description).Reel_Description;
+        let GetAnimation = Button_Reel.node.getComponent(cc.Animation);
+        this.PlayAnimation(GetNum, GetAnimation);
+        Button_Reel.enabled = false;
+    }
+
+    public Run_Reel_All() {
 
         let WaitingTime = 0;
         this.SetDefult_Blackground();
+        this.RandomResult();
+        this.CountLineBet = this.BetSystem.Current_LineBet();
+
         for (let i = 0; i < this.ReelAnimation.length; i++) {
-            setTimeout(() => this.ReelAnimation[i].play(), WaitingTime);
-            WaitingTime += 150;
-        }
-        for (let i = 0; i < this.SlotNode.length; i++) {
-            this.SetNumber[i] = Math.floor(Math.random() * this.Picture_Symbol.length);
+            if ( this.NumberReel_Slot[i] != -1) {
+                setTimeout(() => this.PlayAnimation(i, this.ReelAnimation[i]), WaitingTime);
+                WaitingTime += 150;
+            }
         }
     }
 
-    public StopReel(CountLineBet : number) {
+    private PlayAnimation(number: number, Aniamtion: cc.Animation) {
+
+        Aniamtion.play();
+        this.NumberReel_Slot[number] = -1;
+    }
+
+    public StopReel_Once(NumberReel: number, ReelAni: cc.Animation) {
+
+        ReelAni.stop();
+        if (NumberReel == 0) {
+            this.RoundShowSlot(0, 3);
+        }
+        else if (NumberReel == 1) {
+            this.RoundShowSlot(3, 6);
+        }
+        else if (NumberReel == 2) {
+            this.RoundShowSlot(6, 9);
+        }
+    }
+
+    public StopReel_All() {
 
         let WaitingTime = 0;
         for (let i = 0; i < this.ReelAnimation.length; i++) {
-
-            setTimeout(() => this.SetPicture_Slot(i,CountLineBet), WaitingTime);
+            setTimeout(() => this.SetPicture_Slot(i), WaitingTime);
             WaitingTime += 150;
         }
     }
 
-    private SetPicture_Slot(ReelSlot: number,CountLineBet : number) {
+    public CheckResul() {
+
+        this.CheckPayline.ManagePayline(this.SetNumber, this.CountLineBet);
+        this.SlotBonus();
+        this.Stack_ReelRun = 0;
+        for (let i = 0; i < this.ReelNode.length; i++) {
+            this.Reel_Button[i].enabled = true;
+        }
+    }
+
+    private SetPicture_Slot(ReelSlot: number) {
 
         this.ReelAnimation[ReelSlot].stop();
 
@@ -84,19 +162,17 @@ export default class Reel_Control extends cc.Component {
         }
         else if (ReelSlot == 2) {
             this.RoundShowSlot(6, 9);
-            this.CheckPayline.ManagePayline(this.SetNumber,CountLineBet);      
-            this.SlotBonus();      
-        }        
+            this.CheckResul();
+        }
     }
 
-    private SlotBonus(){
-        let a = this.CheckPayline.PositionBonuse();
+    private SlotBonus() {
 
-        for(let i=0; i<a.length ; i++){
-            
-            let ParentBg_ = this.SlotNode[a[i]].getParent();
+        let Payline_BlackGroung = this.CheckPayline.PositionBonuse();
+        for (let i = 0; i < Payline_BlackGroung.length; i++) {
+
+            let ParentBg_ = this.SlotNode[Payline_BlackGroung[i]].getParent();
             ParentBg_.color = cc.Color.YELLOW;
-            
         }
     }
 
@@ -108,3 +184,8 @@ export default class Reel_Control extends cc.Component {
     }
 }
 
+enum Reel_Number {
+    Reel_1 = 0,
+    Reel_2 = 1,
+    Reel_3 = 2,
+}

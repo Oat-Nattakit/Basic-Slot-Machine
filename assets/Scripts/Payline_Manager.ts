@@ -38,6 +38,7 @@ export class Payline_Manager {
     }
 
     public ManagePayline(value: number[], CountLineBet: number) {
+        
         this.GetArrNUm = value;
         this.Price_Payout2 = new Array();
         this.Price_Payout3 = new Array();
