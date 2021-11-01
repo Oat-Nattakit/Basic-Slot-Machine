@@ -92,5 +92,4 @@ export default class UI_Manager extends cc.Component {
     public TotalBet_Show(value : number){
         this.TotalBet.string = value.toString();
     }
-
 }
