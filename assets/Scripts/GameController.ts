@@ -69,16 +69,16 @@ export default class NewClass extends cc.Component {
     }
     private Set_DefultReel() {
         this.UI_Manager.startPlayBonusAnimation();
-        this.Balance_Update();        
+        this.Balance_Update();
     }
 
-    private Spin_All_Slot() {        
+    private Spin_All_Slot() {
 
         if (this.ReelRun == false) {
             this.ReelRun = true;
             this.Reel_Control.Run_Reel_All();
-            this.Set_DefultReel();            
-            setTimeout(() => this.Stop_Slot(), 1000);
+            this.Set_DefultReel();
+            setTimeout(() => this.Stop_All_Reel(), 1000);
         }
     }
 
@@ -87,9 +87,10 @@ export default class NewClass extends cc.Component {
         if (this.TotalReel == 0) {
             this.Set_DefultReel();
         }
-        this.Reel_Control.Run_Reel_Once(ButtonReel);
+
         let ReelNumber = ButtonReel.node.getComponent(Reel_Description).Reel_Description;
         let ReelAniamtion = ButtonReel.node.getComponent(cc.Animation);
+        this.Reel_Control.Run_Reel_Once(ButtonReel, ReelNumber);
         ReelAniamtion.play();
         this.TotalReel++;
         setTimeout(() => this.Stop_Once_Reel(ReelNumber, ReelAniamtion), 1000);
@@ -99,33 +100,55 @@ export default class NewClass extends cc.Component {
 
         this.Reel_Control.StopReel_Once(ReelNumber, ReelAnimation);
 
-        if (this.TotalReel == this.Reel_Control.ReelNode.length) {
-            this.Reel_Control.CheckResul();            
+        if (this.TotalReel == this.Reel_Control.ReelNode.length) {            
             this.End_SpinCheckResult();
         }
     }
 
-    private Stop_Slot() {
+    private Stop_All_Reel() {
         this.Reel_Control.StopReel_All();
         this.End_SpinCheckResult();
     }
 
-    private End_SpinCheckResult() {     
-        
+    private End_SpinCheckResult() {
+
         this.TotalReel = 0;
-        this.ReelRun = false;
-        setTimeout(() => this.CheckResult_Player(), 400);
+        this.ReelRun = false;        
+        this.CheckResult_Player();
     }
 
-    private CheckResult_Player() {
+    async CheckResult_Player() {      
+        
+        let Price_reward2: number = 0;
+        let Price_reward3: number = 0;        
 
-        if (this.Payline.Total_Payout3().length != 0) {
+        await this.Payline.Awit2();
+        await this.Payline.Awit3();        
+
+        let GetLine_bonus = this.Payline.PaylineBonus();
+
+        Price_reward2 = this.Payline.Total_Payout2();
+        Price_reward3 = this.Payline.Total_Payout3();
+
+        let Price_reward = Price_reward2 + Price_reward3;
+
+        if (Price_reward != 0) {                        
+            this.UI_Manager.ShowPriceBonus(Price_reward);
+            for(let i=0 ; i<GetLine_bonus.length ; i++){
+                this.UI_Manager.ShowLine_Payline(GetLine_bonus[i]);
+            }
+        }
+        if (Price_reward3 != 0) {
             this.UI_Manager.PlayerGetBouns();
-            this.Price_Calculate();
         }
-        else if (this.Payline.Total_Payout2().length != 0) {
-            this.Price_Calculate();
-        }
+        this.Current_balance += Price_reward;
+        this.UI_Manager.ShowCurrentBalance(this.Current_balance);
+    }
+
+    async TestCheckPayOut() {
+        let Getv2 = await this.Payline.Awit2();
+        let Getv3 = await this.Payline.Awit3();
+        console.log(Getv2 + " awit " + Getv3);
     }
 
     private Bet_Manager_Add() {
@@ -158,27 +181,5 @@ export default class NewClass extends cc.Component {
     private Balance_Update() {
         this.Current_balance = this.Current_balance - this.TotalBet_Value;
         this.UI_Manager.ShowCurrentBalance(this.Current_balance);
-    }
-
-    private Price_Calculate() {
-
-        let StackPayout2 = this.Payline.Total_Payout2();
-        let StackPayout3 = this.Payline.Total_Payout3();
-
-        let Price_reward2 = 0;
-        let Price_reward3 = 0;
-
-        for (let i = 0; i < StackPayout2.length; i++) {
-            Price_reward2 += (StackPayout2[i]) * this.Bet_Price;
-        }
-        for (let i = 0; i < StackPayout3.length; i++) {
-            Price_reward3 += (StackPayout3[i]) * this.Bet_Price;
-        }
-
-        let Price_reward = Price_reward2 + Price_reward3;
-        this.UI_Manager.ShowPriceBonus(Price_reward);
-
-        this.Current_balance += Price_reward;
-        this.UI_Manager.ShowCurrentBalance(this.Current_balance);
-    }
+    }   
 }

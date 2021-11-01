@@ -11,10 +11,10 @@ const { ccclass, property } = cc._decorator;
 export default class UI_Manager extends cc.Component {
 
     @property(cc.Button)
-    public Spin_Button: cc.Button = null;
-
-    @property(cc.Node)
-    private TextShowBonus: cc.Node = null;
+    public Spin_Button: cc.Button = null;   
+    
+    @property(cc.Label)
+    private TextBonus: cc.Label = null;
 
     @property(sp.Skeleton)
     private Bonus_Animation: sp.Skeleton = null;
@@ -43,18 +43,24 @@ export default class UI_Manager extends cc.Component {
     @property(cc.Label)
     private TotalBet : cc.Label = null;
 
-    private TextBonus: cc.Label;
+    @property(cc.Node)
+    private Line_Payline : cc.Node[] = new Array();
+    
     private timer: ReturnType<typeof setTimeout> ;
 
-
     public startPlayBonusAnimation() {
-        this.TextBonus = this.TextShowBonus.getComponent(cc.Label);
-        this.TextShowBonus.active = false;
+        this.Bonus_Animation.node.active = false;
+        this.TextBonus.node.active = false;        
         this.Bonus_Animation.animation = "in";              
         clearTimeout(this.timer);
+
+        for(let i=0 ; i<this.Line_Payline.length ; i++){
+            this.Line_Payline[i].active = false;
+        }
     }
     public PlayerGetBouns() {
 
+        this.Bonus_Animation.node.active = true;
         this.Bonus_Animation.animation = "animate";
         this.Bonus_Animation.loop = false;        
         this.timer = setTimeout(() => this.Bonus_Animation.animation = "idle", 800);
@@ -62,8 +68,13 @@ export default class UI_Manager extends cc.Component {
     }
 
     public ShowPriceBonus(Reward: number) {
-        this.TextShowBonus.active = true;
-        this.TextBonus.string = "Reward : " + Reward.toString();        
+        
+        this.TextBonus.node.active = true;
+        this.TextBonus.string = "Reward : "+ + Reward.toString();        
+    }
+
+    public ShowLine_Payline(Payline_number : number){
+        this.Line_Payline[Payline_number].active = true;
     }
 
     public ShowCurrentBalance(Currnet_Balance : number){

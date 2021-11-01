@@ -34,8 +34,7 @@ export default class Reel_Control extends cc.Component {
     private Stack_ReelRun: number = 0;
     private CountLineBet: number = 0;
 
-    //private StackReelRun: number[] = new Array();
-    private NumberReel_Slot : number[] = new Array();
+    private NumberReel_Slot: number[] = new Array();
 
 
     start() {
@@ -80,9 +79,10 @@ export default class Reel_Control extends cc.Component {
             }
         }
         this.NumberReel_Slot = [Reel_Number.Reel_1, Reel_Number.Reel_2, Reel_Number.Reel_3];
+        
     }
 
-    public Run_Reel_Once(Button_Reel: cc.Button) {
+    public Run_Reel_Once(Button_Reel: cc.Button, ReelNumber : number) {
 
         if (this.Stack_ReelRun == 0) {
             this.SetDefult_Blackground();
@@ -90,9 +90,8 @@ export default class Reel_Control extends cc.Component {
             this.CountLineBet = this.BetSystem.Current_LineBet();
         }
         this.Stack_ReelRun++;
-        let GetNum = Button_Reel.node.getComponent(Reel_Description).Reel_Description;
-        let GetAnimation = Button_Reel.node.getComponent(cc.Animation);
-        this.PlayAnimation(GetNum, GetAnimation);
+        Button_Reel.node.opacity = 120;
+        this.NumberReel_Slot[ReelNumber] = -1;
         Button_Reel.enabled = false;
     }
 
@@ -104,22 +103,17 @@ export default class Reel_Control extends cc.Component {
         this.CountLineBet = this.BetSystem.Current_LineBet();
 
         for (let i = 0; i < this.ReelAnimation.length; i++) {
-            if ( this.NumberReel_Slot[i] != -1) {
-                setTimeout(() => this.PlayAnimation(i, this.ReelAnimation[i]), WaitingTime);
+            if (this.NumberReel_Slot[i] != -1) {                
+                setTimeout(() => this.ReelAnimation[i].play(), WaitingTime);   
+                this.ReelNode[i].opacity = 120;          
                 WaitingTime += 150;
             }
         }
     }
 
-    private PlayAnimation(number: number, Aniamtion: cc.Animation) {
+    public StopReel_Once(NumberReel: number, Reel_Animation: cc.Animation) {
 
-        Aniamtion.play();
-        this.NumberReel_Slot[number] = -1;
-    }
-
-    public StopReel_Once(NumberReel: number, ReelAni: cc.Animation) {
-
-        ReelAni.stop();
+        Reel_Animation.stop();
         if (NumberReel == 0) {
             this.RoundShowSlot(0, 3);
         }
@@ -128,24 +122,29 @@ export default class Reel_Control extends cc.Component {
         }
         else if (NumberReel == 2) {
             this.RoundShowSlot(6, 9);
+        }        
+        if(this.Stack_ReelRun == this.ReelNode.length){
+            setTimeout(() =>this.CheckResul(), 300);            
         }
     }
 
     public StopReel_All() {
 
         let WaitingTime = 0;
-        for (let i = 0; i < this.ReelAnimation.length; i++) {
+        for (let i = 0; i < this.ReelAnimation.length; i++) {            
             setTimeout(() => this.SetPicture_Slot(i), WaitingTime);
             WaitingTime += 150;
+
         }
     }
 
-    public CheckResul() {
+    private CheckResul() {
 
         this.CheckPayline.ManagePayline(this.SetNumber, this.CountLineBet);
         this.SlotBonus();
         this.Stack_ReelRun = 0;
         for (let i = 0; i < this.ReelNode.length; i++) {
+            this.ReelNode[i].opacity = 255;
             this.Reel_Button[i].enabled = true;
         }
     }
@@ -168,15 +167,16 @@ export default class Reel_Control extends cc.Component {
 
     private SlotBonus() {
 
-        let Payline_BlackGroung = this.CheckPayline.PositionBonuse();
-        for (let i = 0; i < Payline_BlackGroung.length; i++) {
+        let Payline_BlackGroung = this.CheckPayline.PositionBonuse();        
 
+        for (let i = 0; i < Payline_BlackGroung.length; i++) {
             let ParentBg_ = this.SlotNode[Payline_BlackGroung[i]].getParent();
             ParentBg_.color = cc.Color.YELLOW;
         }
     }
 
     private RoundShowSlot(Min: number, Max: number) {
+
         for (let i = Min; i < Max; i++) {
             let GetSp = this.SlotNode[i].getComponent(cc.Sprite);
             GetSp.spriteFrame = this.Picture_Symbol[this.SetNumber[i]];
@@ -184,7 +184,7 @@ export default class Reel_Control extends cc.Component {
     }
 }
 
-enum Reel_Number {
+export enum Reel_Number {
     Reel_1 = 0,
     Reel_2 = 1,
     Reel_3 = 2,
