@@ -14,7 +14,7 @@ import UI_Manager from "./UI_Manager";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class Game_Control extends cc.Component {
 
     @property(UI_Manager)
     private UI_Manager: UI_Manager = null;
