@@ -7,9 +7,9 @@
 
 const { ccclass, property } = cc._decorator;
 
-export class Bet_System {
+export class Bet_Manager {
 
-    private static Ins_: Bet_System = new Bet_System();
+    private static Ins_: Bet_Manager = new Bet_Manager();
     private Bet_Price: CreateBet = null;
     private CountBet: number;
 
@@ -19,14 +19,14 @@ export class Bet_System {
 
     constructor() {
         this.CountBet = 0;
-        Bet_System.Ins_ = this;
+        Bet_Manager.Ins_ = this;
     }
 
-    public static GetIns(): Bet_System {
-        if (Bet_System.Ins_.Bet_Price == null) {
-            Bet_System.Ins_.Bet_Price = new CreateBet();
+    public static GetIns(): Bet_Manager {
+        if (Bet_Manager.Ins_.Bet_Price == null) {
+            Bet_Manager.Ins_.Bet_Price = new CreateBet();
         }
-        return Bet_System.Ins_;
+        return Bet_Manager.Ins_;
     }
 
     public Bet_Control(Value: number){

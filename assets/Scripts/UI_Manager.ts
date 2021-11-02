@@ -51,9 +51,12 @@ export default class UI_Manager extends cc.Component {
     public startPlayBonusAnimation() {
         this.Bonus_Animation.node.active = false;
         this.TextBonus.node.active = false;        
-        this.Bonus_Animation.animation = "in";              
-        clearTimeout(this.timer);
+        this.Bonus_Animation.animation = "in";       
+        this.Unactive_Line_Payline();       
+        clearTimeout(this.timer);        
+    }
 
+    private Unactive_Line_Payline(){
         for(let i=0 ; i<this.Line_Payline.length ; i++){
             this.Line_Payline[i].active = false;
         }
@@ -64,7 +67,7 @@ export default class UI_Manager extends cc.Component {
         this.Bonus_Animation.animation = "animate";
         this.Bonus_Animation.loop = false;        
         this.timer = setTimeout(() => this.Bonus_Animation.animation = "idle", 800);
-        this.Bonus_Animation.loop = true;        
+        this.Bonus_Animation.loop = true;          
     }
 
     public ShowPriceBonus(Reward: number) {
@@ -73,7 +76,7 @@ export default class UI_Manager extends cc.Component {
         this.TextBonus.string = "Reward : "+ + Reward.toString();        
     }
 
-    public ShowLine_Payline(Payline_number : number){
+    public Active_Line_Payline(Payline_number : number){
         this.Line_Payline[Payline_number].active = true;
     }
 
@@ -91,5 +94,13 @@ export default class UI_Manager extends cc.Component {
 
     public TotalBet_Show(value : number){
         this.TotalBet.string = value.toString();
+    }
+
+    public SetSlot_BG_Bonuse(Node_BG : cc.Node[]){
+        
+        for(let i=0 ; i<Node_BG.length ; i++){
+            Node_BG[i].color = cc.Color.YELLOW;
+            Node_BG[i].children[0].opacity = 255;            
+        }
     }
 }

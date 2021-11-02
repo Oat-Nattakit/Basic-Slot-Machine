@@ -83,11 +83,7 @@ export class Payline_Manager {
                 let Symbol = this.Current_SlotNumber[this.PaylineList[i][Reel_Number.Reel_1]];
                 this.PayoutType2_Bonus(Symbol);
             }
-        }
-
-        for(let i=0 ; i<this.PaylineTrue.length ; i++){
-            console.log(this.PaylineTrue[i]+1);
-        }
+        }        
     }
 
     private CollectPositionSlot_GetBonus(Slot_Position: number) {
@@ -138,14 +134,14 @@ export class Payline_Manager {
         return new Promise(resolve => {
             setTimeout(() => {
               resolve(this.Total_Payout2());
-            }, 400);
+            }, 300);
           });
     }
     public Awit3(){
         return new Promise(resolve => {
             setTimeout(() => {
               resolve(this.Total_Payout3());
-            }, 400);
+            }, 300);
           });
     }
 }

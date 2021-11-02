@@ -5,7 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { Bet_System } from "./Bet_System";
+import { Bet_Manager } from "./Bet_Manager";
 import { Payline_Manager } from "./Payline_Manager";
 import Reel_Control from "./Reel_Control";
 import Reel_Description from "./Reel_Description";
@@ -16,14 +16,14 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class Game_Control extends cc.Component {
 
-    @property(UI_Manager)
+    //@property(UI_Manager)
     private UI_Manager: UI_Manager = null;
 
-    @property(Reel_Control)
+    //@property(Reel_Control)
     private Reel_Control: Reel_Control = null;
 
     private Payline: Payline_Manager;
-    private Bet: Bet_System
+    private Bet: Bet_Manager
 
     private ReelRun: boolean = false;
 
@@ -36,12 +36,19 @@ export default class Game_Control extends cc.Component {
 
     private TotalReel: number = 0;
 
-    start() {
+    onLoad(){
+        this.UI_Manager = this.node.getComponent(UI_Manager);
+        this.Reel_Control = this.node.getComponent(Reel_Control);
 
         this.Payline = Payline_Manager.GetIns_();
-        this.Bet = Bet_System.GetIns();
+        this.Bet = Bet_Manager.GetIns();
+    }
+
+    start() {
+        
         this.SetButton_Function();
         this.SetReelButton();
+
         this.UI_Manager.ShowCurrentBalance(this.Current_balance);
         this.LineBetValue = this.Bet.LineBet_Start(this.Payline.PaylineList.length);
         this.Bet.Bet_Control(0);
@@ -123,7 +130,10 @@ export default class Game_Control extends cc.Component {
         let Price_reward3: number = 0;        
 
         await this.Payline.Awit2();
-        await this.Payline.Awit3();        
+        await this.Payline.Awit3();       
+       
+        let GetBGSlot = this.Reel_Control.SlotBonus();
+        this.UI_Manager.SetSlot_BG_Bonuse(GetBGSlot);
 
         let GetLine_bonus = this.Payline.PaylineBonus();
 
@@ -135,7 +145,7 @@ export default class Game_Control extends cc.Component {
         if (Price_reward != 0) {                        
             this.UI_Manager.ShowPriceBonus(Price_reward);
             for(let i=0 ; i<GetLine_bonus.length ; i++){
-                this.UI_Manager.ShowLine_Payline(GetLine_bonus[i]);
+                this.UI_Manager.Active_Line_Payline(GetLine_bonus[i]);
             }
         }
         if (Price_reward3 != 0) {
@@ -143,12 +153,6 @@ export default class Game_Control extends cc.Component {
         }
         this.Current_balance += Price_reward;
         this.UI_Manager.ShowCurrentBalance(this.Current_balance);
-    }
-
-    async TestCheckPayOut() {
-        let Getv2 = await this.Payline.Awit2();
-        let Getv3 = await this.Payline.Awit3();
-        console.log(Getv2 + " awit " + Getv3);
     }
 
     private Bet_Manager_Add() {
