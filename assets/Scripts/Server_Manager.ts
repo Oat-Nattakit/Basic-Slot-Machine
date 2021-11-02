@@ -34,18 +34,42 @@ export class Server_Manager{
 
     public Slot_Result() : number[]{
 
-        for(let i=0 ; i<this.Result.length ; i++){
+        /*for(let i=0 ; i<this.Result.length ; i++){
             this.Result[i] = Math.floor(Math.random() * 5);            
-        }
+        }*/
         return this.Result;
-    }
+
+      /*  setTimeout(()=> this.Result = this.Test2() , 1000);
+        return this.Result;*/
+        
+    }    
+
+   /* private Test2(){
+        let asflkds : number[] = new Array();
+        for(let i=0 ; i<this.Result.length ; i++){
+            asflkds.push(Math.floor(Math.random() * 5));            
+        }
+        return asflkds;
+    }*/
 
     public Result_Round(Line : number , Bet : number , Current_Balance : number , Total_Bet : number){
-        this.Data = new SetData(Line,Bet,Current_Balance,Total_Bet);
+       
+        this.Data = new SetData(Line,Bet,Current_Balance,Total_Bet);       
+        
         return this.Data;        
     }
 
+    /*public Test() {
+        return new Promise(resolve => {
+            setTimeout(() => {
+              resolve(this.Slot_Result() != null);
+            });
+          });
+    }*/
+
 }
+
+
 
 interface SlotDataPatten{
     Line : number;
