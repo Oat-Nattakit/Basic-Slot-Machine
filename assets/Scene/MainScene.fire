@@ -7696,23 +7696,6 @@
     "_id": "6czEt/7OBPpKzSMNkYy6AQ"
   },
   {
-    "__type__": "1ee0eDbGl9Jl5tVHcXPuDJd",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 165
-    },
-    "_enabled": true,
-    "UI_Manager": {
-      "__id__": 166
-    },
-    "Reel_Control": {
-      "__id__": 168
-    },
-    "Current_balance": 10000,
-    "_id": "5a0YbGbStK4qx+BDv6Fs3K"
-  },
-  {
     "__type__": "8faddV/kslCzpIs3sXPvhgi",
     "_name": "",
     "_objFlags": 0,
@@ -7778,5 +7761,16 @@
       }
     ],
     "_id": "a2OvXxMzlBMp0wlWuUVZDu"
+  },
+  {
+    "__type__": "7e07aQbIMZAhZbr6xmHACAo",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 165
+    },
+    "_enabled": true,
+    "Current_balance": 10000,
+    "_id": "1fgi3biHhOGYG/h/MSlJKk"
   }
 ]

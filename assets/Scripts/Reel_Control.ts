@@ -6,7 +6,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { Bet_Manager } from "./Bet_Manager";
-import { Payline_Manager } from "./Payline_Manager";
+import { Payline_Manager, SlotLine } from "./Payline_Manager";
 import Reel_Description from "./Reel_Description";
 import { Server_Manager } from "./Server_Manager";
 
@@ -117,13 +117,13 @@ export default class Reel_Control extends cc.Component {
 
         Reel_Animation.stop();
         if (NumberReel == 0) {
-            this.RoundShowSlot(0, 3);
+            this.RoundShowSlot(SlotLine.Slot_0, SlotLine.Slot_3);
         }
         else if (NumberReel == 1) {
-            this.RoundShowSlot(3, 6);
+            this.RoundShowSlot(SlotLine.Slot_3, SlotLine.Slot_6);
         }
         else if (NumberReel == 2) {
-            this.RoundShowSlot(6, 9);
+            this.RoundShowSlot(SlotLine.Slot_6, this.SlotNode.length);
         }
         if(this.Stack_ReelRun == this.ReelNode.length){
             setTimeout(() =>this.Slot_Setresult(), 300);            
@@ -153,13 +153,13 @@ export default class Reel_Control extends cc.Component {
         this.ReelAnimation[ReelSlot].stop();
 
         if (ReelSlot == 0) {
-            this.RoundShowSlot(0, 3);
+            this.RoundShowSlot(SlotLine.Slot_0, SlotLine.Slot_3);
         }
         else if (ReelSlot == 1) {
-            this.RoundShowSlot(3, 6);
+            this.RoundShowSlot(SlotLine.Slot_3, SlotLine.Slot_6);
         }
         else if (ReelSlot == 2) {
-            this.RoundShowSlot(6, 9);
+            this.RoundShowSlot(SlotLine.Slot_6, this.SlotNode.length);
             this.Slot_Setresult();
         }
     }

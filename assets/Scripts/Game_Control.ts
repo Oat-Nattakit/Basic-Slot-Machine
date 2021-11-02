@@ -9,6 +9,7 @@ import { Bet_Manager } from "./Bet_Manager";
 import { Payline_Manager } from "./Payline_Manager";
 import Reel_Control from "./Reel_Control";
 import Reel_Description from "./Reel_Description";
+import { Server_Manager } from "./Server_Manager";
 import UI_Manager from "./UI_Manager";
 
 const { ccclass, property } = cc._decorator;
@@ -16,14 +17,11 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class Game_Control extends cc.Component {
 
-    //@property(UI_Manager)
     private UI_Manager: UI_Manager = null;
-
-    //@property(Reel_Control)
     private Reel_Control: Reel_Control = null;
-
     private Payline: Payline_Manager;
     private Bet: Bet_Manager
+    private Server_ : Server_Manager;
 
     private ReelRun: boolean = false;
 
@@ -42,6 +40,9 @@ export default class Game_Control extends cc.Component {
 
         this.Payline = Payline_Manager.GetIns_();
         this.Bet = Bet_Manager.GetIns();
+        this.Server_ = Server_Manager.Getinstant();
+
+        this.UI_Manager.add_ArrayButton();
     }
 
     start() {
@@ -76,6 +77,7 @@ export default class Game_Control extends cc.Component {
     }
     private Set_DefultReel() {
         this.UI_Manager.startPlayBonusAnimation();
+        this.Server_.Result_Round(this.LineBetValue , this.Bet_Price ,this.Current_balance , this.TotalBet_Value);
         this.Balance_Update();
     }
 
@@ -131,6 +133,8 @@ export default class Game_Control extends cc.Component {
 
         await this.Payline.Awit2();
         await this.Payline.Awit3();       
+
+        this.UI_Manager.Button_Status(true);
        
         let GetBGSlot = this.Reel_Control.SlotBonus();
         this.UI_Manager.SetSlot_BG_Bonuse(GetBGSlot);
@@ -143,12 +147,13 @@ export default class Game_Control extends cc.Component {
         let Price_reward = Price_reward2 + Price_reward3;
 
         if (Price_reward != 0) {                        
-            this.UI_Manager.ShowPriceBonus(Price_reward);
+            this.UI_Manager.ShowPriceBonus(Price_reward,false);
             for(let i=0 ; i<GetLine_bonus.length ; i++){
                 this.UI_Manager.Active_Line_Payline(GetLine_bonus[i]);
             }
         }
         if (Price_reward3 != 0) {
+            this.UI_Manager.ShowPriceBonus(Price_reward,true);
             this.UI_Manager.PlayerGetBouns();
         }
         this.Current_balance += Price_reward;
