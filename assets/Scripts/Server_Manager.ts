@@ -34,9 +34,9 @@ export class Server_Manager{
 
     public Slot_Result() : number[]{
 
-        /*for(let i=0 ; i<this.Result.length ; i++){
+        for(let i=0 ; i<this.Result.length ; i++){
             this.Result[i] = Math.floor(Math.random() * 5);            
-        }*/
+        }
         return this.Result;
 
       /*  setTimeout(()=> this.Result = this.Test2() , 1000);
