@@ -78,35 +78,35 @@ export default class Game_Control extends cc.Component {
         this.UI_Manager.startPlayBonusAnimation();
         let Test = this.Server_.Result_Round(this.LineBetValue, this.Bet_Price, this.Current_balance, this.TotalBet_Value);
         this.Balance_Update();
+        this.Reel_Control.SetValue_SlotSymbol();
     }
 
-    private Spin_All_Slot() {
+    async Spin_All_Slot() {
 
         if (this.ReelRun == false) {
             this.ReelRun = true;
             this.Reel_Control.Run_Reel_All();
-            this.Set_DefultReel();
+            await this.Set_DefultReel();
             setTimeout(() => this.Stop_All_Reel(), 1000);
         }
     }
 
-    private Spin_Once_Slot(ButtonReel: cc.Button) {
+    async Spin_Once_Slot(ButtonReel: cc.Button) {
 
         if (this.TotalReel == 0) {
-            this.Set_DefultReel();
+            await this.Set_DefultReel();
         }
-
         let ReelNumber = ButtonReel.node.getComponent(Reel_Description).Reel_Description;
         let ReelAniamtion = ButtonReel.node.getComponent(cc.Animation);
         this.Reel_Control.Run_Reel_Once(ButtonReel, ReelNumber);
         ReelAniamtion.play();
         this.TotalReel++;
-        setTimeout(() => this.Stop_Once_Reel(ReelNumber, ReelAniamtion), 1000);
+        setTimeout(() => this.Stop_Once_Reel(ReelNumber), 1000);
     }
 
-    private Stop_Once_Reel(ReelNumber: number, ReelAnimation: cc.Animation) {
+    private Stop_Once_Reel(ReelNumber: number) {
 
-        this.Reel_Control.StopReel_Once(ReelNumber, ReelAnimation);
+        setTimeout(()=>this.Reel_Control.SetPicture_Slot(ReelNumber),100*this.TotalReel);
 
         if (this.TotalReel == this.Reel_Control.ReelNode.length) {
             this.End_SpinCheckResult();
@@ -114,26 +114,27 @@ export default class Game_Control extends cc.Component {
     }
 
     private Stop_All_Reel() {
-        this.Reel_Control.StopReel_All();
+
+        let Reel_Range: number = this.Reel_Control.ReelNode.length;
+        for (let i = 0; i < Reel_Range; i++) {
+            setTimeout(()=> this.Reel_Control.SetPicture_Slot(i),100*i);
+        }
         this.End_SpinCheckResult();
     }
 
-    private End_SpinCheckResult() {
+    private async End_SpinCheckResult() {
 
         this.TotalReel = 0;
         this.ReelRun = false;
+        let LineBet = this.Bet.Current_LineBet();   
+        await this.Payline.Check_Result(LineBet);
         this.CheckResult_Player();
     }
 
-    async CheckResult_Player() {
+    private CheckResult_Player() {
 
         let Price_reward2: number = 0;
         let Price_reward3: number = 0;
-
-        await this.Payline.Awit2();
-        await this.Payline.Awit3();
-
-        this.UI_Manager.Button_Status(true);
 
         let GetBGSlot = this.Reel_Control.SlotBonus();
         this.UI_Manager.SetSlot_BG_Bonuse(GetBGSlot);
@@ -157,6 +158,8 @@ export default class Game_Control extends cc.Component {
         }
         this.Current_balance += Price_reward;
         this.UI_Manager.ShowCurrentBalance(this.Current_balance);
+        this.UI_Manager.Button_Status(true);
+        this.Server_.GetValueRound = false;
     }
 
     private Bet_Manager_Add() {

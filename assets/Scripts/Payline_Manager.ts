@@ -26,7 +26,7 @@ export class Payline_Manager {
 
     private listPo: number[];
 
-    private PaylineTrue : number[] ;
+    private PaylineTrue: number[];
 
 
     constructor() {
@@ -41,28 +41,35 @@ export class Payline_Manager {
         return Payline_Manager.Ins_;
     }
 
-    public ManagePayline(value: number[], CountLineBet: number) {
-
+    public ManagePayline(value: number[]) {
         this.Current_SlotNumber = value;
         this.Price_Payout2 = new Array();
         this.Price_Payout3 = new Array();
-        this.CheckPayLine(CountLineBet);
     }
 
     private CreatePayline() {
         this.PaylineList = this.Payline.CreatePaylineList();
         this.Payout2 = new CreatePayout2();
         this.Payout3 = new CreatePayout3();
+    }
 
+    public Check_Result(CountLineBet) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(this.CheckPayLine(CountLineBet));
+            }, 400);
+        });
     }
 
     private CheckPayLine(CountLineBet: number) {
+
         this.listPo = new Array();
         this.PaylineTrue = new Array();
+
         for (let i = 0; i < CountLineBet; i++) {
 
             let Check_PayoutType2 = this.PayoutCheck(this.Current_SlotNumber[this.PaylineList[i][Reel_Number.Reel_1]], this.Current_SlotNumber[this.PaylineList[i][Reel_Number.Reel_2]]);
-            let Check_PayoutType3 = this.PayoutCheck(this.Current_SlotNumber[this.PaylineList[i][1]], this.Current_SlotNumber[this.PaylineList[i][Reel_Number.Reel_3]]);
+            let Check_PayoutType3 = this.PayoutCheck(this.Current_SlotNumber[this.PaylineList[i][Reel_Number.Reel_2]], this.Current_SlotNumber[this.PaylineList[i][Reel_Number.Reel_3]]);
 
             if (Check_PayoutType2 == true && Check_PayoutType3 == true) {
                 let Range_Payout3 = 3;
@@ -83,7 +90,7 @@ export class Payline_Manager {
                 let Symbol = this.Current_SlotNumber[this.PaylineList[i][Reel_Number.Reel_1]];
                 this.PayoutType2_Bonus(Symbol);
             }
-        }        
+        }
     }
 
     private CollectPositionSlot_GetBonus(Slot_Position: number) {
@@ -92,7 +99,7 @@ export class Payline_Manager {
     public PositionBonuse() {
         return this.listPo;
     }
-    public PaylineBonus(){
+    public PaylineBonus() {
         return this.PaylineTrue;
     }
 
@@ -114,36 +121,35 @@ export class Payline_Manager {
         this.Price_Payout3.push(GetPayout_Price);
     }
 
-    public Total_Payout2() : number{
-
-        let RewardCOunt : number =0;
-        for(let i=0 ; i<this.Price_Payout2.length ; i++){
-            RewardCOunt += this.Price_Payout2[i];
-        }       
-        return RewardCOunt;
+    public Total_Payout2(): number {
+        let RewardCount: number = 0;
+        for (let i = 0; i < this.Price_Payout2.length; i++) {
+            RewardCount += this.Price_Payout2[i];
+        }
+        return RewardCount;
     }
-    public Total_Payout3() : number {
-        let RewardCOunt : number = 0;
-        for(let i=0 ; i<this.Price_Payout3.length ; i++){
-            RewardCOunt += this.Price_Payout3[i];
-        }       
-        return RewardCOunt;
+    public Total_Payout3(): number {
+        let RewardCount: number = 0;
+        for (let i = 0; i < this.Price_Payout3.length; i++) {
+            RewardCount += this.Price_Payout3[i];
+        }
+        return RewardCount;
     }
 
-    public Awit2() {
+    /*public Awit2() {
         return new Promise(resolve => {
             setTimeout(() => {
               resolve(this.Total_Payout2());
-            }, 300);
+            }, 500);
           });
     }
     public Awit3(){
         return new Promise(resolve => {
             setTimeout(() => {
               resolve(this.Total_Payout3());
-            }, 300);
+            }, 500);
           });
-    }
+    }*/
 }
 
 export enum SlotLine {

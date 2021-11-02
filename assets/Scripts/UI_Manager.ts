@@ -68,9 +68,10 @@ export default class UI_Manager extends cc.Component {
     }
     
     public Button_Status(Status : boolean) {
+
         for(let i=0 ; i<this.ListButton.length ; i++){
             this.ListButton[i].interactable = Status;
-        }        
+        }
     }  
 
     public PlayerGetBouns() {
