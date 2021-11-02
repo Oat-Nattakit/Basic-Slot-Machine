@@ -51,7 +51,6 @@ export default class UI_Manager extends cc.Component {
     private ListButton: cc.Button[] = new Array();
 
     public add_ArrayButton() {
-
         this.ListButton.push(this.Spin_Button);
         this.ListButton.push(this.Add_Bet);
         this.ListButton.push(this.Add_Line);
@@ -75,7 +74,6 @@ export default class UI_Manager extends cc.Component {
     }  
 
     public PlayerGetBouns() {
-
         this.Bonus_Animation.node.active = true;
         this.Bonus_Animation.animation = "animate";
         this.Bonus_Animation.loop = false;
@@ -84,7 +82,6 @@ export default class UI_Manager extends cc.Component {
     }
 
     public ShowPriceBonus(Reward: number, Bonus: boolean) {
-
         this.TextBonus.node.active = true;
         if (Bonus == true) {
             this.TextBonus.string = "Bonus : " + + Reward.toString();

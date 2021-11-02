@@ -14,6 +14,8 @@ export class Server_Manager{
     private Result : number[];
     private Balance : number = 10000;
 
+    private Data : SetData;
+
     constructor(){
         Server_Manager.Ins = this;
     }
@@ -39,7 +41,30 @@ export class Server_Manager{
     }
 
     public Result_Round(Line : number , Bet : number , Current_Balance : number , Total_Bet : number){
-        //console.log(Line+" "+Bet+" "+Current_Balance+" "+Total_Bet);
+        this.Data = new SetData(Line,Bet,Current_Balance,Total_Bet);
+        return this.Data;        
     }
 
+}
+
+interface SlotDataPatten{
+    Line : number;
+    Bet : number;
+    Balance : number;
+    Total_Bet  : number;
+}
+
+class SetData implements SlotDataPatten{
+
+    Line : number;
+    Bet : number;
+    Balance : number;
+    Total_Bet  : number;
+
+    constructor(line : number , bet : number , Current_Balance : number , Total_Bet : number){
+        this.Line = line;
+        this.Bet = bet;
+        this.Balance = Current_Balance;
+        this.Total_Bet = Total_Bet;
+    }
 }

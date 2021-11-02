@@ -77,8 +77,9 @@ export default class Game_Control extends cc.Component {
     }
     private Set_DefultReel() {
         this.UI_Manager.startPlayBonusAnimation();
-        this.Server_.Result_Round(this.LineBetValue , this.Bet_Price ,this.Current_balance , this.TotalBet_Value);
+        let Test = this.Server_.Result_Round(this.LineBetValue , this.Bet_Price ,this.Current_balance , this.TotalBet_Value);
         this.Balance_Update();
+        console.log(Test.Line);
     }
 
     private Spin_All_Slot() {

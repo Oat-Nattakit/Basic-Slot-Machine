@@ -39,7 +39,6 @@ export default class Reel_Control extends cc.Component {
     private NumberReel_Slot: number[] = new Array();
 
     start() {
-
         this.CheckPayline = Payline_Manager.GetIns_();
         this.BetSystem = Bet_Manager.GetIns();
         this.Server_ = Server_Manager.Getinstant();
@@ -50,9 +49,7 @@ export default class Reel_Control extends cc.Component {
     }
 
     private GetComponentInNode() {
-
         this.ReelAnimation = new Array(this.ReelNode.length);
-
         for (let i = 0; i < this.ReelNode.length; i++) {
             this.ReelNode[i].addComponent(Reel_Description).Reel_Description = (i);
             this.ReelAnimation[i] = (this.ReelNode[i].getComponent(cc.Animation));
@@ -68,7 +65,6 @@ export default class Reel_Control extends cc.Component {
     }
 
     private RandomPicture() {
-
         this.SetNumber = this.Server_.Slot_Result();
         for (let i = 0; i < this.SlotNode.length; i++) {            
             let GetSp = this.SlotNode[i].getComponent(cc.Sprite);
@@ -77,16 +73,13 @@ export default class Reel_Control extends cc.Component {
     }
 
     private RandomResult() {
-
         if (this.Stack_ReelRun == 0) {
             this.SetNumber = this.Server_.Slot_Result();
         }
         this.NumberReel_Slot = [Reel_Number.Reel_1, Reel_Number.Reel_2, Reel_Number.Reel_3];
-
     }
 
     public Run_Reel_Once(Button_Reel: cc.Button, ReelNumber: number) {
-
         if (this.Stack_ReelRun == 0) {
             this.SetDefult_Blackground();
             this.RandomResult();
@@ -98,7 +91,6 @@ export default class Reel_Control extends cc.Component {
     }
 
     public Run_Reel_All() {
-
         let WaitingTime = 0;
         this.SetDefult_Blackground();
         this.RandomResult();
@@ -114,7 +106,6 @@ export default class Reel_Control extends cc.Component {
     }
 
     public StopReel_Once(NumberReel: number, Reel_Animation: cc.Animation) {
-
         Reel_Animation.stop();
         if (NumberReel == 0) {
             this.RoundShowSlot(SlotLine.Slot_0, SlotLine.Slot_3);
@@ -131,7 +122,6 @@ export default class Reel_Control extends cc.Component {
     }
 
     public StopReel_All() {
-
         let WaitingTime = 0;
         for (let i = 0; i < this.ReelAnimation.length; i++) {
             setTimeout(() => this.SetPicture_Slot(i), WaitingTime);
@@ -140,7 +130,6 @@ export default class Reel_Control extends cc.Component {
     }
 
     private Slot_Setresult() {
-
         this.CheckPayline.ManagePayline(this.SetNumber, this.CountLineBet);        
         this.Stack_ReelRun = 0;
         for (let i = 0; i < this.ReelNode.length; i++) {
@@ -149,7 +138,6 @@ export default class Reel_Control extends cc.Component {
     }
 
     private SetPicture_Slot(ReelSlot: number) {
-
         this.ReelAnimation[ReelSlot].stop();
 
         if (ReelSlot == 0) {
@@ -165,7 +153,6 @@ export default class Reel_Control extends cc.Component {
     }
 
     public SlotBonus() : cc.Node[]{
-
         let Payline_BlackGroung = this.CheckPayline.PositionBonuse();
         let Node_BG : cc.Node[] = new Array();
         for (let i = 0; i < Payline_BlackGroung.length; i++) {
@@ -176,7 +163,6 @@ export default class Reel_Control extends cc.Component {
     }
 
     private RoundShowSlot(Min: number, Max: number) {
-
         for (let i = Min; i < Max; i++) {
             let GetSp = this.SlotNode[i].getComponent(cc.Sprite);
             this.SlotNode[i].opacity = 120;
