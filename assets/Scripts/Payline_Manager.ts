@@ -9,7 +9,6 @@ import { Reel_Number } from "./Reel_Control";
 
 const { ccclass, property } = cc._decorator;
 
-
 export class Payline_Manager {
 
     private static Ins_: Payline_Manager = new Payline_Manager();
@@ -134,22 +133,7 @@ export class Payline_Manager {
             RewardCount += this.Price_Payout3[i];
         }
         return RewardCount;
-    }
-
-    /*public Awit2() {
-        return new Promise(resolve => {
-            setTimeout(() => {
-              resolve(this.Total_Payout2());
-            }, 500);
-          });
-    }
-    public Awit3(){
-        return new Promise(resolve => {
-            setTimeout(() => {
-              resolve(this.Total_Payout3());
-            }, 500);
-          });
-    }*/
+    }    
 }
 
 export enum SlotLine {
