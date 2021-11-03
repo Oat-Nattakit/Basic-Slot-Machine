@@ -105,7 +105,7 @@ class SetData implements SlotDataPatten {
     }
 }
 
-class Player_Reward implements Payout_Price {
+export class Player_Reward implements Payout_Price {
 
     Payout2: number;
     Payout3: number;

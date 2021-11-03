@@ -94,7 +94,7 @@ export class Payline_Manager {
     public PositionBonuse() {
         return this.Bonus_Position;
     }
-    public PaylineBonus() {
+    public Payline_Reward() {
         return this.PaylineTrue;
     }
 

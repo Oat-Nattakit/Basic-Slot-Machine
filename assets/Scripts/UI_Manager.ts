@@ -102,10 +102,10 @@ export default class UI_Manager extends cc.Component {
     public ShowPriceBonus(Reward: number, Bonus: boolean) {
         this.TextBonus.node.active = true;
         if (Bonus == true) {
-            this.TextBonus.string = "Bonus : " + + Reward.toString();
+            this.TextBonus.string = "Bonus : "+ Reward.toString();
         }
         else {
-            this.TextBonus.string = "Reward : " + + Reward.toString();
+            this.TextBonus.string = "Reward : "+ Reward.toString();
         }
     }
 
