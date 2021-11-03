@@ -7764,7 +7764,7 @@
         "__id__": 169
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 176
@@ -7823,7 +7823,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "New Button",
+    "_name": "Clam_Reward",
     "_objFlags": 0,
     "_parent": {
       "__id__": 168
@@ -8033,8 +8033,8 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "Clam",
-    "_N$string": "Clam",
+    "_string": "Collect",
+    "_N$string": "Collect",
     "_fontSize": 20,
     "_lineHeight": 40,
     "_enableWrapText": false,
@@ -9098,6 +9098,9 @@
     },
     "acc_": {
       "__id__": 190
+    },
+    "Clam_reward": {
+      "__id__": 175
     },
     "TextBonus": {
       "__id__": 85

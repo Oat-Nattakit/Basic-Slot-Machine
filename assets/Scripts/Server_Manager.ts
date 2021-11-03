@@ -16,7 +16,7 @@ export class Server_Manager {
     private Result: number[];
     private Balance: number = 10000;
 
-    private Data: SetData;
+    private Data: Data_Play;
     private Reward: Player_Reward;
 
     public GetValueRound: boolean = false;
@@ -52,7 +52,7 @@ export class Server_Manager {
 
     public DataPlayer_BeforeSpin(Line: number, Bet: number, Current_Balance: number, Total_Bet: number) {
 
-        this.Data = new SetData(Line, Bet, Current_Balance, Total_Bet);
+        this.Data = new Data_Play(Line, Bet, Current_Balance, Total_Bet);
         return this.Data;
     }
 
@@ -90,7 +90,7 @@ interface Payout_Price {
     Payout3: number;
 }
 
-class SetData implements SlotDataPatten {
+export class Data_Play implements SlotDataPatten {
 
     Line: number;
     Bet: number;

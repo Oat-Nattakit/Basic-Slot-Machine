@@ -99,7 +99,6 @@ export default class UI_Manager extends cc.Component {
 
     public PlayerGetBouns() {
         this.Bonus_Animation.node.active = true;
-        //this.RewardNode.active = true;
         this.Bonus_Animation.animation = "animate";
         this.Bonus_Animation.loop = false;
         this.timer = setTimeout(() => this.Bonus_Animation.animation = "idle", 800);
@@ -150,7 +149,7 @@ export default class UI_Manager extends cc.Component {
         }
     }
 
-    public Player_NotBalance(Status: boolean) {
+    public Balance_ReadytoPlay(Status: boolean) {
         if (Status == true) {
             this.Panal_NotPlay.active = true
         }
