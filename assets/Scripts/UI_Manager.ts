@@ -12,7 +12,7 @@ export default class UI_Manager extends cc.Component {
 
     @property(cc.Button)
     public Spin_Button: cc.Button = null;
-    
+
     @property(cc.Button)
     public Add_Bet: cc.Button = null;
 
@@ -25,21 +25,27 @@ export default class UI_Manager extends cc.Component {
     @property(cc.Button)
     public Del_Line: cc.Button = null;
 
+    @property(cc.Button)
+    public acc_: cc.Button = null;
+
     @property(cc.Label)
-    private TextBonus: cc.Label = null;    
+    private TextBonus: cc.Label = null;
 
     @property(cc.Label)
     private Balance_Text: cc.Label = null;
 
     @property(cc.Label)
-    private CurrentBet_Text: cc.Label = null;    
+    private CurrentBet_Text: cc.Label = null;
 
     @property(cc.Label)
-    private BetLine_Text: cc.Label = null;    
+    private BetLine_Text: cc.Label = null;
 
     @property(cc.Label)
     private TotalBet: cc.Label = null;
-    
+
+    @property(cc.Node)
+    private Panal_NotPlay : cc.Node = null;
+
     @property(sp.Skeleton)
     private Bonus_Animation: sp.Skeleton = null;
 
@@ -48,7 +54,7 @@ export default class UI_Manager extends cc.Component {
 
     private timer: ReturnType<typeof setTimeout>;
 
-    private ListButton: cc.Button[] = new Array();
+    private ListButton: cc.Button[] = new Array();  
 
     public add_ArrayButton() {
         this.ListButton.push(this.Spin_Button);
@@ -63,16 +69,27 @@ export default class UI_Manager extends cc.Component {
         this.TextBonus.node.active = false;
         this.Bonus_Animation.animation = "in";
         this.Unactive_Line_Payline();
-        this.Button_Status(false);
         clearTimeout(this.timer);
     }
-    
-    public Button_Status(Status : boolean) {
 
-        for(let i=0 ; i<this.ListButton.length ; i++){
-            this.ListButton[i].interactable = Status;
+    public Button_Status(Status: boolean, CurrentRound: number = 0) {
+
+        for (let i = 0; i < this.ListButton.length; i++) {
+            if (Status == true) {
+                this.ListButton[i].interactable = Status;
+            }
+            else {
+                if (CurrentRound == 3) {
+                    this.ListButton[i].interactable = Status;
+                }
+                else {
+                    if (i > 0) {
+                        this.ListButton[i].interactable = Status;
+                    }
+                }
+            }
         }
-    }  
+    }
 
     public PlayerGetBouns() {
         this.Bonus_Animation.node.active = true;
@@ -91,7 +108,7 @@ export default class UI_Manager extends cc.Component {
             this.TextBonus.string = "Reward : " + + Reward.toString();
         }
     }
-    
+
     private Unactive_Line_Payline() {
         for (let i = 0; i < this.Line_Payline.length; i++) {
             this.Line_Payline[i].active = false;
@@ -119,10 +136,18 @@ export default class UI_Manager extends cc.Component {
     }
 
     public SetSlot_BG_Bonuse(Node_BG: cc.Node[]) {
-
         for (let i = 0; i < Node_BG.length; i++) {
             Node_BG[i].color = cc.Color.YELLOW;
             Node_BG[i].children[0].opacity = 255;
+        }
+    }
+
+    public Player_NotBalance(Status : boolean){
+        if(Status == true){
+            this.Panal_NotPlay.active = true          
+        }
+        else{
+            this.Panal_NotPlay.active = false;
         }
     }
 }

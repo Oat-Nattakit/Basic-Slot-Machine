@@ -80,7 +80,7 @@ export default class Reel_Control extends cc.Component {
         }
     }
 
-    private GetSymbol_SlotFromServer() {
+    private GetSymbol_IDFromServer() {
         this.Server_.Slot_GetSymbolValue();
         this.SlotSymbol_ID = this.Server_.Slot_Result();
         this.CheckPayline.ManagePayline(this.SlotSymbol_ID);
@@ -89,11 +89,11 @@ export default class Reel_Control extends cc.Component {
     public SetValue_SlotSymbol() {
 
         if (this.Stack_ReelRun.length == 0) {
-            this.GetSymbol_SlotFromServer();
+            this.GetSymbol_IDFromServer();
         }
     }
 
-    public Run_Reel_Once(Button_Reel: cc.Button, ReelNumber: number) {
+    public One_Reel_PlayAnimation(Button_Reel: cc.Button, ReelNumber: number) {
 
         if (this.Stack_ReelRun.length == 0) {
             this.SetDefult_Blackground();
@@ -101,9 +101,10 @@ export default class Reel_Control extends cc.Component {
         this.ReelAnimation[ReelNumber].play();
         this.NumberReel_Slot[ReelNumber] = -1;
         Button_Reel.enabled = false;
+        return this.ReelAnimation[ReelNumber];
     }
 
-    public Run_Reel_All() {
+    public All_Reel_PlayAniamtion() {
 
         let WaitingTime = 0;
         this.SetDefult_Blackground();

@@ -60,11 +60,12 @@ export default class Game_Control extends cc.Component {
     }
 
     private SetButton_Function() {
-        this.UI_Manager.Spin_Button.node.on('click', this.Spin_All_Slot, this);
+        this.UI_Manager.Spin_Button.node.on('click', this.Spin_All_Reel, this);
         this.UI_Manager.Add_Bet.node.on('click', this.Bet_Manager_Add, this);
         this.UI_Manager.Del_Bet.node.on('click', this.Bet_Manager_Del, this);
         this.UI_Manager.Add_Line.node.on('click', this.LineBet_Add, this);
-        this.UI_Manager.Del_Line.node.on('click', this.LineBet_Del, this);
+        this.UI_Manager.Del_Line.node.on('click', this.LineBet_Del, this);   
+        this.UI_Manager.acc_.node.on('click', this.HidePanal, this);      
     }
 
     private SetReelButton() {
@@ -73,26 +74,36 @@ export default class Game_Control extends cc.Component {
 
         for (let i = 0; i < ReelNode.length; i++) {
             Reel_Button[i] = ReelNode[i].getComponent(cc.Button);
-            Reel_Button[i].node.on('click', this.Spin_Once_Slot, this);
+            Reel_Button[i].node.on('click', this.Spin_One_Reel, this);
         }
     }
-    private Set_DefultReel() {
-        this.UI_Manager.startPlayBonusAnimation();        
-        this.Balance_Update();
+    private Set_DefultReel(): boolean {
+
+        this.UI_Manager.startPlayBonusAnimation();
+        this.Server_.DataPlayer_BeforeSpin(this.LineBetValue, this.Bet_Price, this.Current_balance, this.TotalBet_Value);
+        let GetStatus = this.Balance_Update();
         this.Reel_Control.SetValue_SlotSymbol();
-        this.Payline.CheckPayLine(this.LineBetValue);
+        this.Payline.CheckPayLine_Reward(this.LineBetValue);
+        return GetStatus;
     }
 
-    async Spin_All_Slot() {
+    async Spin_All_Reel() {
 
         if (this.ReelRun == false) {
-            this.ReelRun = true;
-            this.Last_animation = this.Reel_Control.Run_Reel_All();
-            await this.Set_DefultReel();
-            setTimeout(() => this.Stop_All_Reel(), 1000);
+            let Spin: boolean = await this.Set_DefultReel();
+            console.log(Spin);
+            if (Spin == true) {
+                this.ReelRun = true;
+                this.UI_Manager.Button_Status(false, 3);
+                this.Last_animation = this.Reel_Control.All_Reel_PlayAniamtion();
+                setTimeout(() => this.Stop_All_Reel(), 1000);
+            }
+            else {
+                this.UI_Manager.Player_NotBalance(true);               
+            }
         }
     }
-    
+
     private Stop_All_Reel() {
 
         let Reel_Range: number = this.Reel_Control.ReelNode.length;
@@ -102,17 +113,22 @@ export default class Game_Control extends cc.Component {
         this.End_SpinCheckResult();
     }
 
-    async Spin_Once_Slot(ButtonReel: cc.Button) {
-
+    async Spin_One_Reel(ButtonReel: cc.Button) {
+        let Spin: boolean = false;
         if (this.TotalReel == 0) {
-            await this.Set_DefultReel();
+            Spin = await this.Set_DefultReel();
         }
-        let ReelNumber = ButtonReel.node.getComponent(Reel_Description).Reel_Description;
-        let ReelAniamtion = ButtonReel.node.getComponent(cc.Animation);
-        this.Reel_Control.Run_Reel_Once(ButtonReel, ReelNumber);       
-        this.Last_animation = ReelAniamtion;
-        this.TotalReel++;
-        setTimeout(() => this.Stop_Once_Reel(ReelNumber), 1000);
+
+        if (Spin == true) {
+            let ReelNumber = ButtonReel.node.getComponent(Reel_Description).Reel_Description;
+            this.Last_animation = this.Reel_Control.One_Reel_PlayAnimation(ButtonReel, ReelNumber);
+            this.TotalReel++;
+            this.UI_Manager.Button_Status(false, this.TotalReel);
+            setTimeout(() => this.Stop_Once_Reel(ReelNumber), 1000);
+        }
+        else {
+            this.UI_Manager.Player_NotBalance(true);                    
+        }
     }
 
     private Stop_Once_Reel(ReelNumber: number) {
@@ -124,13 +140,13 @@ export default class Game_Control extends cc.Component {
         }
     }
 
-    
     private End_SpinCheckResult() {
 
         this.TotalReel = 0;
         this.ReelRun = false;
         this.CheckPlayer_reward = true;
     }
+
     update() {
         if (this.CheckPlayer_reward == true) {
             if (this.Last_animation.getAnimationState('ReelAnimation').isPlaying == false) {
@@ -141,20 +157,18 @@ export default class Game_Control extends cc.Component {
     }
 
     private CheckResult_Player() {
-        
-        let Price_reward2: number = 0;
-        let Price_reward3: number = 0;        
 
         let GetBGSlot = this.Reel_Control.SlotBonus();
         this.UI_Manager.SetSlot_BG_Bonuse(GetBGSlot);
 
         let GetLine_bonus = this.Payline.PaylineBonus();
 
-        Price_reward2 = this.Payline.Total_Payout2();
-        Price_reward3 = this.Payline.Total_Payout3();
+        let GetStack2 = this.Payline.StackSymbol_Payout2();
+        let GetStack3 = this.Payline.StackSymbol_Payout3();
 
-        let TotalPrice_reward = Price_reward2 + Price_reward3;
-        console.log(TotalPrice_reward);
+        let Reward = this.Server_.Player_WinRound(GetStack2, GetStack3);
+
+        let TotalPrice_reward = Reward.Payout2 + Reward.Payout3;
 
         if (TotalPrice_reward != 0) {
             this.UI_Manager.ShowPriceBonus(TotalPrice_reward, false);
@@ -162,7 +176,8 @@ export default class Game_Control extends cc.Component {
                 this.UI_Manager.Active_Line_Payline(GetLine_bonus[i]);
             }
         }
-        if (Price_reward3 != 0) {
+
+        if (Reward.Payout3 != 0) {
             this.UI_Manager.ShowPriceBonus(TotalPrice_reward, true);
             this.UI_Manager.PlayerGetBouns();
         }
@@ -199,8 +214,20 @@ export default class Game_Control extends cc.Component {
         this.UI_Manager.TotalBet_Show(this.TotalBet_Value);
     }
 
-    private Balance_Update() {
-        this.Current_balance = this.Current_balance - this.TotalBet_Value;
-        this.UI_Manager.ShowCurrentBalance(this.Current_balance);
+    private Balance_Update(): boolean {
+
+        let Balance = this.Current_balance - this.TotalBet_Value;        
+        if (Balance >= 0) {
+            this.Current_balance = Balance;
+            this.UI_Manager.ShowCurrentBalance(this.Current_balance);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    private HidePanal(){
+        this.UI_Manager.Player_NotBalance(false);
     }
 }
