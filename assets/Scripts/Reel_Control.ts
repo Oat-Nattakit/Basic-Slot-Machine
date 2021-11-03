@@ -33,8 +33,6 @@ export default class Reel_Control extends cc.Component {
     private BetSystem: Bet_Manager;
     private Server_: Server_Manager;
 
-    //private CountLineBet: number = 0;
-
     private NumberReel_Slot: number[] = new Array();
     private Stack_ReelRun: boolean[] = new Array();
 
@@ -62,7 +60,7 @@ export default class Reel_Control extends cc.Component {
             let ParentBg_ = this.SlotNode[i].getParent();
             this.SlotNode[i].opacity = 255;
             ParentBg_.color = cc.Color.BLACK;
-        }        
+        }
     }
 
     private PreGame_SetSymbolID(): number[] {
@@ -99,8 +97,8 @@ export default class Reel_Control extends cc.Component {
 
         if (this.Stack_ReelRun.length == 0) {
             this.SetDefult_Blackground();
-            //this.CountLineBet = this.BetSystem.Current_LineBet();
         }
+        this.ReelAnimation[ReelNumber].play();
         this.NumberReel_Slot[ReelNumber] = -1;
         Button_Reel.enabled = false;
     }
@@ -109,7 +107,6 @@ export default class Reel_Control extends cc.Component {
 
         let WaitingTime = 0;
         this.SetDefult_Blackground();
-        //this.CountLineBet = this.BetSystem.Current_LineBet();
 
         for (let i = 0; i < this.ReelAnimation.length; i++) {
             if (this.NumberReel_Slot[i] != -1) {
@@ -118,23 +115,12 @@ export default class Reel_Control extends cc.Component {
                 WaitingTime += 150;
             }
         }
+        return this.ReelAnimation[this.ReelAnimation.length-1];
     }
 
-    private Set_Result_Slot() {
-        
-        //await this.CheckPayline.ManagePayline(this.SlotSymbol_ID, this.CountLineBet);
-        //this.CheckPayline.ManagePayline(this.SlotSymbol_ID);
-        this.Stack_ReelRun = new Array();       
-        this.NumberReel_Slot = [Reel_Number.Reel_1, Reel_Number.Reel_2, Reel_Number.Reel_3];
-        for (let i = 0; i < this.ReelNode.length; i++) {
-            this.Reel_Button[i].enabled = true;
-        }       
-    }
-
-
-    public SetPicture_Slot(ReelSlot: number) {
-
-        this.ReelAnimation[ReelSlot].stop();
+    public SetPicture_Slot(ReelSlot: number) {       
+    
+        this.ReelAnimation[ReelSlot].stop();       
 
         if (ReelSlot == 0) {
             this.RoundShowSlot(SlotLine.Slot_0, SlotLine.Slot_3);
@@ -149,6 +135,15 @@ export default class Reel_Control extends cc.Component {
             this.Set_Result_Slot();
         }
     }
+
+    private Set_Result_Slot() {
+        this.Stack_ReelRun = new Array();
+        this.NumberReel_Slot = [Reel_Number.Reel_1, Reel_Number.Reel_2, Reel_Number.Reel_3];
+        for (let i = 0; i < this.ReelNode.length; i++) {
+            this.Reel_Button[i].enabled = true;
+        }
+    }
+
     private RoundShowSlot(Min: number, Max: number) {
         for (let i = Min; i < Max; i++) {
             let GetSp = this.SlotNode[i].getComponent(cc.Sprite);
@@ -159,9 +154,11 @@ export default class Reel_Control extends cc.Component {
     }
 
     public SlotBonus(): cc.Node[] {
+
         let Payline_BlackGroung = this.CheckPayline.PositionBonuse();
         let Node_BG: cc.Node[] = new Array();
         for (let i = 0; i < Payline_BlackGroung.length; i++) {
+
             let ParentBg_ = this.SlotNode[Payline_BlackGroung[i]].getParent();
             Node_BG.push(ParentBg_);
         }

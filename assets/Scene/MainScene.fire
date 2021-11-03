@@ -4430,7 +4430,7 @@
         1,
         1,
         1,
-        1
+        0
       ]
     },
     "_eulerAngles": {
@@ -4557,7 +4557,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "f0048c10-f03e-4c97-b9d3-3506e1d58952"
+      "__uuid__": "ab465b87-d9f6-4be0-b962-8f88febbdfae"
     },
     "_type": 1,
     "_sizeMode": 0,
@@ -4615,27 +4615,27 @@
     "clickEvents": [],
     "_N$interactable": true,
     "_N$enableAutoGrayEffect": false,
-    "_N$transition": 2,
-    "transition": 2,
+    "_N$transition": 1,
+    "transition": 1,
     "_N$normalColor": {
       "__type__": "cc.Color",
-      "r": 230,
-      "g": 230,
-      "b": 230,
+      "r": 255,
+      "g": 255,
+      "b": 255,
       "a": 255
     },
     "_N$pressedColor": {
       "__type__": "cc.Color",
-      "r": 200,
-      "g": 200,
-      "b": 200,
+      "r": 150,
+      "g": 150,
+      "b": 150,
       "a": 255
     },
     "pressedColor": {
       "__type__": "cc.Color",
-      "r": 200,
-      "g": 200,
-      "b": 200,
+      "r": 150,
+      "g": 150,
+      "b": 150,
       "a": 255
     },
     "_N$hoverColor": {
@@ -4660,7 +4660,7 @@
       "a": 200
     },
     "_N$normalSprite": {
-      "__uuid__": "f0048c10-f03e-4c97-b9d3-3506e1d58952"
+      "__uuid__": "9bbda31e-ad49-43c9-aaf2-f7d9896bac69"
     },
     "_N$pressedSprite": {
       "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
@@ -5668,9 +5668,9 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 230,
+      "g": 230,
+      "b": 230,
       "a": 255
     },
     "_contentSize": {
@@ -5923,7 +5923,7 @@
       "r": 120,
       "g": 120,
       "b": 120,
-      "a": 200
+      "a": 255
     },
     "_N$normalSprite": {
       "__uuid__": "f0048c10-f03e-4c97-b9d3-3506e1d58952"
@@ -7646,26 +7646,11 @@
     "Spin_Button": {
       "__id__": 101
     },
-    "TextBonus": {
-      "__id__": 92
-    },
-    "Bonus_Animation": {
-      "__id__": 9
-    },
-    "Balance_Text": {
-      "__id__": 105
-    },
-    "CurrentBet_Text": {
-      "__id__": 120
-    },
     "Add_Bet": {
       "__id__": 128
     },
     "Del_Bet": {
       "__id__": 136
-    },
-    "BetLine_Text": {
-      "__id__": 142
     },
     "Add_Line": {
       "__id__": 150
@@ -7673,8 +7658,23 @@
     "Del_Line": {
       "__id__": 158
     },
+    "TextBonus": {
+      "__id__": 92
+    },
+    "Balance_Text": {
+      "__id__": 105
+    },
+    "CurrentBet_Text": {
+      "__id__": 120
+    },
+    "BetLine_Text": {
+      "__id__": 142
+    },
     "TotalBet": {
       "__id__": 113
+    },
+    "Bonus_Animation": {
+      "__id__": 9
     },
     "Line_Payline": [
       {

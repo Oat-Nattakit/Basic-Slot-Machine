@@ -23,7 +23,7 @@ export class Payline_Manager {
 
     public PaylineList = new Array();
 
-    private listPo: number[];
+    private Bonus_Position: number[];
 
     private PaylineTrue: number[];
 
@@ -43,7 +43,7 @@ export class Payline_Manager {
     public ManagePayline(value: number[]) {
         this.Current_SlotNumber = value;
         this.Price_Payout2 = new Array();
-        this.Price_Payout3 = new Array();
+        this.Price_Payout3 = new Array();          
     }
 
     private CreatePayline() {
@@ -60,9 +60,9 @@ export class Payline_Manager {
         });
     }
 
-    private CheckPayLine(CountLineBet: number) {
+    public CheckPayLine(CountLineBet: number) {
 
-        this.listPo = new Array();
+        this.Bonus_Position = new Array();
         this.PaylineTrue = new Array();
 
         for (let i = 0; i < CountLineBet; i++) {
@@ -72,7 +72,7 @@ export class Payline_Manager {
 
             if (Check_PayoutType2 == true && Check_PayoutType3 == true) {
                 let Range_Payout3 = 3;
-                for (let j = 0; j < Range_Payout3; j++) {
+                for (let j = 0; j < Range_Payout3; j++) {                    
                     this.CollectPositionSlot_GetBonus(this.PaylineList[i][j]);
                 }
                 this.PaylineTrue.push(i);
@@ -88,15 +88,15 @@ export class Payline_Manager {
                 this.PaylineTrue.push(i);
                 let Symbol = this.Current_SlotNumber[this.PaylineList[i][Reel_Number.Reel_1]];
                 this.PayoutType2_Bonus(Symbol);
-            }
+            }            
         }
     }
 
     private CollectPositionSlot_GetBonus(Slot_Position: number) {
-        this.listPo.push(Slot_Position);
+        this.Bonus_Position.push(Slot_Position);
     }
     public PositionBonuse() {
-        return this.listPo;
+        return this.Bonus_Position;
     }
     public PaylineBonus() {
         return this.PaylineTrue;
@@ -111,13 +111,13 @@ export class Payline_Manager {
     }
 
     private PayoutType2_Bonus(Symbol: number) {
-        let GetPayout_Price: number = this.Payout2.ListPayout2[Symbol];
-        this.Price_Payout2.push(GetPayout_Price);
+        let Price_By_Symbol: number = this.Payout2.ListPayout2[Symbol];        
+        this.Price_Payout2.push(Price_By_Symbol);
     }
 
     private PayoutType3_Bonus(Symbol: number) {
-        let GetPayout_Price: number = this.Payout3.ListPayout3[Symbol];
-        this.Price_Payout3.push(GetPayout_Price);
+        let Price_By_Symbol: number = this.Payout3.ListPayout3[Symbol];
+        this.Price_Payout3.push(Price_By_Symbol);
     }
 
     public Total_Payout2(): number {
