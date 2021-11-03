@@ -91,13 +91,14 @@ export default class Reel_Control extends cc.Component {
         if (this.Stack_ReelRun.length == 0) {
             this.GetSymbol_IDFromServer();
         }
+        this.SetDefult_Blackground();
     }
 
     public One_Reel_PlayAnimation(Button_Reel: cc.Button, ReelNumber: number) {
 
-        if (this.Stack_ReelRun.length == 0) {
+       /* if (this.Stack_ReelRun.length == 0) {
             this.SetDefult_Blackground();
-        }
+        }*/
         this.ReelAnimation[ReelNumber].play();
         this.NumberReel_Slot[ReelNumber] = -1;
         Button_Reel.enabled = false;
@@ -107,7 +108,7 @@ export default class Reel_Control extends cc.Component {
     public All_Reel_PlayAniamtion() {
 
         let WaitingTime = 0;
-        this.SetDefult_Blackground();
+       // this.SetDefult_Blackground();
 
         for (let i = 0; i < this.ReelAnimation.length; i++) {
             if (this.NumberReel_Slot[i] != -1) {

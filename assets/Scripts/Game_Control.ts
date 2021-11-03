@@ -36,6 +36,7 @@ export default class Game_Control extends cc.Component {
     private TotalReel: number = 0;
 
     private Last_animation: cc.Animation;
+    private Total_Reward : number = 0;
 
     onLoad() {
         this.UI_Manager = this.node.getComponent(UI_Manager);
@@ -67,6 +68,7 @@ export default class Game_Control extends cc.Component {
         this.UI_Manager.Add_Line.node.on('click', this.LineBet_Add, this);
         this.UI_Manager.Del_Line.node.on('click', this.LineBet_Del, this);
         this.UI_Manager.acc_.node.on('click', this.HidePanal, this);
+        this.UI_Manager.Clam_reward.node.on('click', this.Hide_UI_Reward, this);
     }
 
     private SetReelButton() {
@@ -85,7 +87,6 @@ export default class Game_Control extends cc.Component {
         this.Balance_Status = this.Balance_Update();
         this.Reel_Control.SetValue_SlotSymbol();
         this.Payline.CheckPayLine_Reward(this.LineBetValue);
-        //return GetStatus;
     }
 
     async Spin_All_Reel() {
@@ -110,7 +111,7 @@ export default class Game_Control extends cc.Component {
         for (let i = 0; i < Reel_Range; i++) {
             setTimeout(() => this.Reel_Control.SetPicture_Slot(i), 100 * i);
         }
-        this.End_SpinCheckResult();
+        this.End_AnimationCheckResult();
     }
 
     async Spin_One_Reel(ButtonReel: cc.Button) {
@@ -136,11 +137,11 @@ export default class Game_Control extends cc.Component {
         setTimeout(() => this.Reel_Control.SetPicture_Slot(ReelNumber), 100 * this.TotalReel);
 
         if (this.TotalReel == this.Reel_Control.ReelNode.length) {
-            this.End_SpinCheckResult();
+            this.End_AnimationCheckResult();
         }
     }
 
-    private End_SpinCheckResult() {
+    private End_AnimationCheckResult() {
 
         this.TotalReel = 0;
         this.ReelRun = false;
@@ -157,39 +158,43 @@ export default class Game_Control extends cc.Component {
     }
 
     private CheckResult_Player() {
-
         let GetStack2 = this.Payline.StackSymbol_Payout2();
         let GetStack3 = this.Payline.StackSymbol_Payout3();
 
         let Reward = this.Server_.Player_WinRound(GetStack2, GetStack3);
-        this.Show_Reward(Reward);
-
-        let TotalPrice_reward = Reward.Payout2 + Reward.Payout3;        
-
-        this.Current_balance += TotalPrice_reward;
-        this.UI_Manager.ShowCurrentBalance(this.Current_balance);
-        this.UI_Manager.Button_Status(true);
-        this.Server_.GetValueRound = false;
+        this.Show_Reward(Reward);       
     }
 
     private Show_Reward(Reward: Player_Reward) {
 
-        let Total_Reward = Reward.Payout2 + Reward.Payout3;
-        if (Total_Reward != 0) {
+        this.Total_Reward = 0;
+        this.Total_Reward = Reward.Payout2 + Reward.Payout3;
+        if (this.Total_Reward != 0) {
             let ListBlackground_Slot = this.Reel_Control.SlotBonus();
             this.UI_Manager.SetSlot_BG_Bonuse(ListBlackground_Slot);
             let GetLine_bonus = this.Payline.Payline_Reward();
 
-            this.UI_Manager.ShowPriceBonus(Total_Reward, false);
+            this.UI_Manager.ShowPriceBonus(this.Total_Reward, false);
             for (let i = 0; i < GetLine_bonus.length; i++) {
                 this.UI_Manager.Active_Line_Payline(GetLine_bonus[i]);
             }
         }
         if (Reward.Payout3 != 0) {
-            this.UI_Manager.ShowPriceBonus(Total_Reward, true);
+            this.UI_Manager.ShowPriceBonus(this.Total_Reward, true);
             this.UI_Manager.PlayerGetBouns();
-        }
+        }      
+        this.EndRound_Game();          
+    }
 
+    private EndRound_Game(){
+        this.Current_balance += this.Total_Reward;
+        this.UI_Manager.ShowCurrentBalance(this.Current_balance);
+        this.UI_Manager.Button_Status(true);
+        this.Server_.GetValueRound = false;
+    }
+    private Hide_UI_Reward(){
+        this.Reel_Control.SetDefult_Blackground();
+        this.UI_Manager.Hide_ClamReward();
     }
 
     private Bet_Manager_Add() {
@@ -232,7 +237,7 @@ export default class Game_Control extends cc.Component {
         }
     }
 
-    private HidePanal() {
+    private HidePanal() {        
         this.UI_Manager.Player_NotBalance(false);
     }
 }

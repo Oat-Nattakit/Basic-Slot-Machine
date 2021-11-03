@@ -28,6 +28,9 @@ export default class UI_Manager extends cc.Component {
     @property(cc.Button)
     public acc_: cc.Button = null;
 
+    @property(cc.Button)
+    public Clam_reward: cc.Button = null;
+
     @property(cc.Label)
     private TextBonus: cc.Label = null;
 
@@ -44,7 +47,10 @@ export default class UI_Manager extends cc.Component {
     private TotalBet: cc.Label = null;
 
     @property(cc.Node)
-    private Panal_NotPlay : cc.Node = null;
+    private RewardNode: cc.Node = null;
+
+    @property(cc.Node)
+    private Panal_NotPlay: cc.Node = null;
 
     @property(sp.Skeleton)
     private Bonus_Animation: sp.Skeleton = null;
@@ -54,7 +60,7 @@ export default class UI_Manager extends cc.Component {
 
     private timer: ReturnType<typeof setTimeout>;
 
-    private ListButton: cc.Button[] = new Array();  
+    private ListButton: cc.Button[] = new Array();
 
     public add_ArrayButton() {
         this.ListButton.push(this.Spin_Button);
@@ -66,20 +72,20 @@ export default class UI_Manager extends cc.Component {
 
     public startPlayBonusAnimation() {
         this.Bonus_Animation.node.active = false;
-        this.TextBonus.node.active = false;
+        this.RewardNode.active = false;
         this.Bonus_Animation.animation = "in";
         this.Unactive_Line_Payline();
         clearTimeout(this.timer);
     }
 
     public Button_Status(Status: boolean, CurrentRound: number = 0) {
-
+        let Reel_Range = 3;
         for (let i = 0; i < this.ListButton.length; i++) {
             if (Status == true) {
                 this.ListButton[i].interactable = Status;
             }
             else {
-                if (CurrentRound == 3) {
+                if (CurrentRound == Reel_Range) {
                     this.ListButton[i].interactable = Status;
                 }
                 else {
@@ -93,6 +99,7 @@ export default class UI_Manager extends cc.Component {
 
     public PlayerGetBouns() {
         this.Bonus_Animation.node.active = true;
+        //this.RewardNode.active = true;
         this.Bonus_Animation.animation = "animate";
         this.Bonus_Animation.loop = false;
         this.timer = setTimeout(() => this.Bonus_Animation.animation = "idle", 800);
@@ -100,12 +107,13 @@ export default class UI_Manager extends cc.Component {
     }
 
     public ShowPriceBonus(Reward: number, Bonus: boolean) {
-        this.TextBonus.node.active = true;
+        this.RewardNode.active = true;
+        this.Clam_reward.node.getParent().active = true;
         if (Bonus == true) {
-            this.TextBonus.string = "Bonus : "+ Reward.toString();
+            this.TextBonus.string = "Bonus : " + Reward.toString();
         }
         else {
-            this.TextBonus.string = "Reward : "+ Reward.toString();
+            this.TextBonus.string = "Reward : " + Reward.toString();
         }
     }
 
@@ -142,12 +150,17 @@ export default class UI_Manager extends cc.Component {
         }
     }
 
-    public Player_NotBalance(Status : boolean){
-        if(Status == true){
-            this.Panal_NotPlay.active = true          
+    public Player_NotBalance(Status: boolean) {
+        if (Status == true) {
+            this.Panal_NotPlay.active = true
         }
-        else{
+        else {
             this.Panal_NotPlay.active = false;
         }
+    }
+
+    public Hide_ClamReward() {
+        this.Clam_reward.node.getParent().active = false;
+        this.startPlayBonusAnimation();
     }
 }
