@@ -62,6 +62,9 @@ export default class UI_Manager extends cc.Component {
 
     private ListButton: cc.Button[] = new Array();
 
+    private Bonuse_ScaleUp: cc.Tween[] = null;
+    private StackArr: cc.Node[] = null;
+
     public add_ArrayButton() {
         this.ListButton.push(this.Spin_Button);
         this.ListButton.push(this.Add_Bet);
@@ -71,6 +74,7 @@ export default class UI_Manager extends cc.Component {
     }
 
     public startPlayBonusAnimation() {
+        this.Bonuse_ScaleUp = null;
         this.Bonus_Animation.node.active = false;
         this.RewardNode.active = false;
         this.Bonus_Animation.animation = "in";
@@ -143,9 +147,18 @@ export default class UI_Manager extends cc.Component {
     }
 
     public SetSlot_BG_Bonuse(Node_BG: cc.Node[]) {
+
+        this.Bonuse_ScaleUp = new Array();
+        this.StackArr = Node_BG;
+
         for (let i = 0; i < Node_BG.length; i++) {
             Node_BG[i].color = cc.Color.YELLOW;
             Node_BG[i].children[0].opacity = 255;
+
+            let ScalUp = cc.tween().to(0.3, { scale: 1.2 }, { easing: 'sineIn' });
+            let ScalDown = cc.tween().to(0.3, { scale: 1 }, { easing: 'sineIn' });
+            let Play = cc.tween(Node_BG[i]).sequence(ScalUp, ScalDown);
+            this.Bonuse_ScaleUp.push(cc.tween(Node_BG[i]).repeat(5, Play).start());
         }
     }
 
@@ -160,6 +173,18 @@ export default class UI_Manager extends cc.Component {
 
     public Hide_ClamReward() {
         this.Clam_reward.node.getParent().active = false;
+        if (this.Bonuse_ScaleUp != null) {
+            this.StopAllTween();
+        }
         this.startPlayBonusAnimation();
+    }
+
+    private StopAllTween() {
+
+        for (let i = 0; i < this.Bonuse_ScaleUp.length; i++) {
+            this.Bonuse_ScaleUp[i].stop();
+            cc.tween(this.StackArr[i]).to(0.1, { scale: 1 }, { easing: 'sineIn' }).start();
+        }
+
     }
 }

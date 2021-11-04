@@ -91,7 +91,6 @@ export default class Reel_Control extends cc.Component {
         if (this.Stack_ReelRun.length == 0) {
             this.GetSymbol_ID_FromServer();
         }
-        //this.SetDefult_Blackground();
     }
 
     public One_Reel_PlayAnimation(Button_Reel: cc.Button, ReelNumber: number) {
@@ -113,12 +112,12 @@ export default class Reel_Control extends cc.Component {
                 WaitingTime += 150;
             }
         }
-        return this.ReelAnimation[this.ReelAnimation.length-1];
+        return this.ReelAnimation[this.ReelAnimation.length - 1];
     }
 
-    public SetPicture_Slot(ReelSlot: number) {       
-    
-        this.ReelAnimation[ReelSlot].stop();       
+    public SetPicture_Slot(ReelSlot: number) {
+
+        this.ReelAnimation[ReelSlot].stop();
 
         if (ReelSlot == 0) {
             this.RoundShowSlot(SlotLine.Slot_0, SlotLine.Slot_3);
@@ -143,7 +142,7 @@ export default class Reel_Control extends cc.Component {
         this.Stack_ReelRun.push(true);
     }
 
-    private Reset_Slot() {        
+    private Reset_Slot() {
         this.Stack_ReelRun = new Array();
         this.NumberReel_Slot = [Reel_Number.Reel_1, Reel_Number.Reel_2, Reel_Number.Reel_3];
         for (let i = 0; i < this.ReelNode.length; i++) {
@@ -155,6 +154,7 @@ export default class Reel_Control extends cc.Component {
 
         let Payline_BlackGroung = this.Payline.PositionBonuse();
         let Node_BG: cc.Node[] = new Array();
+
         for (let i = 0; i < Payline_BlackGroung.length; i++) {
 
             let ParentBg_ = this.SlotNode[Payline_BlackGroung[i]].getParent();

@@ -200,9 +200,8 @@ export default class Game_Control extends cc.Component {
     }
 
     private EndRound_Game(){
-
-        this.Current_balance += this.Total_Reward;
-       // console.log(this.data.Balance - this.Current_balance);
+        
+        this.Current_balance += this.Total_Reward;       
         this.UI_Manager.ShowCurrentBalance(this.Current_balance);
         this.UI_Manager.Button_Status(true);
         this.Server_.GetValueRound = false;
