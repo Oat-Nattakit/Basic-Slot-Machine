@@ -64,9 +64,13 @@ export default class UI_Manager extends cc.Component {
 
     private Bonuse_ScaleUp: cc.Tween[] = null;
     private Stack_Array: cc.Node[] = null;
+    private nummmm: number = 0;
+    private test : number = 0;
+    private test2 : number = 0;
+    private stringTest : string = "";
 
     public add_ArrayButton() {
-        
+
         this.ListButton.push(this.Spin_Button);
         this.ListButton.push(this.Add_Bet);
         this.ListButton.push(this.Add_Line);
@@ -104,6 +108,7 @@ export default class UI_Manager extends cc.Component {
     }
 
     public PlayerGetBouns() {
+
         this.Bonus_Animation.node.active = true;
         this.Bonus_Animation.animation = "animate";
         this.Bonus_Animation.loop = false;
@@ -112,15 +117,43 @@ export default class UI_Manager extends cc.Component {
     }
 
     public ShowPriceBonus(Reward: number, Bonus: boolean) {
+
+        this.nummmm = 0;
         this.RewardNode.active = true;
         this.Cliam_reward.node.getParent().active = true;
+        this.stringTest ="";
+
         if (Bonus == true) {
             this.TextBonus.string = "Bonus : " + Reward.toString();
+            //this.TextBonus.string = "Bonus : " + this.stringTest;
         }
         else {
+            //this.TextBonus.string = "Reward : " + this.stringTest;
             this.TextBonus.string = "Reward : " + Reward.toString();
         }
+       this.test = Reward/60;
+       this.test2 = 0;
+
+      //  console.log(Reward / 60);
+
     }
+
+   /* update(dt) {
+
+        if (this.RewardNode.active == true) {
+            this.nummmm += dt;
+            if (this.nummmm < 1) {
+                this.stringTest = Math.round(this.test2).toString();
+                this.TextBonus.string = "Bonus : " + this.stringTest;
+                this.test2 += this.test;               
+            }  
+            else{
+                this.stringTest =  Math.round(this.test2).toString();
+                this.TextBonus.string = "Bonus : " + this.stringTest;
+
+            }          
+        }
+    }*/
 
     private Unactive_Line_Payline() {
         for (let i = 0; i < this.Line_Payline.length; i++) {
@@ -155,7 +188,7 @@ export default class UI_Manager extends cc.Component {
 
         for (let i = 0; i < Node_BG.length; i++) {
 
-            let ColorGold = new cc.Color(255,207,0)
+            let ColorGold = new cc.Color(255, 207, 0)
             Node_BG[i].color = ColorGold;
             Node_BG[i].children[0].opacity = 255;
 
@@ -189,7 +222,7 @@ export default class UI_Manager extends cc.Component {
 
         for (let i = 0; i < this.Bonuse_ScaleUp.length; i++) {
             this.Bonuse_ScaleUp[i].stop();
-            let a = cc.tween(this.Stack_Array[i]).to(0.1, { scale: 1 }, { easing: 'sineIn' }).start();            
+            cc.tween(this.Stack_Array[i]).to(0.1, { scale: 1 }, { easing: 'sineIn' }).start();
         }
 
     }
