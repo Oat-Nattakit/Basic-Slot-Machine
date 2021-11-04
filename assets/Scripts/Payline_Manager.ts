@@ -37,7 +37,7 @@ export class Payline_Manager {
     }
 
     public ManagePayline(value: number[]) {
-        this.List_SlotNumber = value;  
+        this.List_SlotNumber = value;
         this.listSymbol2 = new Array();
         this.listSymbol3 = new Array();
     }
@@ -63,7 +63,7 @@ export class Payline_Manager {
                 }
                 this.PaylineTrue.push(i);
                 let Symbol = this.List_SlotNumber[this.PaylineList[i][Reel_Number.Reel_1]];
-                this.PayoutSymbol_Bonus(TypePayout.Payout3,Symbol);
+                this.PayoutSymbol_Bonus(TypePayout.Payout3, Symbol);
             }
             else if (Check_PayoutType2 == true) {
 
@@ -73,11 +73,11 @@ export class Payline_Manager {
                 }
                 this.PaylineTrue.push(i);
                 let Symbol = this.List_SlotNumber[this.PaylineList[i][Reel_Number.Reel_1]];
-                this.PayoutSymbol_Bonus(TypePayout.Payout2,Symbol);
+                this.PayoutSymbol_Bonus(TypePayout.Payout2, Symbol);
             }
         }
-    } 
-    
+    }
+
     private PayoutCheck(Number1: number, Number2: number) {
         let Payout: boolean = false;
         if (Number1 == Number2) {
@@ -95,16 +95,16 @@ export class Payline_Manager {
     }
     public Payline_Reward() {
         return this.PaylineTrue;
-    }   
+    }
 
     private PayoutSymbol_Bonus(Payout_Type: number, Symbol: number) {
         if (Payout_Type == TypePayout.Payout2) {
             this.listSymbol2.push(Symbol);
         }
-        else if(Payout_Type == TypePayout.Payout3){
+        else if (Payout_Type == TypePayout.Payout3) {
             this.listSymbol3.push(Symbol);
         }
-    } 
+    }
 
     public StackSymbol_Payout2() {
         return this.listSymbol2;
@@ -112,7 +112,7 @@ export class Payline_Manager {
 
     public StackSymbol_Payout3() {
         return this.listSymbol3;
-    }    
+    }
 }
 
 enum TypePayout {
@@ -167,6 +167,7 @@ class PayLine implements SlotPayLine {
     PayLine_5: number[];
 
     constructor() {
+
         this.PayLine_1 = [this.SlotPosition.Slot_1, this.SlotPosition.Slot_4, this.SlotPosition.Slot_7];
         this.PayLine_2 = [this.SlotPosition.Slot_0, this.SlotPosition.Slot_3, this.SlotPosition.Slot_6];
         this.PayLine_3 = [this.SlotPosition.Slot_2, this.SlotPosition.Slot_5, this.SlotPosition.Slot_8];

@@ -29,7 +29,7 @@ export default class UI_Manager extends cc.Component {
     public acc_: cc.Button = null;
 
     @property(cc.Button)
-    public Clam_reward: cc.Button = null;
+    public Cliam_reward: cc.Button = null;
 
     @property(cc.Label)
     private TextBonus: cc.Label = null;
@@ -63,9 +63,10 @@ export default class UI_Manager extends cc.Component {
     private ListButton: cc.Button[] = new Array();
 
     private Bonuse_ScaleUp: cc.Tween[] = null;
-    private StackArr: cc.Node[] = null;
+    private Stack_Array: cc.Node[] = null;
 
     public add_ArrayButton() {
+        
         this.ListButton.push(this.Spin_Button);
         this.ListButton.push(this.Add_Bet);
         this.ListButton.push(this.Add_Line);
@@ -83,6 +84,7 @@ export default class UI_Manager extends cc.Component {
     }
 
     public Button_Status(Status: boolean, CurrentRound: number = 0) {
+
         let Reel_Range = 3;
         for (let i = 0; i < this.ListButton.length; i++) {
             if (Status == true) {
@@ -111,7 +113,7 @@ export default class UI_Manager extends cc.Component {
 
     public ShowPriceBonus(Reward: number, Bonus: boolean) {
         this.RewardNode.active = true;
-        this.Clam_reward.node.getParent().active = true;
+        this.Cliam_reward.node.getParent().active = true;
         if (Bonus == true) {
             this.TextBonus.string = "Bonus : " + Reward.toString();
         }
@@ -149,13 +151,15 @@ export default class UI_Manager extends cc.Component {
     public SetSlot_BG_Bonuse(Node_BG: cc.Node[]) {
 
         this.Bonuse_ScaleUp = new Array();
-        this.StackArr = Node_BG;
+        this.Stack_Array = Node_BG;
 
         for (let i = 0; i < Node_BG.length; i++) {
-            Node_BG[i].color = cc.Color.YELLOW;
+
+            let ColorGold = new cc.Color(255,207,0)
+            Node_BG[i].color = ColorGold;
             Node_BG[i].children[0].opacity = 255;
 
-            let ScalUp = cc.tween().to(0.3, { scale: 1.2 }, { easing: 'sineIn' });
+            let ScalUp = cc.tween().to(0.3, { scale: 1.1 }, { easing: 'sineIn' });
             let ScalDown = cc.tween().to(0.3, { scale: 1 }, { easing: 'sineIn' });
             let Play = cc.tween(Node_BG[i]).sequence(ScalUp, ScalDown);
             this.Bonuse_ScaleUp.push(cc.tween(Node_BG[i]).repeat(5, Play).start());
@@ -163,6 +167,7 @@ export default class UI_Manager extends cc.Component {
     }
 
     public Balance_ReadytoPlay(Status: boolean) {
+
         if (Status == true) {
             this.Panal_NotPlay.active = true
         }
@@ -172,7 +177,8 @@ export default class UI_Manager extends cc.Component {
     }
 
     public Hide_ClamReward() {
-        this.Clam_reward.node.getParent().active = false;
+
+        this.Cliam_reward.node.getParent().active = false;
         if (this.Bonuse_ScaleUp != null) {
             this.StopAllTween();
         }
@@ -183,7 +189,7 @@ export default class UI_Manager extends cc.Component {
 
         for (let i = 0; i < this.Bonuse_ScaleUp.length; i++) {
             this.Bonuse_ScaleUp[i].stop();
-            cc.tween(this.StackArr[i]).to(0.1, { scale: 1 }, { easing: 'sineIn' }).start();
+            let a = cc.tween(this.Stack_Array[i]).to(0.1, { scale: 1 }, { easing: 'sineIn' }).start();            
         }
 
     }

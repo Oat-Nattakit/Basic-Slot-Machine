@@ -37,11 +37,12 @@ export class Server_Manager {
         this.Result = new Array(Range);
     }
 
-    public Slot_GetSymbolValue() {
+    public Slot_GetSymbolValue() {        
+        
         if (this.GetValueRound == false) {
             for (let i = 0; i < this.Result.length; i++) {
                 this.Result[i] = Math.floor(Math.random() * 5);
-            }
+            }           
             this.GetValueRound = true;
         }
     }
@@ -50,9 +51,9 @@ export class Server_Manager {
         return this.Result;
     }
 
-    public DataPlayer_BeforeSpin(Line: number, Bet: number, Current_Balance: number, Total_Bet: number) {
+    public DataPlayer_BeforeSpin(Data : Data_Play) {
 
-        this.Data = new Data_Play(Line, Bet, Current_Balance, Total_Bet);
+        this.Data = Data;        
         return this.Data;
     }
 
@@ -62,7 +63,7 @@ export class Server_Manager {
         let Payout3 : CreatePayout3 = new CreatePayout3();
 
         let Total_Payout2 : number = 0;
-        let Total_Payout3  :number = 0;
+        let Total_Payout3 : number = 0;
 
         for(let i=0 ; i<Symbol2.length ; i++){
             let GetPrice = Payout2.ListPayout2[Symbol2[i]];

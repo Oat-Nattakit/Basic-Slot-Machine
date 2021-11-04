@@ -272,9 +272,9 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 122,
-      "g": 215,
-      "b": 233,
+      "r": 150,
+      "g": 222,
+      "b": 236,
       "a": 255
     },
     "_contentSize": {
@@ -846,9 +846,9 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 0,
+      "g": 0,
+      "b": 0,
       "a": 255
     },
     "_contentSize": {
@@ -4253,9 +4253,9 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
+      "r": 255,
+      "g": 255,
+      "b": 255,
       "a": 255
     },
     "_contentSize": {
@@ -4356,7 +4356,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -130,
+        -120,
         0,
         0,
         0,
@@ -4557,7 +4557,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "477ae6e5-2987-44b1-a193-bcac7eec081f"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -4749,7 +4749,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "477ae6e5-2987-44b1-a193-bcac7eec081f"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -4941,7 +4941,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "477ae6e5-2987-44b1-a193-bcac7eec081f"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -4972,9 +4972,7 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "4073eabf-055a-43d0-93b3-08cdfd090e51"
-    },
+    "_spriteFrame": null,
     "_type": 0,
     "_sizeMode": 0,
     "_fillType": 0,
@@ -5395,7 +5393,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "477ae6e5-2987-44b1-a193-bcac7eec081f"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -5587,7 +5585,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "477ae6e5-2987-44b1-a193-bcac7eec081f"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -5779,7 +5777,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "477ae6e5-2987-44b1-a193-bcac7eec081f"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -5810,9 +5808,7 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "4073eabf-055a-43d0-93b3-08cdfd090e51"
-    },
+    "_spriteFrame": null,
     "_type": 0,
     "_sizeMode": 0,
     "_fillType": 0,
@@ -6032,7 +6028,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        130,
+        120,
         0,
         0,
         0,
@@ -6233,7 +6229,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "477ae6e5-2987-44b1-a193-bcac7eec081f"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -6425,7 +6421,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "477ae6e5-2987-44b1-a193-bcac7eec081f"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -6617,7 +6613,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "477ae6e5-2987-44b1-a193-bcac7eec081f"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -6648,9 +6644,7 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "4073eabf-055a-43d0-93b3-08cdfd090e51"
-    },
+    "_spriteFrame": null,
     "_type": 0,
     "_sizeMode": 0,
     "_fillType": 0,
@@ -6827,7 +6821,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "5f0e8b43-12e9-44d2-b7f5-910f4bedd883"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -6891,11 +6885,11 @@
       "height": 40
     },
     "_N$startAxis": 1,
-    "_N$paddingLeft": 0,
+    "_N$paddingLeft": 10,
     "_N$paddingRight": 10,
     "_N$paddingTop": 0,
     "_N$paddingBottom": 0,
-    "_N$spacingX": 10,
+    "_N$spacingX": 0,
     "_N$spacingY": 10,
     "_N$verticalDirection": 1,
     "_N$horizontalDirection": 0,
@@ -7386,7 +7380,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 500,
+      "width": 510,
       "height": 5
     },
     "_anchorPoint": {
@@ -7403,8 +7397,8 @@
         0,
         0,
         0,
-        0.35836794954530027,
-        0.9335804264972017,
+        0.36243803828370164,
+        0.9320078692827986,
         1,
         1,
         1
@@ -7414,7 +7408,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 42
+      "z": 42.5
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -7466,8 +7460,8 @@
     "alignMode": 1,
     "_target": null,
     "_alignFlags": 40,
-    "_left": -60,
-    "_right": -60,
+    "_left": -65,
+    "_right": -65,
     "_top": 0,
     "_bottom": 0,
     "_verticalCenter": 0,
@@ -7510,7 +7504,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 500,
+      "width": 510,
       "height": 5
     },
     "_anchorPoint": {
@@ -7527,8 +7521,8 @@
         0,
         0,
         0,
-        -0.35836794954530027,
-        0.9335804264972017,
+        -0.36243803828370164,
+        0.9320078692827986,
         1,
         1,
         1
@@ -7538,7 +7532,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": -42
+      "z": -42.5
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -7590,8 +7584,8 @@
     "alignMode": 1,
     "_target": null,
     "_alignFlags": 40,
-    "_left": -60,
-    "_right": -60,
+    "_left": -65,
+    "_right": -65,
     "_top": 0,
     "_bottom": 0,
     "_verticalCenter": 0,
@@ -9129,7 +9123,7 @@
     "acc_": {
       "__id__": 191
     },
-    "Clam_reward": {
+    "Cliam_reward": {
       "__id__": 175
     },
     "TextBonus": {

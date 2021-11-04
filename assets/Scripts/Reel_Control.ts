@@ -75,6 +75,7 @@ export default class Reel_Control extends cc.Component {
         this.NumberReel_Slot = [Reel_Number.Reel_1, Reel_Number.Reel_2, Reel_Number.Reel_3];
         this.SlotSymbol_ID = this.PreGame_SetSymbolID();
         for (let i = 0; i < this.SlotNode.length; i++) {
+            this.SlotNode[i].scale = 0.9;
             let GetSp = this.SlotNode[i].getComponent(cc.Sprite);
             GetSp.spriteFrame = this.Picture_Symbol[this.SlotSymbol_ID[i]];
         }
