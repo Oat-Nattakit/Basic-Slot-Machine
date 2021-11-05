@@ -45,15 +45,15 @@ export class Server_Manager {
             }
             this.GetValueRound = true;
         }*/
-        
         if (this.GetValueRound == false) {
+            this.GetValueRound = true;
             return new Promise(resolve => {
                 setTimeout(() => {
                     resolve(this.TestAwiteValue());
                 }, 2000);
             });
         }
-        else{
+        else {
             return new Promise(resolve => {
                 setTimeout(() => {
                     resolve(0);
@@ -64,13 +64,14 @@ export class Server_Manager {
 
     private TestAwiteValue() {
 
-        if (this.GetValueRound == false) {
 
-            for (let i = 0; i < this.Result.length; i++) {
-                this.Result[i] = Math.floor(Math.random() * 5);
-            }
-            this.GetValueRound = true;
+        // if (this.GetValueRound == false) {
+
+        for (let i = 0; i < this.Result.length; i++) {
+            this.Result[i] = Math.floor(Math.random() * 5);
         }
+        //this.GetValueRound = true;
+        //}
     }
 
     public Slot_Result(): number[] {

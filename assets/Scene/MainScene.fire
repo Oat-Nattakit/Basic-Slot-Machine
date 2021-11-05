@@ -7748,7 +7748,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Node_ButtonClaimReward",
+    "_name": "Node_Win",
     "_objFlags": 0,
     "_parent": {
       "__id__": 2
@@ -9126,6 +9126,7 @@
     "Cliam_reward": {
       "__id__": 175
     },
+    "Hide_Lose": null,
     "TextBonus": {
       "__id__": 85
     },

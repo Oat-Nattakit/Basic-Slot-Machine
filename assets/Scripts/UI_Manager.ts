@@ -31,6 +31,9 @@ export default class UI_Manager extends cc.Component {
     @property(cc.Button)
     public Cliam_reward: cc.Button = null;
 
+    @property(cc.Button)
+    public Hide_Lose: cc.Button = null;
+
     @property(cc.Label)
     private TextBonus: cc.Label = null;
 
@@ -64,10 +67,6 @@ export default class UI_Manager extends cc.Component {
 
     private Bonuse_ScaleUp: cc.Tween[] = null;
     private Stack_Array: cc.Node[] = null;
-    private nummmm: number = 0;
-    private test : number = 0;
-    private test2 : number = 0;
-    private stringTest : string = "";
 
     public add_ArrayButton() {
 
@@ -118,42 +117,16 @@ export default class UI_Manager extends cc.Component {
 
     public ShowPriceBonus(Reward: number, Bonus: boolean) {
 
-        this.nummmm = 0;
         this.RewardNode.active = true;
         this.Cliam_reward.node.getParent().active = true;
-        this.stringTest ="";
 
         if (Bonus == true) {
             this.TextBonus.string = "Bonus : " + Reward.toString();
-            //this.TextBonus.string = "Bonus : " + this.stringTest;
         }
         else {
-            //this.TextBonus.string = "Reward : " + this.stringTest;
             this.TextBonus.string = "Reward : " + Reward.toString();
         }
-       this.test = Reward/60;
-       this.test2 = 0;
-
-      //  console.log(Reward / 60);
-
     }
-
-   /* update(dt) {
-
-        if (this.RewardNode.active == true) {
-            this.nummmm += dt;
-            if (this.nummmm < 1) {
-                this.stringTest = Math.round(this.test2).toString();
-                this.TextBonus.string = "Bonus : " + this.stringTest;
-                this.test2 += this.test;               
-            }  
-            else{
-                this.stringTest =  Math.round(this.test2).toString();
-                this.TextBonus.string = "Bonus : " + this.stringTest;
-
-            }          
-        }
-    }*/
 
     private Unactive_Line_Payline() {
         for (let i = 0; i < this.Line_Payline.length; i++) {
@@ -207,6 +180,10 @@ export default class UI_Manager extends cc.Component {
         else {
             this.Panal_NotPlay.active = false;
         }
+    }
+
+    public Player_LoseRound() {
+
     }
 
     public Hide_ClamReward() {

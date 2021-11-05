@@ -39,7 +39,8 @@ export default class Game_Control extends cc.Component {
     private Last_animation: cc.Animation;
 
     private Data_Player: Data_Play;
-    private listButton: cc.Button[] = new Array();
+    private Lise : number = 1;
+
 
     onLoad() {
         this.UI_Manager = this.node.getComponent(UI_Manager);
@@ -50,6 +51,7 @@ export default class Game_Control extends cc.Component {
         this.Server_ = Server_Manager.Getinstant();
 
         this.UI_Manager.add_ArrayButton();
+        
     }
 
     start() {
@@ -94,8 +96,7 @@ export default class Game_Control extends cc.Component {
 
     }
     private CheckCurrentBalance() {
-
-        console.log("11111");
+        
         this.Balance_Status = false;
         this.UI_Manager.startPlayBonusAnimation();
         this.Data_Player = new Data_Play(this.LineBetValue, this.Bet_Price, this.Current_balance, this.TotalBet_Value);
@@ -106,7 +107,7 @@ export default class Game_Control extends cc.Component {
     async Spin_All_Reel() {
 
         if (this.ReelRun == false) {
-            this.ReelRun = true;           
+            this.ReelRun = true;
             this.CheckCurrentBalance();
         }
 
@@ -121,58 +122,30 @@ export default class Game_Control extends cc.Component {
             for (let i = 0; i < Reel_Button.length; i++) {
                 if (Reel_Button[i].enabled == true) {
                     setTimeout(() => this.Spin_One_Reel(Reel_Button[i]), WaitingTime);
-                    WaitingTime += 150;
+                    WaitingTime += 200;
                 }
             }
         }
-
-        /*if (this.Balance_Status == true) {
-            if (this.TotalReel == 0) {
-                this.ReelRun = true;
-                let ReelRange = this.Reel_Control.ReelNode.length;
-                this.UI_Manager.Button_Status(false, ReelRange);
-                this.Last_animation = this.Reel_Control.All_Reel_PlayAniamtion();
-                await this.Set_DefultReel();
-                setTimeout(() => this.Stop_All_Reel(), 1000);
-            }
-            else {
-                for (let i = 0; i < this.Reel_Control.Reel_Button.length; i++) {
-                    if (this.Reel_Control.Reel_Button[i].enabled == true) {
-                        setTimeout(()=> this.Spin_One_Reel(this.Reel_Control.Reel_Button[i]),WaitingTime);
-                        WaitingTime += 150;
-                    }
-                }
-            }
-        }*/
         else {
             this.UI_Manager.Balance_ReadytoPlay(true);
-            // }
         }
     }
 
-    /*private Stop_All_Reel() {
-
-        let Reel_Range: number = this.Reel_Control.ReelNode.length;
-        for (let i = 0; i < Reel_Range; i++) {
-            setTimeout(() => this.Reel_Control.SetPicture_Slot(i), 100 * i);
-        }
-        this.End_AnimationCheckResult();
-    }*/
-
     async Spin_One_Reel(ButtonReel: cc.Button) {
 
-        if (this.ReelRun == false) {    
-            this.ReelRun = true;            
+        if (this.ReelRun == false) {
+            this.ReelRun = true;
             this.CheckCurrentBalance();
         }
 
-        if (this.Balance_Status == true) {            
+        if (this.Balance_Status == true) {
             let ReelNumber = ButtonReel.node.getComponent(Reel_Description).Reel_Description;
             this.Last_animation = this.Reel_Control.One_Reel_PlayAnimation(ButtonReel, ReelNumber);
             this.TotalReel++;
-            this.UI_Manager.Button_Status(false, this.TotalReel);
-            await this.Set_DefultReel();
-            setTimeout(() => this.Stop_Once_Reel(ReelNumber), 1000);
+            this.UI_Manager.Button_Status(false, this.TotalReel);            
+            await this.Set_DefultReel();            
+            setTimeout(() => this.Stop_Once_Reel(ReelNumber), 500 *this.Lise );
+            this.Lise++;
         }
         else {
             this.UI_Manager.Balance_ReadytoPlay(true);
@@ -189,7 +162,7 @@ export default class Game_Control extends cc.Component {
     }
 
     private End_AnimationCheckResult() {
-
+        this.Lise = 0;
         this.TotalReel = 0;
         this.ReelRun = false;
         this.CheckPlayer_reward = true;
@@ -200,7 +173,7 @@ export default class Game_Control extends cc.Component {
         if (this.CheckPlayer_reward == true) {
             if (this.Last_animation.getAnimationState('ReelAnimation').isPlaying == false) {
                 this.CheckPlayer_reward = false;
-                setTimeout(() => this.CheckResult_Player(), 100);
+                setTimeout(() => this.CheckResult_Player(), 200);
             }
         }
     }
@@ -234,6 +207,11 @@ export default class Game_Control extends cc.Component {
             }
             this.UI_Manager.SetSlot_BG_Bonuse(ListBlackground_Slot);
             this.UI_Manager.ShowPriceBonus(this.Total_Reward, Payline3_Bonus);
+        }
+
+        else{
+            this.Reel_Control.SetDefult_Blackground();
+            this.UI_Manager.startPlayBonusAnimation();
         }
 
         this.EndRound_Game();
@@ -281,14 +259,14 @@ export default class Game_Control extends cc.Component {
 
     private Balance_Update(): boolean {
 
-        let Balacne_Ready: boolean = false;
+        let Balance_Ready: boolean = false;
         let Balance = this.Current_balance - this.TotalBet_Value;
         if (Balance >= 0) {
             this.Current_balance = Balance;
             this.UI_Manager.ShowCurrentBalance(this.Current_balance);
-            Balacne_Ready = true;
+            Balance_Ready = true;
         }
-        return Balacne_Ready;
+        return Balance_Ready;
     }
 
     private HidePanal_BalanceNotReady() {
