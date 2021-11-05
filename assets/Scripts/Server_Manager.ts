@@ -37,12 +37,38 @@ export class Server_Manager {
         this.Result = new Array(Range);
     }
 
-    public Slot_GetSymbolValue() {        
-        
-        if (this.GetValueRound == false) {
+    public Slot_GetSymbolValue() {
+
+        /*if (this.GetValueRound == false) {
             for (let i = 0; i < this.Result.length; i++) {
                 this.Result[i] = Math.floor(Math.random() * 5);
-            }           
+            }
+            this.GetValueRound = true;
+        }*/
+        
+        if (this.GetValueRound == false) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve(this.TestAwiteValue());
+                }, 2000);
+            });
+        }
+        else{
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve(0);
+                }, 2000);
+            });
+        }
+    }
+
+    private TestAwiteValue() {
+
+        if (this.GetValueRound == false) {
+
+            for (let i = 0; i < this.Result.length; i++) {
+                this.Result[i] = Math.floor(Math.random() * 5);
+            }
             this.GetValueRound = true;
         }
     }
@@ -51,30 +77,30 @@ export class Server_Manager {
         return this.Result;
     }
 
-    public DataPlayer_BeforeSpin(Data : Data_Play) {
+    public DataPlayer_BeforeSpin(Data: Data_Play) {
 
-        this.Data = Data;        
+        this.Data = Data;
         return this.Data;
     }
 
-    public Player_WinRound(Symbol2: number[],Symbol3: number[]) {
-       
-        let Payout2 : CreatePayout2 = new CreatePayout2();
-        let Payout3 : CreatePayout3 = new CreatePayout3();
+    public Player_WinRound(Symbol2: number[], Symbol3: number[]) {
 
-        let Total_Payout2 : number = 0;
-        let Total_Payout3 : number = 0;
+        let Payout2: CreatePayout2 = new CreatePayout2();
+        let Payout3: CreatePayout3 = new CreatePayout3();
 
-        for(let i=0 ; i<Symbol2.length ; i++){
+        let Total_Payout2: number = 0;
+        let Total_Payout3: number = 0;
+
+        for (let i = 0; i < Symbol2.length; i++) {
             let GetPrice = Payout2.ListPayout2[Symbol2[i]];
             Total_Payout2 += GetPrice;
         }
-        for(let i=0 ; i<Symbol3.length ; i++){
+        for (let i = 0; i < Symbol3.length; i++) {
             let GetPrice = Payout3.ListPayout3[Symbol3[i]];
             Total_Payout3 += GetPrice;
         }
 
-        this.Reward = new Player_Reward(Total_Payout2,Total_Payout3);
+        this.Reward = new Player_Reward(Total_Payout2, Total_Payout3);
         return this.Reward;
     }
 }

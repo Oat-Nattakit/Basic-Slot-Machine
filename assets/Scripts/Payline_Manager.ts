@@ -47,7 +47,7 @@ export class Payline_Manager {
     }
 
     public SetPayLine_Reward(Line_Bet: number) {
-
+        
         this.Bonus_Position = new Array();
         this.PaylineTrue = new Array();
 

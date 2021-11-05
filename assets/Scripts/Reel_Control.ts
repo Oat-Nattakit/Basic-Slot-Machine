@@ -81,16 +81,21 @@ export default class Reel_Control extends cc.Component {
         }
     }
 
-    private GetSymbol_ID_FromServer() {
-        this.Server_.Slot_GetSymbolValue();
+    private async GetSymbol_ID_FromServer() {
+        
+        await this.Server_.Slot_GetSymbolValue();
         this.SlotSymbol_ID = this.Server_.Slot_Result();
         this.Payline.ManagePayline(this.SlotSymbol_ID);
     }
 
     public Set_SlotSymbol() {
-
+        
         if (this.Stack_ReelRun.length == 0) {
-            this.GetSymbol_ID_FromServer();
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve(this.GetSymbol_ID_FromServer());
+                }, 0);
+            });            
         }
     }
 
@@ -129,7 +134,7 @@ export default class Reel_Control extends cc.Component {
         else if (ReelSlot == 2) {
             this.RoundShowSlot(SlotLine.Slot_6, this.SlotNode.length);
         }
-        if (this.Stack_ReelRun.length == this.ReelNode.length) {
+        if (this.Stack_ReelRun.length == this.ReelNode.length) {           
             this.Reset_Slot();
         }
     }
