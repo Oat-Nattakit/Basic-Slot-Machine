@@ -63,8 +63,7 @@ export default class UI_Manager extends cc.Component {
     private ListButton: cc.Button[] = new Array();
 
     private Bonuse_ScaleUp: cc.Tween[] = null;
-    private Stack_Array: cc.Node[] = null;
-    private GameActive: boolean = false;
+    private Stack_Array: cc.Node[] = null;   
 
     public add_ArrayButton() {
 
@@ -76,6 +75,7 @@ export default class UI_Manager extends cc.Component {
     }
 
     public startPlayBonusAnimation() {
+
         this.Bonuse_ScaleUp = null;
         this.Bonus_Animation.node.active = false;
         this.RewardNode.active = false;
@@ -84,20 +84,20 @@ export default class UI_Manager extends cc.Component {
         clearTimeout(this.timer);
     }
 
-    public Button_Status(Status: boolean, CurrentRound: number = 0) {
+    public Button_Status(Status_ButtonActive: boolean, CurrentRound: number = 0) {
 
         let Reel_Range = 3;
         for (let i = 0; i < this.ListButton.length; i++) {
-            if (Status == true) {
-                this.ListButton[i].interactable = Status;
+            if (Status_ButtonActive == true) {
+                this.ListButton[i].interactable = Status_ButtonActive;
             }
             else {
                 if (CurrentRound == Reel_Range) {
-                    this.ListButton[i].interactable = Status;
+                    this.ListButton[i].interactable = Status_ButtonActive;
                 }
                 else {
                     if (i > 0) {
-                        this.ListButton[i].interactable = Status;
+                        this.ListButton[i].interactable = Status_ButtonActive;
                     }
                 }
             }
@@ -127,32 +127,38 @@ export default class UI_Manager extends cc.Component {
     }
 
     private Unactive_Line_Payline() {
+
         for (let i = 0; i < this.Line_Payline.length; i++) {
             this.Line_Payline[i].active = false;
         }
     }
 
+    public Show_Use_Payline(CurrentLineUse: number) {
+
+        this.Unactive_Line_Payline();
+        for (let i = CurrentLineUse - 1; i >= 0; i--) {
+            this.Active_Line_Payline(i);
+        }
+    }
+
     public Active_Line_Payline(Payline_number: number) {
+
         this.Line_Payline[Payline_number].active = true;
     }
 
     public ShowCurrentBalance(Currnet_Balance: number) {
+
         this.Balance_Text.string = Currnet_Balance.toString();
     }
 
     public ShowCurrentBet(CurrentBet: number) {
+
         this.CurrentBet_Text.string = CurrentBet.toString();
     }
 
     public ShowCurrentLineBet(CurrentLineBet: number) {
+
         this.BetLine_Text.string = CurrentLineBet.toString();
-        /*if (this.GameActive == true) {
-            this.Unactive_Line_Payline();
-            for (let i = CurrentLineBet - 1; i >= 0; i--) {
-                this.Active_Line_Payline(i);
-            }
-        }
-        this.GameActive = true;*/
     }
 
     public TotalBet_Show(value: number) {

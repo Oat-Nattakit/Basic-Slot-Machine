@@ -72,6 +72,7 @@ export default class Game_Control extends cc.Component {
         let StartTotalBetPrice = 0;
 
         this.Data_Player = new Data_Play(Stat_Line_Bet, StartBetPrice, StartBalance, StartTotalBetPrice);
+        this.UI_Manager.ShowCurrentBalance(this.Data_Player.Balance);
         this.UpdateData_TotalBet();
 
     }
@@ -111,7 +112,7 @@ export default class Game_Control extends cc.Component {
         this.ReelRun = true;
         this.Balance_Status = false;
         this.UI_Manager.startPlayBonusAnimation();
-        this.Data_Player = this.Server_.DataPlayer_BeforeSpin(this.Data_Player);
+        this.Data_Player = this.Server_.DataPlayer_BeforeSpin(this.Data_Player);        
         this.Balance_Status = this.Balance_Update();
     }
 
@@ -190,7 +191,7 @@ export default class Game_Control extends cc.Component {
         let GetStack2 = this.Payline.StackSymbol_Payout2();
         let GetStack3 = this.Payline.StackSymbol_Payout3();
 
-        let Reward = this.Server_.Player_WinRound(GetStack2, GetStack3);
+        let Reward = this.Server_.Player_WinRound(GetStack2, GetStack3,this.Data_Player);
 
         this.Show_Reward(Reward);
     }
@@ -198,7 +199,8 @@ export default class Game_Control extends cc.Component {
     private Show_Reward(Reward: Player_Reward) {
 
         this.Total_Reward = 0;
-        this.Total_Reward = Reward.Payout2 + Reward.Payout3;
+        this.Total_Reward = Reward.Payout2 + Reward.Payout3;       
+
         let Payline3_Bonus = false;
         if (this.Total_Reward != 0) {
 
@@ -232,7 +234,6 @@ export default class Game_Control extends cc.Component {
 
         this.Data_Player.Balance += this.Total_Reward;
         this.UI_Manager.ShowCurrentBalance(this.Data_Player.Balance);
-
         this.UI_Manager.Button_Status(true);
         this.Server_.GetValueRound = false;
     }
@@ -254,12 +255,14 @@ export default class Game_Control extends cc.Component {
     private LineBet_Add() {
         //this.Bet.Line_Control(1);
         this.Bet.Line_Control(this.Data_Player, 1);
+        this.UI_Manager.Show_Use_Payline(this.Data_Player.Line);
         this.UpdateData_TotalBet();
     }
 
     private LineBet_Del() {
         //this.Bet.Line_Control(-1);
         this.Bet.Line_Control(this.Data_Player, -1);
+        this.UI_Manager.Show_Use_Payline(this.Data_Player.Line);
         this.UpdateData_TotalBet();
     }
 

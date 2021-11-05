@@ -14,7 +14,7 @@ export class Server_Manager {
 
     private static Ins: Server_Manager = new Server_Manager();
     private Result: number[];
-    private Balance: number = 10000;
+    private Balance: number = 1000;
 
     private Data: Data_Play;
     private Reward: Player_Reward;
@@ -80,12 +80,11 @@ export class Server_Manager {
 
     public DataPlayer_BeforeSpin(Data: Data_Play) {
 
-        this.Data = Data;
-        console.log(this.Data);
+        this.Data = Data;        
         return this.Data;
     }
 
-    public Player_WinRound(Symbol2: number[], Symbol3: number[]) {
+    public Player_WinRound(Symbol2: number[], Symbol3: number[],Data : Data_Play) {
 
         let Payout2: CreatePayout2 = new CreatePayout2();
         let Payout3: CreatePayout3 = new CreatePayout3();
@@ -95,11 +94,11 @@ export class Server_Manager {
 
         for (let i = 0; i < Symbol2.length; i++) {
             let GetPrice = Payout2.ListPayout2[Symbol2[i]];
-            Total_Payout2 += GetPrice;
+            Total_Payout2 += GetPrice * Data.Bet;
         }
         for (let i = 0; i < Symbol3.length; i++) {
             let GetPrice = Payout3.ListPayout3[Symbol3[i]];
-            Total_Payout3 += GetPrice;
+            Total_Payout3 += GetPrice*Data.Bet;
         }
 
         this.Reward = new Player_Reward(Total_Payout2, Total_Payout3);
