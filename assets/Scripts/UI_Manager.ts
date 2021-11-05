@@ -31,9 +31,6 @@ export default class UI_Manager extends cc.Component {
     @property(cc.Button)
     public Cliam_reward: cc.Button = null;
 
-    @property(cc.Button)
-    public Hide_Lose: cc.Button = null;
-
     @property(cc.Label)
     private TextBonus: cc.Label = null;
 
@@ -67,6 +64,7 @@ export default class UI_Manager extends cc.Component {
 
     private Bonuse_ScaleUp: cc.Tween[] = null;
     private Stack_Array: cc.Node[] = null;
+    private GameActive: boolean = false;
 
     public add_ArrayButton() {
 
@@ -148,6 +146,13 @@ export default class UI_Manager extends cc.Component {
 
     public ShowCurrentLineBet(CurrentLineBet: number) {
         this.BetLine_Text.string = CurrentLineBet.toString();
+        /*if (this.GameActive == true) {
+            this.Unactive_Line_Payline();
+            for (let i = CurrentLineBet - 1; i >= 0; i--) {
+                this.Active_Line_Payline(i);
+            }
+        }
+        this.GameActive = true;*/
     }
 
     public TotalBet_Show(value: number) {
@@ -180,10 +185,6 @@ export default class UI_Manager extends cc.Component {
         else {
             this.Panal_NotPlay.active = false;
         }
-    }
-
-    public Player_LoseRound() {
-
     }
 
     public Hide_ClamReward() {

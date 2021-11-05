@@ -5,6 +5,8 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import { Data_Play } from "./Server_Manager";
+
 const { ccclass, property } = cc._decorator;
 
 export class Bet_Manager {
@@ -15,7 +17,7 @@ export class Bet_Manager {
 
     private CountLine: number = 0;
     private MaxLine: number = 0;
-    private CurrentBet_Price : number = 0;
+    //private CurrentBet_Price: number = 0;
 
     constructor() {
         this.CountBet = 0;
@@ -29,7 +31,7 @@ export class Bet_Manager {
         return Bet_Manager.Ins_;
     }
 
-    public Bet_Control(Value: number){
+    /*public Bet_Control( Value: number){
 
         this.CurrentBet_Price = 0;
         this.CountBet += Value;
@@ -41,15 +43,35 @@ export class Bet_Manager {
             this.CountBet = this.Bet_Price.BetStep.length - 1;
         }
         this.CurrentBet_Price = this.Bet_Price.BetStep[this.CountBet];        
+    }*/
+
+    public Bet_StartValue() {
+        let StartBet = this.Bet_Price.BetStep[0];
+        return StartBet;
+    }
+    public Bet_Control(Data: Data_Play, Value: number) {
+
+        //this.CurrentBet_Price = 0;
+        //Data.Total_Bet = 0;
+        //Data.Bet += Value;
+        this.CountBet += Value;
+
+        if (this.CountBet <= 0) {
+            this.CountBet = 0;
+        }
+        else if (this.CountBet >= this.Bet_Price.BetStep.length) {
+            this.CountBet = this.Bet_Price.BetStep.length - 1;
+        }
+        Data.Bet = this.Bet_Price.BetStep[this.CountBet];
     }
 
-    public LineBet_Start(MaxLine: number) : number{
+    public LineBet_Start(MaxLine: number): number {
         this.CountLine = MaxLine;
         this.MaxLine = MaxLine;
         return this.CountLine;
     }
 
-    public Line_Control(LineBet_Value: number = 0){
+    /*public Line_Control(LineBet_Value: number = 0){
 
         this.CountLine += LineBet_Value;
 
@@ -58,16 +80,27 @@ export class Bet_Manager {
         }
         else if (this.CountLine <= 1) {
             this.CountLine = 1
-        }        
+        }              
+    }*/
+
+    public Line_Control(Data: Data_Play, CountLine: number = 0) {
+
+        Data.Line += CountLine;
+        if (Data.Line >= this.MaxLine) {
+            Data.Line = this.MaxLine;
+        }
+        else if (Data.Line <= 1) {
+            Data.Line = 1;
+        }
     }
 
-    public Current_LineBet() : number{
+    /*public Current_LineBet() : number{
         return this.CountLine;
     }
 
     public Current_BetPrice() : number{
         return this.CurrentBet_Price;
-    }
+    }*/
 }
 
 export enum Bet_Price {

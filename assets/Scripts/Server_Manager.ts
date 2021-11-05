@@ -81,6 +81,7 @@ export class Server_Manager {
     public DataPlayer_BeforeSpin(Data: Data_Play) {
 
         this.Data = Data;
+        console.log(this.Data);
         return this.Data;
     }
 
