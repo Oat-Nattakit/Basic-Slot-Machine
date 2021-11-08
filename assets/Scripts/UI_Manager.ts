@@ -13,7 +13,7 @@ const { ccclass, property } = cc._decorator;
 export default class UI_Manager extends cc.Component {
 
     @property(cc.Button)
-    public spin_Button: cc.Button = null;    
+    public spin_Button: cc.Button = null;
 
     @property(cc.Button)
     public balanceNot_reandy: cc.Button = null;
@@ -25,7 +25,7 @@ export default class UI_Manager extends cc.Component {
     private bonus_Text: cc.Label = null;
 
     @property(cc.Label)
-    private balance_Text: cc.Label = null;    
+    private balance_Text: cc.Label = null;
 
     @property(cc.Label)
     private totalBet_Text: cc.Label = null;
@@ -40,20 +40,20 @@ export default class UI_Manager extends cc.Component {
     private bonus_Animation: sp.Skeleton = null;
 
     @property(ButtonNode_Manager)
-    public betPrice : ButtonNode_Manager = null;
+    public betPrice: ButtonNode_Manager = null;
 
     @property(ButtonNode_Manager)
-    public linePayout : ButtonNode_Manager = null;
+    public linePayout: ButtonNode_Manager = null;
 
     @property(cc.Node)
-    private line_Payline : cc.Node[] = new Array();
+    private line_Payline: cc.Node[] = new Array();
 
     private _timer: ReturnType<typeof setTimeout>;
 
     private _listButton: cc.Button[] = new Array();
 
     private _bonuse_ScaleUp: cc.Tween[] = null;
-    private _stack_BackgroundNode: cc.Node[] = null;   
+    private _stack_BackgroundNode: cc.Node[] = null;
 
     public add_ArrayButton() {
 
@@ -61,7 +61,7 @@ export default class UI_Manager extends cc.Component {
         this._listButton.push(this.betPrice.add_Button);
         this._listButton.push(this.betPrice.del_Button);
         this._listButton.push(this.linePayout.add_Button);
-        this._listButton.push(this.linePayout.del_Button);       
+        this._listButton.push(this.linePayout.del_Button);
     }
 
     public startPlayBonusAnimation() {
@@ -142,7 +142,7 @@ export default class UI_Manager extends cc.Component {
     }
 
     public showCurrentBet(_current_Bet: number) {
-       
+
         this.betPrice.showValue_Text.string = _current_Bet.toString();
     }
 
@@ -174,13 +174,15 @@ export default class UI_Manager extends cc.Component {
     }
 
     public balance_ReadytoPlay(_playStatus: boolean) {
-
-        if (_playStatus == true) {
-            this.notPlay_Node.active = true
+        
+        this.balanceNot_reandy.node.getParent().active = _playStatus;
+        /*if (_playStatus == true) {
+           
+            //this.notPlay_Node.active = true
         }
         else {
-            this.notPlay_Node.active = false;
-        }
+            //this.notPlay_Node.active = false;
+        }*/
     }
 
     public hide_ReceiveReward() {

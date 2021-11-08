@@ -149,9 +149,8 @@ export default class Game_Control extends cc.Component {
     }
     private async _testwaiting() {
 
-        await this._set_DefultReel();
+        await this._set_DefultReel();    
         for (let i = 0; i < this._reelSpin_list.length; i++) {
-            //setTimeout(() => this.Reel_Control.testSlow(this.ListTest[i]), 250 * this.List);
             setTimeout(() => this._stop_Once_Reel(this._reelSpin_list[i]), 500 * this._list);
             this._list++;
         }

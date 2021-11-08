@@ -57,20 +57,15 @@ export class Server_Manager {
         }
     }
 
-    private _testAwiteValue() {
-
-
-        // if (this.GetValueRound == false) {
+    private _testAwiteValue() {        
 
         for (let i = 0; i < this._result_symbol.length; i++) {
             this._result_symbol[i] = Math.floor(Math.random() * 5);
-        }
-
-        //this.GetValueRound = true;
-        //}
+        }       
     }
 
     public slot_Result(): number[] {       
+        console.log(this._result_symbol);
         return this._result_symbol;
     }
 
@@ -84,7 +79,7 @@ export class Server_Manager {
         let _data_Respon : SlotDataPatten = JSON.parse(_jsonData);
 
         this._data_Player = new Data_Play(_data_Respon.bl , this._data_Player.b , this._data_Player.l ,this._data_Player.tb);    */  
-        //#endregion
+        //#endregion       
         
         return this._data_Player;
     }
