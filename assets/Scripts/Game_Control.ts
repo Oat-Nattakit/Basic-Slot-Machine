@@ -62,12 +62,13 @@ export default class Game_Control extends cc.Component {
     private _setButton_Function() {
 
         this._ui_Manager.spin_Button.node.on('click', this._spin_All_Reel, this);
-        this._ui_Manager.add_Bet.node.on('click', this._bet_Manager_Add, this);
-        this._ui_Manager.del_Bet.node.on('click', this.Bet_Manager_Del, this);
-        this._ui_Manager.add_Line.node.on('click', this._lineBet_Add, this);
-        this._ui_Manager.del_Line.node.on('click', this._lineBet_Del, this);
         this._ui_Manager.balanceNot_reandy.node.on('click', this._hidePanal_BalanceNotReady, this);
         this._ui_Manager.receive_reward.node.on('click', this._hide_UI_Reward, this);
+
+        this._ui_Manager.betPrice.add_Button.node.on('click', this._bet_Manager_Add, this);
+        this._ui_Manager.betPrice.del_Button.node.on('click', this.Bet_Manager_Del, this);
+        this._ui_Manager.linePayout.add_Button.node.on('click', this._lineBet_Add, this);
+        this._ui_Manager.linePayout.del_Button.node.on('click', this._lineBet_Del, this);        
     }
 
     private _setReelButton() {

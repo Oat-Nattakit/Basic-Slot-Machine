@@ -5,25 +5,15 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import ButtonNode_Manager from "./ButtonNode_Manager";
+
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class UI_Manager extends cc.Component {
 
     @property(cc.Button)
-    public spin_Button: cc.Button = null;
-
-    @property(cc.Button)
-    public add_Bet: cc.Button = null;
-
-    @property(cc.Button)
-    public del_Bet: cc.Button = null;
-
-    @property(cc.Button)
-    public add_Line: cc.Button = null;
-
-    @property(cc.Button)
-    public del_Line: cc.Button = null;
+    public spin_Button: cc.Button = null;    
 
     @property(cc.Button)
     public balanceNot_reandy: cc.Button = null;
@@ -35,13 +25,7 @@ export default class UI_Manager extends cc.Component {
     private bonus_Text: cc.Label = null;
 
     @property(cc.Label)
-    private balance_Text: cc.Label = null;
-
-    @property(cc.Label)
-    private currentBet_Text: cc.Label = null;
-
-    @property(cc.Label)
-    private betLine_Text: cc.Label = null;
+    private balance_Text: cc.Label = null;    
 
     @property(cc.Label)
     private totalBet_Text: cc.Label = null;
@@ -54,6 +38,12 @@ export default class UI_Manager extends cc.Component {
 
     @property(sp.Skeleton)
     private bonus_Animation: sp.Skeleton = null;
+
+    @property(ButtonNode_Manager)
+    public betPrice : ButtonNode_Manager = null;
+
+    @property(ButtonNode_Manager)
+    public linePayout : ButtonNode_Manager = null;
 
     @property(cc.Node)
     private line_Payline : cc.Node[] = new Array();
@@ -68,10 +58,10 @@ export default class UI_Manager extends cc.Component {
     public add_ArrayButton() {
 
         this._listButton.push(this.spin_Button);
-        this._listButton.push(this.add_Bet);
-        this._listButton.push(this.add_Line);
-        this._listButton.push(this.del_Bet);
-        this._listButton.push(this.del_Line);
+        this._listButton.push(this.betPrice.add_Button);
+        this._listButton.push(this.betPrice.del_Button);
+        this._listButton.push(this.linePayout.add_Button);
+        this._listButton.push(this.linePayout.del_Button);       
     }
 
     public startPlayBonusAnimation() {
@@ -152,13 +142,13 @@ export default class UI_Manager extends cc.Component {
     }
 
     public showCurrentBet(_current_Bet: number) {
-
-        this.currentBet_Text.string = _current_Bet.toString();
+       
+        this.betPrice.showValue_Text.string = _current_Bet.toString();
     }
 
     public showCurrentLineBet(_current_LineBet: number) {
 
-        this.betLine_Text.string = _current_LineBet.toString();
+        this.linePayout.showValue_Text.string = _current_LineBet.toString();
     }
 
     public show_totalBet(_total_BetPrice: number) {
