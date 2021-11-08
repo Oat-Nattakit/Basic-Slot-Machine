@@ -38,14 +38,14 @@ export default class Reel_Control extends cc.Component {
     start() {
 
         this.Payline = Payline_Manager.GetIns_();
-        this.Server_ = Server_Manager.Getinstant();
-
-        this.Server_.Set_Slot_Range(this.SlotNode.length);
+        this.Server_ = Server_Manager.getInstant();        
+        
         this.GetComponentInNode();
         this.PreGame_RandomPicture();
     }
 
     private GetComponentInNode() {
+
         this.ReelAnimation = new Array(this.ReelNode.length);
         for (let i = 0; i < this.ReelNode.length; i++) {
             this.ReelNode[i].addComponent(Reel_Description).Reel_Description = (i);
@@ -83,8 +83,8 @@ export default class Reel_Control extends cc.Component {
 
     private async GetSymbol_ID_FromServer() {
         
-        await this.Server_.Slot_GetSymbolValue();
-        this.SlotSymbol_ID = this.Server_.Slot_Result();
+        await this.Server_.slot_GetSymbolValue();
+        this.SlotSymbol_ID = this.Server_.slot_Result();
         this.Payline.ManagePayline(this.SlotSymbol_ID);
     }
 
@@ -99,18 +99,18 @@ export default class Reel_Control extends cc.Component {
         }
     }
 
-    public One_Reel_PlayAnimation(Button_Reel: cc.Button, ReelNumber: number) {
-
+    public Reel_PlayAnimation(Button_Reel: cc.Button, ReelNumber: number) {
+       
         this.ReelAnimation[ReelNumber].play();
         this.NumberReel_Slot[ReelNumber] = -1;
-        Button_Reel.enabled = false;
+        Button_Reel.enabled = false;        
         return this.ReelAnimation[ReelNumber];
     }
 
-    public All_Reel_PlayAniamtion() {
+    /*public All_Reel_PlayAniamtion() {
 
         let WaitingTime = 0;
-
+        
         for (let i = 0; i < this.ReelAnimation.length; i++) {
             if (this.NumberReel_Slot[i] != -1) {
                 this.ReelNode[i].getComponent(cc.Button).enabled = false;
@@ -119,7 +119,11 @@ export default class Reel_Control extends cc.Component {
             }
         }
         return this.ReelAnimation[this.ReelAnimation.length - 1];
-    }
+    }*/
+    /*testSlow(ReelSlot: number){
+        let TestSpeed : cc.AnimationState = this.ReelAnimation[ReelSlot].getAnimationState("ReelAnimation");
+        TestSpeed.speed = 0.5;
+    }*/
 
     public SetPicture_Slot(ReelSlot: number) {
 

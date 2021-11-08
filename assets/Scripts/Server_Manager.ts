@@ -12,44 +12,39 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export class Server_Manager {
 
-    private static Ins: Server_Manager = new Server_Manager();
-    private Result: number[];
-    private Balance: number = 1000;
+    private static _ins: Server_Manager = new Server_Manager();
+    private _result_symbol: number[] = new Array(9);
+    private _balance: number = 1000;
 
-    private Data: Data_Play;
-    private Reward: Player_Reward;
+    private _data_Player: Data_Play;
+    private _reward: Player_Reward;
 
-    public GetValueRound: boolean = false;
+    public getValueRound: boolean = false;
 
     constructor() {
-        Server_Manager.Ins = this;
+        Server_Manager._ins = this;
     }
 
-    public static Getinstant(): Server_Manager {
-        return Server_Manager.Ins;
+    public static getInstant(): Server_Manager {
+        return Server_Manager._ins;
     }
 
-    public Player_CurrentBalance(): number {
-        return this.Balance;
+    public player_CurrentBalance(): number {
+        return this._balance;
     }
 
-    public Set_Slot_Range(Range: number) {
-        this.Result = new Array(Range);
-    }
+    public player_DefultData(): Data_Play {
+        this._data_Player = new Data_Play(this._balance, 1, 5, 5);        
+        return this._data_Player;
+    }  
 
-    public Slot_GetSymbolValue() {
-
-        /*if (this.GetValueRound == false) {
-            for (let i = 0; i < this.Result.length; i++) {
-                this.Result[i] = Math.floor(Math.random() * 5);
-            }
-            this.GetValueRound = true;
-        }*/
-        if (this.GetValueRound == false) {
-            this.GetValueRound = true;
+    public slot_GetSymbolValue() {
+       
+        if (this.getValueRound == false) {
+            this.getValueRound = true;
             return new Promise(resolve => {
                 setTimeout(() => {
-                    resolve(this.TestAwiteValue());
+                    resolve(this._testAwiteValue());
                 }, 2000);
             });
         }
@@ -62,55 +57,63 @@ export class Server_Manager {
         }
     }
 
-    private TestAwiteValue() {
+    private _testAwiteValue() {
 
 
         // if (this.GetValueRound == false) {
 
-        for (let i = 0; i < this.Result.length; i++) {
-            this.Result[i] = Math.floor(Math.random() * 5);
+        for (let i = 0; i < this._result_symbol.length; i++) {
+            this._result_symbol[i] = Math.floor(Math.random() * 5);
         }
+
         //this.GetValueRound = true;
         //}
     }
 
-    public Slot_Result(): number[] {
-        return this.Result;
+    public slot_Result(): number[] {       
+        return this._result_symbol;
     }
 
-    public DataPlayer_BeforeSpin(Data: Data_Play) {
+    public dataPlayer_BeforeSpin(Data: Data_Play) {
 
-        this.Data = Data;        
-        return this.Data;
+        this._data_Player = Data;
+
+        //TestCast call server
+        /*let _jsonData = JSON.stringify(this._data_Player);
+        let _data_Respon : SlotDataPatten = JSON.parse(_jsonData);
+
+        this._data_Player = new Data_Play(_data_Respon.bl , this._data_Player.b , this._data_Player.l ,this._data_Player.tb);    */  
+        
+        return this._data_Player;
     }
 
-    public Player_WinRound(Symbol2: number[], Symbol3: number[],Data : Data_Play) {
+    public player_WinRound(_symbol2: number[], _symbol3: number[], _data: Data_Play) {
 
-        let Payout2: CreatePayout2 = new CreatePayout2();
-        let Payout3: CreatePayout3 = new CreatePayout3();
+        let _payout2: CreatePayout2 = new CreatePayout2();
+        let _payout3: CreatePayout3 = new CreatePayout3();
 
-        let Total_Payout2: number = 0;
-        let Total_Payout3: number = 0;
+        let _total_Payout2: number = 0;
+        let _total_Payout3: number = 0;
 
-        for (let i = 0; i < Symbol2.length; i++) {
-            let GetPrice = Payout2.ListPayout2[Symbol2[i]];
-            Total_Payout2 += GetPrice * Data.Bet;
+        for (let i = 0; i < _symbol2.length; i++) {
+            let _getPrice = _payout2.listPayout2[_symbol2[i]];
+            _total_Payout2 += _getPrice * _data.b;
         }
-        for (let i = 0; i < Symbol3.length; i++) {
-            let GetPrice = Payout3.ListPayout3[Symbol3[i]];
-            Total_Payout3 += GetPrice*Data.Bet;
+        for (let i = 0; i < _symbol3.length; i++) {
+            let _getPrice = _payout3.listPayout3[_symbol3[i]];
+            _total_Payout3 += _getPrice * _data.b;
         }
 
-        this.Reward = new Player_Reward(Total_Payout2, Total_Payout3);
-        return this.Reward;
+        this._reward = new Player_Reward(_total_Payout2, _total_Payout3);
+        return this._reward;
     }
 }
 
 interface SlotDataPatten {
-    Line: number;
-    Bet: number;
-    Balance: number;
-    Total_Bet: number;
+    bl: number; // Balance
+    b: number;  // Bet
+    l: number;  // Line
+    tb: number; // Total_Bet
 }
 
 interface Payout_Price {
@@ -120,16 +123,16 @@ interface Payout_Price {
 
 export class Data_Play implements SlotDataPatten {
 
-    Line: number;
-    Bet: number;
-    Balance: number;
-    Total_Bet: number;
+    bl: number;
+    b: number;
+    l: number;
+    tb: number;
 
-    constructor(line: number, bet: number, Current_Balance: number, Total_Bet: number) {
-        this.Line = line;
-        this.Bet = bet;
-        this.Balance = Current_Balance;
-        this.Total_Bet = Total_Bet;
+    constructor(Current_Balance: number, bet: number, line: number, Total_Bet: number) {
+        this.bl = Current_Balance;
+        this.b = bet;
+        this.l = line;
+        this.tb = Total_Bet;
     }
 }
 

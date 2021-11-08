@@ -11,116 +11,79 @@ const { ccclass, property } = cc._decorator;
 
 export class Bet_Manager {
 
-    private static Ins_: Bet_Manager = new Bet_Manager();
-    private Bet_Price: CreateBet = null;
-    private CountBet: number;
+    private static _ins: Bet_Manager = new Bet_Manager();
+    private _bet_Price: CreateBet = null;
+    private _countBet: number;
 
-    private CountLine: number = 0;
-    private MaxLine: number = 0;
-    //private CurrentBet_Price: number = 0;
+    private _countLine: number = 0;
+    private _maxLine: number = 0;
 
     constructor() {
-        this.CountBet = 0;
-        Bet_Manager.Ins_ = this;
+        this._countBet = 0;
+        Bet_Manager._ins = this;
     }
 
-    public static GetIns(): Bet_Manager {
-        if (Bet_Manager.Ins_.Bet_Price == null) {
-            Bet_Manager.Ins_.Bet_Price = new CreateBet();
+    public static getIns(): Bet_Manager {
+        if (Bet_Manager._ins._bet_Price == null) {
+            Bet_Manager._ins._bet_Price = new CreateBet();
         }
-        return Bet_Manager.Ins_;
+        return Bet_Manager._ins;
     }
 
-    /*public Bet_Control( Value: number){
-
-        this.CurrentBet_Price = 0;
-        this.CountBet += Value;
-        
-        if (this.CountBet <= 0) {
-            this.CountBet = 0;
-        }
-        else if (this.CountBet >= this.Bet_Price.BetStep.length) {
-            this.CountBet = this.Bet_Price.BetStep.length - 1;
-        }
-        this.CurrentBet_Price = this.Bet_Price.BetStep[this.CountBet];        
-    }*/
-
-    public Bet_StartValue() {
-        let StartBet = this.Bet_Price.BetStep[0];
-        return StartBet;
-    }
-    public Bet_Control(Data: Data_Play, Value: number) {
-
-        //this.CurrentBet_Price = 0;
-        //Data.Total_Bet = 0;
-        //Data.Bet += Value;
-        this.CountBet += Value;
-
-        if (this.CountBet <= 0) {
-            this.CountBet = 0;
-        }
-        else if (this.CountBet >= this.Bet_Price.BetStep.length) {
-            this.CountBet = this.Bet_Price.BetStep.length - 1;
-        }
-        Data.Bet = this.Bet_Price.BetStep[this.CountBet];
+    public bet_StartValue() {
+        let _startBet = this._bet_Price.betStep[0];
+        return _startBet;
     }
 
-    public LineBet_Start(MaxLine: number): number {
-        this.CountLine = MaxLine;
-        this.MaxLine = MaxLine;
-        return this.CountLine;
+    public bet_Control(_data: Data_Play, _valueChange: number) {
+
+        this._countBet += _valueChange;
+
+        if (this._countBet <= 0) {
+            this._countBet = 0;
+        }
+        else if (this._countBet >= this._bet_Price.betStep.length) {
+            this._countBet = this._bet_Price.betStep.length - 1;
+        }
+        _data.b = this._bet_Price.betStep[this._countBet];
     }
 
-    /*public Line_Control(LineBet_Value: number = 0){
-
-        this.CountLine += LineBet_Value;
-
-        if (this.CountLine >= this.MaxLine) {
-            this.CountLine = this.MaxLine;
-        }
-        else if (this.CountLine <= 1) {
-            this.CountLine = 1
-        }              
-    }*/
-
-    public Line_Control(Data: Data_Play, CountLine: number = 0) {
-
-        Data.Line += CountLine;
-        if (Data.Line >= this.MaxLine) {
-            Data.Line = this.MaxLine;
-        }
-        else if (Data.Line <= 1) {
-            Data.Line = 1;
-        }
+    public lineBet_Start(_maxLine: number): number {
+        this._countLine = _maxLine;
+        this._maxLine = _maxLine;        
+        return this._countLine;
     }
 
-    /*public Current_LineBet() : number{
-        return this.CountLine;
-    }
+    public line_Control(_data: Data_Play, _countLine: number = 0) {
 
-    public Current_BetPrice() : number{
-        return this.CurrentBet_Price;
-    }*/
+        _data.l += _countLine;
+        if (_data.l >= this._maxLine) {
+            _data.l = this._maxLine;
+        }
+        else if (_data.l <= 1) {
+            _data.l = 1;
+        }        
+    }
 }
 
 export enum Bet_Price {
-    Bet_Price1 = 1,
-    Bet_Price2 = 2,
-    Bet_Price3 = 5,
-    Bet_Price4 = 10,
-    Bet_Price5 = 50,
-    Bet_Price6 = 100,
+    bet_Price1 = 1,
+    bet_Price2 = 2,
+    bet_Price3 = 5,
+    bet_Price4 = 10,
+    bet_Price5 = 50,
+    bet_Price6 = 100,
 }
 
 interface Bet_Step {
-    BetStep: number[];
+    betStep: number[];
 }
 
 class CreateBet implements Bet_Step {
 
-    BetStep: number[];
+    public betStep: number[];
 
     constructor() {
-        this.BetStep = [Bet_Price.Bet_Price1, Bet_Price.Bet_Price2, Bet_Price.Bet_Price3, Bet_Price.Bet_Price4, Bet_Price.Bet_Price5, Bet_Price.Bet_Price6];
+        this.betStep = [Bet_Price.bet_Price1, Bet_Price.bet_Price2, Bet_Price.bet_Price3, Bet_Price.bet_Price4, Bet_Price.bet_Price5, Bet_Price.bet_Price6];
     }
 }

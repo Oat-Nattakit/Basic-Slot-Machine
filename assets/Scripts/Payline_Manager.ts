@@ -46,7 +46,7 @@ export class Payline_Manager {
         this.PaylineList = this.Payline.CreatePaylineList();
     }
 
-    public SetPayLine_Reward(Line_Bet: number) {
+    public SetPayLine_Reward(Line_Bet: number) {        
         
         this.Bonus_Position = new Array();
         this.PaylineTrue = new Array();
@@ -178,7 +178,7 @@ class PayLine implements SlotPayLine {
 
 class CreatePayLine extends PayLine {
 
-    private ListPayLine = new Array();
+    private _listPayLine = new Array();
 
     constructor() {
         super();
@@ -186,37 +186,37 @@ class CreatePayLine extends PayLine {
 
     CreatePaylineList() {
 
-        this.ListPayLine.push(this.PayLine_1);
-        this.ListPayLine.push(this.PayLine_2);
-        this.ListPayLine.push(this.PayLine_3);
-        this.ListPayLine.push(this.PayLine_4);
-        this.ListPayLine.push(this.PayLine_5);
+        this._listPayLine.push(this.PayLine_1);
+        this._listPayLine.push(this.PayLine_2);
+        this._listPayLine.push(this.PayLine_3);
+        this._listPayLine.push(this.PayLine_4);
+        this._listPayLine.push(this.PayLine_5);
 
-        return this.ListPayLine;
+        return this._listPayLine;
     }
 }
 export class CreatePayout2 {
 
-    public ListPayout2: number[] = new Array();
+    public listPayout2: number[] = new Array();
 
     constructor() {
-        this.ListPayout2.push(PayoutCount2.PayoutType2_0);
-        this.ListPayout2.push(PayoutCount2.PayoutType2_1);
-        this.ListPayout2.push(PayoutCount2.PayoutType2_2);
-        this.ListPayout2.push(PayoutCount2.PayoutType2_3);
-        this.ListPayout2.push(PayoutCount2.PayoutType2_4);
+        this.listPayout2.push(PayoutCount2.PayoutType2_0);
+        this.listPayout2.push(PayoutCount2.PayoutType2_1);
+        this.listPayout2.push(PayoutCount2.PayoutType2_2);
+        this.listPayout2.push(PayoutCount2.PayoutType2_3);
+        this.listPayout2.push(PayoutCount2.PayoutType2_4);
     }
 }
 
 export class CreatePayout3 {
 
-    public ListPayout3: number[] = new Array();
+    public listPayout3: number[] = new Array();
 
     constructor() {
-        this.ListPayout3.push(PayoutCount3.PayoutType3_0);
-        this.ListPayout3.push(PayoutCount3.PayoutType3_1);
-        this.ListPayout3.push(PayoutCount3.PayoutType3_2);
-        this.ListPayout3.push(PayoutCount3.PayoutType3_3);
-        this.ListPayout3.push(PayoutCount3.PayoutType3_4);
+        this.listPayout3.push(PayoutCount3.PayoutType3_0);
+        this.listPayout3.push(PayoutCount3.PayoutType3_1);
+        this.listPayout3.push(PayoutCount3.PayoutType3_2);
+        this.listPayout3.push(PayoutCount3.PayoutType3_3);
+        this.listPayout3.push(PayoutCount3.PayoutType3_4);
     }
 }

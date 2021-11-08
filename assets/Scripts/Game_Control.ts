@@ -27,18 +27,14 @@ export default class Game_Control extends cc.Component {
     private CheckPlayer_reward: boolean = false;
     private Balance_Status: boolean = false;
 
-    //@property(cc.Integer)
-    /*private Current_balance: number = 0;
-    private LineBetValue: number = 0;
-    private Bet_Price: number = 0;
-    private TotalBet_Value: number = 0;*/
     private TotalReel: number = 0;
     private Total_Reward: number = 0;
 
     private Last_animation: cc.Animation;
 
     private Data_Player: Data_Play;
-    private Lise: number = 1;
+    private List: number = 1;
+    private ListTest: number[] = new Array();
 
 
     onLoad() {
@@ -46,8 +42,8 @@ export default class Game_Control extends cc.Component {
         this.Reel_Control = this.node.getComponent(Reel_Control);
 
         this.Payline = Payline_Manager.GetIns_();
-        this.Bet = Bet_Manager.GetIns();
-        this.Server_ = Server_Manager.Getinstant();
+        this.Bet = Bet_Manager.getIns();
+        this.Server_ = Server_Manager.getInstant();
 
         this.UI_Manager.add_ArrayButton();
 
@@ -58,23 +54,9 @@ export default class Game_Control extends cc.Component {
         this.SetButton_Function();
         this.SetReelButton();
 
-        //this.Current_balance = this.Server_.Player_CurrentBalance();
-
-        //this.UI_Manager.ShowCurrentBalance(this.Current_balance);
-        //this.LineBetValue = this.Bet.LineBet_Start(this.Payline.PaylineList.length);
-        //this.Bet.Bet_Control(0);
-        //this.Bet_Price = this.Bet.Current_BetPrice();
-        //this.Bet_Price = this.Bet.Bet_StartValue();
-
-        let StartBetPrice = this.Bet.Bet_StartValue();
-        let Stat_Line_Bet = this.Bet.LineBet_Start(this.Payline.PaylineList.length);
-        let StartBalance = this.Server_.Player_CurrentBalance();
-        let StartTotalBetPrice = 0;
-
-        this.Data_Player = new Data_Play(Stat_Line_Bet, StartBetPrice, StartBalance, StartTotalBetPrice);
-        this.UI_Manager.ShowCurrentBalance(this.Data_Player.Balance);
+        this.Data_Player = this.Server_.player_DefultData();
+        this.Bet.lineBet_Start(this.Data_Player.l);
         this.UpdateData_TotalBet();
-
     }
 
     private SetButton_Function() {
@@ -103,16 +85,16 @@ export default class Game_Control extends cc.Component {
     private async Set_DefultReel() {
 
         await this.Reel_Control.Set_SlotSymbol();
-        //this.Payline.SetPayLine_Reward(this.LineBetValue);
-        this.Payline.SetPayLine_Reward(this.Data_Player.Line);
+        this.Payline.SetPayLine_Reward(this.Data_Player.l);
 
     }
     private CheckCurrentBalance() {
 
         this.ReelRun = true;
         this.Balance_Status = false;
+        this.ListTest = new Array();
         this.UI_Manager.startPlayBonusAnimation();
-        this.Data_Player = this.Server_.DataPlayer_BeforeSpin(this.Data_Player);        
+        this.Data_Player = this.Server_.dataPlayer_BeforeSpin(this.Data_Player);
         this.Balance_Status = this.Balance_Update();
     }
 
@@ -148,15 +130,29 @@ export default class Game_Control extends cc.Component {
 
         if (this.Balance_Status == true) {
             let ReelNumber = ButtonReel.node.getComponent(Reel_Description).Reel_Description;
-            this.Last_animation = this.Reel_Control.One_Reel_PlayAnimation(ButtonReel, ReelNumber);
+            this.Last_animation = this.Reel_Control.Reel_PlayAnimation(ButtonReel, ReelNumber);
             this.TotalReel++;
             this.UI_Manager.Button_Status(false, this.TotalReel);
-            await this.Set_DefultReel();
-            setTimeout(() => this.Stop_Once_Reel(ReelNumber), 500 * this.Lise);
-            this.Lise++;
+            this.ListTest.push(ReelNumber);
+
+            if (this.ListTest.length == 3) {
+                this.Testwaiting();
+            }
+            /*await this.Set_DefultReel();
+            setTimeout(() => this.Stop_Once_Reel(ReelNumber), 500 * this.List);*/
+            //this.List++;
         }
         else {
             this.UI_Manager.Balance_ReadytoPlay(true);
+        }
+    }
+    async Testwaiting() {
+
+        await this.Set_DefultReel();
+        for (let i = 0; i < this.ListTest.length; i++) {
+            //setTimeout(() => this.Reel_Control.testSlow(this.ListTest[i]), 250 * this.List);
+            setTimeout(() => this.Stop_Once_Reel(this.ListTest[i]), 500 * this.List);
+            this.List++;
         }
     }
 
@@ -165,12 +161,14 @@ export default class Game_Control extends cc.Component {
         setTimeout(() => this.Reel_Control.SetPicture_Slot(ReelNumber), 100 * this.TotalReel);
 
         if (this.TotalReel == this.Reel_Control.ReelNode.length) {
+
             this.End_AnimationCheckResult();
         }
     }
 
     private End_AnimationCheckResult() {
-        this.Lise = 0;
+
+        this.List = 0;
         this.TotalReel = 0;
         this.ReelRun = false;
         this.CheckPlayer_reward = true;
@@ -191,7 +189,7 @@ export default class Game_Control extends cc.Component {
         let GetStack2 = this.Payline.StackSymbol_Payout2();
         let GetStack3 = this.Payline.StackSymbol_Payout3();
 
-        let Reward = this.Server_.Player_WinRound(GetStack2, GetStack3,this.Data_Player);
+        let Reward = this.Server_.player_WinRound(GetStack2, GetStack3, this.Data_Player);
 
         this.Show_Reward(Reward);
     }
@@ -199,7 +197,7 @@ export default class Game_Control extends cc.Component {
     private Show_Reward(Reward: Player_Reward) {
 
         this.Total_Reward = 0;
-        this.Total_Reward = Reward.Payout2 + Reward.Payout3;       
+        this.Total_Reward = Reward.Payout2 + Reward.Payout3;
 
         let Payline3_Bonus = false;
         if (this.Total_Reward != 0) {
@@ -228,14 +226,10 @@ export default class Game_Control extends cc.Component {
 
     private EndRound_Game() {
 
-        //this.Current_balance += this.Total_Reward;        
-        //this.Current_balance = this.Data_Player.Balance;
-        //this.UI_Manager.ShowCurrentBalance(this.Current_balance);
-
-        this.Data_Player.Balance += this.Total_Reward;
-        this.UI_Manager.ShowCurrentBalance(this.Data_Player.Balance);
+        this.Data_Player.bl += this.Total_Reward;
+        this.UI_Manager.ShowCurrentBalance(this.Data_Player.bl);
         this.UI_Manager.Button_Status(true);
-        this.Server_.GetValueRound = false;
+        this.Server_.getValueRound = false;
     }
     private Hide_UI_Reward() {
         this.Reel_Control.SetDefult_Blackground();
@@ -243,60 +237,47 @@ export default class Game_Control extends cc.Component {
     }
 
     private Bet_Manager_Add() {
-        //this.Bet.Bet_Control(1);
-        this.Bet.Bet_Control(this.Data_Player, 1);
+
+        this.Bet.bet_Control(this.Data_Player, 1);
         this.UpdateData_TotalBet();
     }
     private Bet_Manager_Del() {
-        //this.Bet.Bet_Control(-1);
-        this.Bet.Bet_Control(this.Data_Player, -1);
+
+        this.Bet.bet_Control(this.Data_Player, -1);
         this.UpdateData_TotalBet();
     }
     private LineBet_Add() {
-        //this.Bet.Line_Control(1);
-        this.Bet.Line_Control(this.Data_Player, 1);
-        this.UI_Manager.Show_Use_Payline(this.Data_Player.Line);
+
+        this.Bet.line_Control(this.Data_Player, 1);
+        this.UI_Manager.Show_Use_Payline(this.Data_Player.l);
         this.UpdateData_TotalBet();
     }
 
     private LineBet_Del() {
-        //this.Bet.Line_Control(-1);
-        this.Bet.Line_Control(this.Data_Player, -1);
-        this.UI_Manager.Show_Use_Payline(this.Data_Player.Line);
+
+        this.Bet.line_Control(this.Data_Player, -1);
+        this.UI_Manager.Show_Use_Payline(this.Data_Player.l);
         this.UpdateData_TotalBet();
     }
 
     private UpdateData_TotalBet() {
 
-        /*this.LineBetValue = this.Bet.Current_LineBet();
-        //this.Bet_Price = this.Bet.Current_BetPrice();*/
-
-        //this.UI_Manager.ShowCurrentBet(this.Bet_Price); 
-        //this.UI_Manager.ShowCurrentLineBet(this.LineBetValue);
-        //this.TotalBet_Value = (this.LineBetValue * this.Bet_Price);
-        //this.Data_Player.Total_Bet = this.TotalBet_Value ;   
-        //this.UI_Manager.TotalBet_Show(this.TotalBet_Value);
-
-        this.UI_Manager.ShowCurrentBet(this.Data_Player.Bet);
-        this.UI_Manager.ShowCurrentLineBet(this.Data_Player.Line);
-        let TotalBetValue = this.Data_Player.Line * this.Data_Player.Bet;
-        this.Data_Player.Total_Bet = TotalBetValue
-        this.UI_Manager.TotalBet_Show(this.Data_Player.Total_Bet);
-
-        //console.log(this.Data_Player.Bet+" "+this.Data_Player.Total_Bet);
-        //console.log(this.Data_Player);
+        this.UI_Manager.ShowCurrentBet(this.Data_Player.b);
+        this.UI_Manager.ShowCurrentLineBet(this.Data_Player.l);
+        this.UI_Manager.ShowCurrentBalance(this.Data_Player.bl);
+        let TotalBetValue = this.Data_Player.l * this.Data_Player.b;
+        this.Data_Player.tb = TotalBetValue
+        this.UI_Manager.TotalBet_Show(this.Data_Player.tb);
+        //this.UI_Manager.
     }
 
     private Balance_Update(): boolean {
 
         let Balance_Ready: boolean = false;
-        //let Balance = this.Current_balance - this.TotalBet_Value;
-        let Balance = this.Data_Player.Balance - this.Data_Player.Total_Bet;
+        let Balance = this.Data_Player.bl - this.Data_Player.tb;
         if (Balance >= 0) {
-            this.Data_Player.Balance = Balance;
-            //this.Current_balance = Balance;
-            //this.UI_Manager.ShowCurrentBalance(this.Current_balance);
-            this.UI_Manager.ShowCurrentBalance(this.Data_Player.Balance);
+            this.Data_Player.bl = Balance;
+            this.UI_Manager.ShowCurrentBalance(this.Data_Player.bl);
             Balance_Ready = true;
         }
         return Balance_Ready;
