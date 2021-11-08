@@ -961,7 +961,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Text_Balance",
+    "_name": "Balance_Text",
     "_objFlags": 0,
     "_parent": {
       "__id__": 17
@@ -1307,7 +1307,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Text_TotalBet",
+    "_name": "TotalBet_Text",
     "_objFlags": 0,
     "_parent": {
       "__id__": 25
@@ -2654,7 +2654,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "LineBet_Text",
+    "_name": "Betline_Text",
     "_objFlags": 0,
     "_parent": {
       "__id__": 54
@@ -3667,7 +3667,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Node_Reward",
+    "_name": "Reward_Node",
     "_objFlags": 0,
     "_parent": {
       "__id__": 2
@@ -7817,7 +7817,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Clam_Reward",
+    "_name": "Receive_reward",
     "_objFlags": 0,
     "_parent": {
       "__id__": 168
@@ -8255,7 +8255,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Node_NotBalance",
+    "_name": "NotPlayer_Node",
     "_objFlags": 0,
     "_parent": {
       "__id__": 2
@@ -8549,7 +8549,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Continue",
+    "_name": "Balance_notready",
     "_objFlags": 0,
     "_parent": {
       "__id__": 179
@@ -9105,52 +9105,52 @@
       "__id__": 197
     },
     "_enabled": true,
-    "Spin_Button": {
+    "spin_Button": {
       "__id__": 15
     },
-    "Add_Bet": {
+    "add_Bet": {
       "__id__": 42
     },
-    "Del_Bet": {
+    "del_Bet": {
       "__id__": 50
     },
-    "Add_Line": {
+    "add_Line": {
       "__id__": 64
     },
-    "Del_Line": {
+    "del_Line": {
       "__id__": 72
     },
-    "acc_": {
+    "balanceNot_reandy": {
       "__id__": 191
     },
-    "Cliam_reward": {
+    "receive_reward": {
       "__id__": 175
     },
-    "TextBonus": {
+    "bonus_Text": {
       "__id__": 85
     },
-    "Balance_Text": {
+    "balance_Text": {
       "__id__": 19
     },
-    "CurrentBet_Text": {
+    "currentBet_Text": {
       "__id__": 34
     },
-    "BetLine_Text": {
+    "betLine_Text": {
       "__id__": 56
     },
-    "TotalBet": {
+    "totalBet_Text": {
       "__id__": 27
     },
-    "RewardNode": {
+    "reward_Node": {
       "__id__": 77
     },
-    "Panal_NotPlay": {
+    "notPlay_Node": {
       "__id__": 179
     },
-    "Bonus_Animation": {
+    "bonus_Animation": {
       "__id__": 82
     },
-    "Line_Payline": [
+    "line_Payline": [
       {
         "__id__": 148
       },
@@ -9177,7 +9177,7 @@
       "__id__": 197
     },
     "_enabled": true,
-    "SlotNode": [
+    "slotNode": [
       {
         "__id__": 92
       },
@@ -9206,7 +9206,7 @@
         "__id__": 136
       }
     ],
-    "ReelNode": [
+    "reelNode": [
       {
         "__id__": 90
       },
@@ -9217,23 +9217,7 @@
         "__id__": 126
       }
     ],
-    "Picture_Symbol": [
-      {
-        "__uuid__": "389ea815-47f9-4e41-84a7-cda36ab8825c"
-      },
-      {
-        "__uuid__": "297bbe30-fd1a-4a8e-8bdb-fa79970aec82"
-      },
-      {
-        "__uuid__": "67ef207a-7493-43da-8cd0-919f2ba63174"
-      },
-      {
-        "__uuid__": "d2890dd1-ca53-4231-9dc5-f8e7cd58d8c4"
-      },
-      {
-        "__uuid__": "47b7bca4-cf82-466b-9d0e-c65be7d60374"
-      }
-    ],
+    "picture_Symbol": [],
     "_id": "a2OvXxMzlBMp0wlWuUVZDu"
   },
   {

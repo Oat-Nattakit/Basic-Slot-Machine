@@ -11,7 +11,7 @@ const { ccclass, property } = cc._decorator;
 
 export class Bet_Manager {
 
-    private static _ins: Bet_Manager = new Bet_Manager();
+    private static _insBet_Manager: Bet_Manager = new Bet_Manager();
     private _bet_Price: CreateBet = null;
     private _countBet: number;
 
@@ -20,14 +20,14 @@ export class Bet_Manager {
 
     constructor() {
         this._countBet = 0;
-        Bet_Manager._ins = this;
+        Bet_Manager._insBet_Manager = this;
     }
 
     public static getIns(): Bet_Manager {
-        if (Bet_Manager._ins._bet_Price == null) {
-            Bet_Manager._ins._bet_Price = new CreateBet();
+        if (Bet_Manager._insBet_Manager._bet_Price == null) {
+            Bet_Manager._insBet_Manager._bet_Price = new CreateBet();
         }
-        return Bet_Manager._ins;
+        return Bet_Manager._insBet_Manager;
     }
 
     public bet_StartValue() {
@@ -54,9 +54,9 @@ export class Bet_Manager {
         return this._countLine;
     }
 
-    public line_Control(_data: Data_Play, _countLine: number = 0) {
+    public line_Control(_data: Data_Play, _lineValueChange: number = 0) {
 
-        _data.l += _countLine;
+        _data.l += _lineValueChange;
         if (_data.l >= this._maxLine) {
             _data.l = this._maxLine;
         }

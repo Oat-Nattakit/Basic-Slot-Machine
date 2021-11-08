@@ -12,7 +12,7 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export class Server_Manager {
 
-    private static _ins: Server_Manager = new Server_Manager();
+    private static _insServer_Manager: Server_Manager = new Server_Manager();
     private _result_symbol: number[] = new Array(9);
     private _balance: number = 1000;
 
@@ -22,11 +22,11 @@ export class Server_Manager {
     public getValueRound: boolean = false;
 
     constructor() {
-        Server_Manager._ins = this;
+        Server_Manager._insServer_Manager = this;
     }
 
     public static getInstant(): Server_Manager {
-        return Server_Manager._ins;
+        return Server_Manager._insServer_Manager;
     }
 
     public player_CurrentBalance(): number {
@@ -78,11 +78,13 @@ export class Server_Manager {
 
         this._data_Player = Data;
 
-        //TestCast call server
+        //#region Test Case call server
+
         /*let _jsonData = JSON.stringify(this._data_Player);
         let _data_Respon : SlotDataPatten = JSON.parse(_jsonData);
 
         this._data_Player = new Data_Play(_data_Respon.bl , this._data_Player.b , this._data_Player.l ,this._data_Player.tb);    */  
+        //#endregion
         
         return this._data_Player;
     }
@@ -117,16 +119,16 @@ interface SlotDataPatten {
 }
 
 interface Payout_Price {
-    Payout2: number;
-    Payout3: number;
+    payout2: number;
+    payout3: number;
 }
 
 export class Data_Play implements SlotDataPatten {
 
-    bl: number;
-    b: number;
-    l: number;
-    tb: number;
+    public bl: number;
+    public b: number;
+    public l: number;
+    public tb: number;
 
     constructor(Current_Balance: number, bet: number, line: number, Total_Bet: number) {
         this.bl = Current_Balance;
@@ -138,11 +140,11 @@ export class Data_Play implements SlotDataPatten {
 
 export class Player_Reward implements Payout_Price {
 
-    Payout2: number;
-    Payout3: number;
+    public payout2: number;
+    public payout3: number;
 
-    constructor(Price_Payout2: number, Price_Payout3: number) {
-        this.Payout2 = Price_Payout2;
-        this.Payout3 = Price_Payout3;
+    constructor(_price_Payout2: number, _price_Payout3: number) {
+        this.payout2 = _price_Payout2;
+        this.payout3 = _price_Payout3;
     }
 }

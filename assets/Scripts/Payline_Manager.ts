@@ -11,168 +11,171 @@ const { ccclass, property } = cc._decorator;
 
 export class Payline_Manager {
 
-    private static Ins_: Payline_Manager = new Payline_Manager();
-    private List_SlotNumber: number[] = null;
-    private Payline: CreatePayLine = null;
+    private static _insPayline_Manager: Payline_Manager = new Payline_Manager();
+    private _slotNumber_list: number[] = null;
+    private _payline: CreatePayLine = null;
 
-    public PaylineList = new Array();
+    public payline_List = new Array();
 
-    private Bonus_Position: number[];
+    private _bonus_Position: number[];
 
-    private PaylineTrue: number[];
+    private _payline_HitReward: number[];
 
-    private listSymbol2: number[];
-    private listSymbol3: number[];
+    private _listSymbol2: number[];
+    private _listSymbol3: number[];
 
     constructor() {
-        Payline_Manager.Ins_ = this;
+        Payline_Manager._insPayline_Manager = this;
     }
 
-    public static GetIns_(): Payline_Manager {
-        if (Payline_Manager.Ins_.Payline == null) {
-            Payline_Manager.Ins_.Payline = new CreatePayLine();
-            Payline_Manager.Ins_.CreatePayline();
+    public static getPayline_Manager(): Payline_Manager {
+        if (Payline_Manager._insPayline_Manager._payline == null) {
+            Payline_Manager._insPayline_Manager._payline = new CreatePayLine();
+            Payline_Manager._insPayline_Manager._createPayline();
         }
-        return Payline_Manager.Ins_;
+        return Payline_Manager._insPayline_Manager;
     }
 
-    public ManagePayline(value: number[]) {
-        this.List_SlotNumber = value;
-        this.listSymbol2 = new Array();
-        this.listSymbol3 = new Array();
+    public managePayline(_idSymbol_list: number[]) {
+        this._slotNumber_list = _idSymbol_list;
+        this._listSymbol2 = new Array();
+        this._listSymbol3 = new Array();
     }
 
-    private CreatePayline() {
-        this.PaylineList = this.Payline.CreatePaylineList();
+    private _createPayline() {
+        this.payline_List = this._payline.CreatePaylineList();
     }
 
-    public SetPayLine_Reward(Line_Bet: number) {        
+    public checkPayLine_Reward(_line_Bet: number) {        
         
-        this.Bonus_Position = new Array();
-        this.PaylineTrue = new Array();
+        this._bonus_Position = new Array();
+        this._payline_HitReward = new Array();
 
-        for (let i = 0; i < Line_Bet; i++) {
+        for (let i = 0; i < _line_Bet; i++) {
 
-            let Check_PayoutType2 = this.PayoutCheck(this.List_SlotNumber[this.PaylineList[i][Reel_Number.Reel_1]], this.List_SlotNumber[this.PaylineList[i][Reel_Number.Reel_2]]);
-            let Check_PayoutType3 = this.PayoutCheck(this.List_SlotNumber[this.PaylineList[i][Reel_Number.Reel_2]], this.List_SlotNumber[this.PaylineList[i][Reel_Number.Reel_3]]);
+            let _check_PayoutType2 = this._payoutCheck(this._slotNumber_list[this.payline_List[i][Reel_Number.reel_1]], this._slotNumber_list[this.payline_List[i][Reel_Number.reel_2]]);
+            let _check_PayoutType3 = this._payoutCheck(this._slotNumber_list[this.payline_List[i][Reel_Number.reel_2]], this._slotNumber_list[this.payline_List[i][Reel_Number.reel_3]]);
 
-            if (Check_PayoutType2 == true && Check_PayoutType3 == true) {
-                let Range_Payout3 = 3;
-                for (let j = 0; j < Range_Payout3; j++) {
-                    this.CollectPositionSlot_GetBonus(this.PaylineList[i][j]);
+            if (_check_PayoutType2 == true && _check_PayoutType3 == true) {
+
+                let _range_Payout3 = 3;
+                for (let j = 0; j < _range_Payout3; j++) {
+                    this._collectPositionSlot_Bonus(this.payline_List[i][j]);
                 }
-                this.PaylineTrue.push(i);
-                let Symbol = this.List_SlotNumber[this.PaylineList[i][Reel_Number.Reel_1]];
-                this.PayoutSymbol_Bonus(TypePayout.Payout3, Symbol);
+                this._payline_HitReward.push(i);
+                let _symbol = this._slotNumber_list[this.payline_List[i][Reel_Number.reel_1]];
+                this._payoutSymbol_Bonus(TypePayout._payout3, _symbol);
             }
-            else if (Check_PayoutType2 == true) {
+            else if (_check_PayoutType2 == true) {
 
-                let Range_Payout2 = 2;
-                for (let j = 0; j < Range_Payout2; j++) {
-                    this.CollectPositionSlot_GetBonus(this.PaylineList[i][j]);
+                let _range_Payout2 = 2;
+                for (let j = 0; j < _range_Payout2; j++) {
+                    this._collectPositionSlot_Bonus(this.payline_List[i][j]);
                 }
-                this.PaylineTrue.push(i);
-                let Symbol = this.List_SlotNumber[this.PaylineList[i][Reel_Number.Reel_1]];
-                this.PayoutSymbol_Bonus(TypePayout.Payout2, Symbol);
+                this._payline_HitReward.push(i);
+                let _symbol = this._slotNumber_list[this.payline_List[i][Reel_Number.reel_1]];
+                this._payoutSymbol_Bonus(TypePayout._payout2, _symbol);
             }
         }
     }
 
-    private PayoutCheck(Number1: number, Number2: number) {
-        let Payout: boolean = false;
-        if (Number1 == Number2) {
-            Payout = true;
+    private _payoutCheck(_idSymbolPos1: number, _idSymbolPos2: number) {
+
+        let _payoutHitReward: boolean = false;
+        if (_idSymbolPos1 == _idSymbolPos2) {
+            _payoutHitReward = true;
         }
-        return Payout
+        return _payoutHitReward
     }
 
-    private CollectPositionSlot_GetBonus(Slot_Position: number) {
-        this.Bonus_Position.push(Slot_Position);
+    private _collectPositionSlot_Bonus(_slotBonuse_Position: number) {
+        this._bonus_Position.push(_slotBonuse_Position);
     }
 
-    public PositionBonuse() {
-        return this.Bonus_Position;
+    public positionBonuse() {
+        return this._bonus_Position;
     }
-    public Payline_Reward() {
-        return this.PaylineTrue;
+    public payline_Reward() {
+        return this._payline_HitReward;
     }
 
-    private PayoutSymbol_Bonus(Payout_Type: number, Symbol: number) {
-        if (Payout_Type == TypePayout.Payout2) {
-            this.listSymbol2.push(Symbol);
+    private _payoutSymbol_Bonus(_payout_Type: number, _idSymbol: number) {
+
+        if (_payout_Type == TypePayout._payout2) {
+            this._listSymbol2.push(_idSymbol);
         }
-        else if (Payout_Type == TypePayout.Payout3) {
-            this.listSymbol3.push(Symbol);
+        else if (_payout_Type == TypePayout._payout3) {
+            this._listSymbol3.push(_idSymbol);
         }
     }
 
-    public StackSymbol_Payout2() {
-        return this.listSymbol2;
+    public stackSymbol_Payout2() {
+        return this._listSymbol2;
     }
 
-    public StackSymbol_Payout3() {
-        return this.listSymbol3;
+    public stackSymbol_Payout3() {
+        return this._listSymbol3;
     }
 }
 
 enum TypePayout {
-    Payout2 = 2,
-    Payout3 = 3,
+    _payout2 = 2,
+    _payout3 = 3,
 }
 
 export enum SlotLine {
-    Slot_0 = 0,
-    Slot_1 = 1,
-    Slot_2 = 2,
-    Slot_3 = 3,
-    Slot_4 = 4,
-    Slot_5 = 5,
-    Slot_6 = 6,
-    Slot_7 = 7,
-    Slot_8 = 8,
+    slot_0 = 0,
+    slot_1 = 1,
+    slot_2 = 2,
+    slot_3 = 3,
+    slot_4 = 4,
+    slot_5 = 5,
+    slot_6 = 6,
+    slot_7 = 7,
+    slot_8 = 8,
 }
 
-export enum PayoutCount2 {
-    PayoutType2_0 = 5,
-    PayoutType2_1 = 7,
-    PayoutType2_2 = 10,
-    PayoutType2_3 = 15,
-    PayoutType2_4 = 30,
+enum PayoutCount2 {
+    _payoutType2_0 = 5,
+    _payoutType2_1 = 7,
+    _payoutType2_2 = 10,
+    _payoutType2_3 = 15,
+    _payoutType2_4 = 30,
 }
 
-export enum PayoutCount3 {
-    PayoutType3_0 = 10,
-    PayoutType3_1 = 20,
-    PayoutType3_2 = 50,
-    PayoutType3_3 = 100,
-    PayoutType3_4 = 500,
+enum PayoutCount3 {
+    _payoutType3_0 = 10,
+    _payoutType3_1 = 20,
+    _payoutType3_2 = 50,
+    _payoutType3_3 = 100,
+    _payoutType3_4 = 500,
 }
 
 interface SlotPayLine {
-    PayLine_1: number[];
-    PayLine_2: number[];
-    PayLine_3: number[];
-    PayLine_4: number[];
-    PayLine_5: number[];
+    _payLine_1: number[];
+    _payLine_2: number[];
+    _payLine_3: number[];
+    _payLine_4: number[];
+    _payLine_5: number[];
 }
 
 class PayLine implements SlotPayLine {
 
-    private SlotPosition = SlotLine;
+    private _slotPosition = SlotLine;
 
-    PayLine_1: number[];
-    PayLine_2: number[];
-    PayLine_3: number[];
-    PayLine_4: number[];
-    PayLine_5: number[];
+    _payLine_1: number[];
+    _payLine_2: number[];
+    _payLine_3: number[];
+    _payLine_4: number[];
+    _payLine_5: number[];
 
     constructor() {
 
-        this.PayLine_1 = [this.SlotPosition.Slot_1, this.SlotPosition.Slot_4, this.SlotPosition.Slot_7];
-        this.PayLine_2 = [this.SlotPosition.Slot_0, this.SlotPosition.Slot_3, this.SlotPosition.Slot_6];
-        this.PayLine_3 = [this.SlotPosition.Slot_2, this.SlotPosition.Slot_5, this.SlotPosition.Slot_8];
-        this.PayLine_4 = [this.SlotPosition.Slot_2, this.SlotPosition.Slot_4, this.SlotPosition.Slot_6];
-        this.PayLine_5 = [this.SlotPosition.Slot_0, this.SlotPosition.Slot_4, this.SlotPosition.Slot_8];
+        this._payLine_1 = [this._slotPosition.slot_1, this._slotPosition.slot_4, this._slotPosition.slot_7];
+        this._payLine_2 = [this._slotPosition.slot_0, this._slotPosition.slot_3, this._slotPosition.slot_6];
+        this._payLine_3 = [this._slotPosition.slot_2, this._slotPosition.slot_5, this._slotPosition.slot_8];
+        this._payLine_4 = [this._slotPosition.slot_2, this._slotPosition.slot_4, this._slotPosition.slot_6];
+        this._payLine_5 = [this._slotPosition.slot_0, this._slotPosition.slot_4, this._slotPosition.slot_8];
     }
 }
 
@@ -186,11 +189,11 @@ class CreatePayLine extends PayLine {
 
     CreatePaylineList() {
 
-        this._listPayLine.push(this.PayLine_1);
-        this._listPayLine.push(this.PayLine_2);
-        this._listPayLine.push(this.PayLine_3);
-        this._listPayLine.push(this.PayLine_4);
-        this._listPayLine.push(this.PayLine_5);
+        this._listPayLine.push(this._payLine_1);
+        this._listPayLine.push(this._payLine_2);
+        this._listPayLine.push(this._payLine_3);
+        this._listPayLine.push(this._payLine_4);
+        this._listPayLine.push(this._payLine_5);
 
         return this._listPayLine;
     }
@@ -200,11 +203,11 @@ export class CreatePayout2 {
     public listPayout2: number[] = new Array();
 
     constructor() {
-        this.listPayout2.push(PayoutCount2.PayoutType2_0);
-        this.listPayout2.push(PayoutCount2.PayoutType2_1);
-        this.listPayout2.push(PayoutCount2.PayoutType2_2);
-        this.listPayout2.push(PayoutCount2.PayoutType2_3);
-        this.listPayout2.push(PayoutCount2.PayoutType2_4);
+        this.listPayout2.push(PayoutCount2._payoutType2_0);
+        this.listPayout2.push(PayoutCount2._payoutType2_1);
+        this.listPayout2.push(PayoutCount2._payoutType2_2);
+        this.listPayout2.push(PayoutCount2._payoutType2_3);
+        this.listPayout2.push(PayoutCount2._payoutType2_4);
     }
 }
 
@@ -213,10 +216,10 @@ export class CreatePayout3 {
     public listPayout3: number[] = new Array();
 
     constructor() {
-        this.listPayout3.push(PayoutCount3.PayoutType3_0);
-        this.listPayout3.push(PayoutCount3.PayoutType3_1);
-        this.listPayout3.push(PayoutCount3.PayoutType3_2);
-        this.listPayout3.push(PayoutCount3.PayoutType3_3);
-        this.listPayout3.push(PayoutCount3.PayoutType3_4);
+        this.listPayout3.push(PayoutCount3._payoutType3_0);
+        this.listPayout3.push(PayoutCount3._payoutType3_1);
+        this.listPayout3.push(PayoutCount3._payoutType3_2);
+        this.listPayout3.push(PayoutCount3._payoutType3_3);
+        this.listPayout3.push(PayoutCount3._payoutType3_4);
     }
 }

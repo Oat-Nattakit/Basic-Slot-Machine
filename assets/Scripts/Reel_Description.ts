@@ -10,6 +10,6 @@ const {ccclass, property} = cc._decorator;
 export default class Reel_Description extends cc.Component{
 
     @property(cc.Integer)
-    public Reel_Description : number = 0;
+    public reel_Description : number = 0;
 }
 

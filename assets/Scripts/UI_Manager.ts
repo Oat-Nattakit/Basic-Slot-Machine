@@ -11,202 +11,202 @@ const { ccclass, property } = cc._decorator;
 export default class UI_Manager extends cc.Component {
 
     @property(cc.Button)
-    public Spin_Button: cc.Button = null;
+    public spin_Button: cc.Button = null;
 
     @property(cc.Button)
-    public Add_Bet: cc.Button = null;
+    public add_Bet: cc.Button = null;
 
     @property(cc.Button)
-    public Del_Bet: cc.Button = null;
+    public del_Bet: cc.Button = null;
 
     @property(cc.Button)
-    public Add_Line: cc.Button = null;
+    public add_Line: cc.Button = null;
 
     @property(cc.Button)
-    public Del_Line: cc.Button = null;
+    public del_Line: cc.Button = null;
 
     @property(cc.Button)
-    public acc_: cc.Button = null;
+    public balanceNot_reandy: cc.Button = null;
 
     @property(cc.Button)
-    public Cliam_reward: cc.Button = null;
+    public receive_reward: cc.Button = null;
 
     @property(cc.Label)
-    private TextBonus: cc.Label = null;
+    private bonus_Text: cc.Label = null;
 
     @property(cc.Label)
-    private Balance_Text: cc.Label = null;
+    private balance_Text: cc.Label = null;
 
     @property(cc.Label)
-    private CurrentBet_Text: cc.Label = null;
+    private currentBet_Text: cc.Label = null;
 
     @property(cc.Label)
-    private BetLine_Text: cc.Label = null;
+    private betLine_Text: cc.Label = null;
 
     @property(cc.Label)
-    private TotalBet: cc.Label = null;
+    private totalBet_Text: cc.Label = null;
 
     @property(cc.Node)
-    private RewardNode: cc.Node = null;
+    private reward_Node: cc.Node = null;
 
     @property(cc.Node)
-    private Panal_NotPlay: cc.Node = null;
+    private notPlay_Node: cc.Node = null;
 
     @property(sp.Skeleton)
-    private Bonus_Animation: sp.Skeleton = null;
+    private bonus_Animation: sp.Skeleton = null;
 
     @property(cc.Node)
-    private Line_Payline: cc.Node[] = new Array();
+    private line_Payline : cc.Node[] = new Array();
 
-    private timer: ReturnType<typeof setTimeout>;
+    private _timer: ReturnType<typeof setTimeout>;
 
-    private ListButton: cc.Button[] = new Array();
+    private _listButton: cc.Button[] = new Array();
 
-    private Bonuse_ScaleUp: cc.Tween[] = null;
-    private Stack_Array: cc.Node[] = null;   
+    private _bonuse_ScaleUp: cc.Tween[] = null;
+    private _stack_BackgroundNode: cc.Node[] = null;   
 
     public add_ArrayButton() {
 
-        this.ListButton.push(this.Spin_Button);
-        this.ListButton.push(this.Add_Bet);
-        this.ListButton.push(this.Add_Line);
-        this.ListButton.push(this.Del_Bet);
-        this.ListButton.push(this.Del_Line);
+        this._listButton.push(this.spin_Button);
+        this._listButton.push(this.add_Bet);
+        this._listButton.push(this.add_Line);
+        this._listButton.push(this.del_Bet);
+        this._listButton.push(this.del_Line);
     }
 
     public startPlayBonusAnimation() {
 
-        this.Bonuse_ScaleUp = null;
-        this.Bonus_Animation.node.active = false;
-        this.RewardNode.active = false;
-        this.Bonus_Animation.animation = "in";
-        this.Unactive_Line_Payline();
-        clearTimeout(this.timer);
+        this._bonuse_ScaleUp = null;
+        this.bonus_Animation.node.active = false;
+        this.reward_Node.active = false;
+        this.bonus_Animation.animation = "in";
+        this._unactive_Line_Payline();
+        clearTimeout(this._timer);
     }
 
-    public Button_Status(Status_ButtonActive: boolean, CurrentRound: number = 0) {
+    public button_Status(_status_ButtonActive: boolean, _currentRound: number = 0) {
 
-        let Reel_Range = 3;
-        for (let i = 0; i < this.ListButton.length; i++) {
-            if (Status_ButtonActive == true) {
-                this.ListButton[i].interactable = Status_ButtonActive;
+        let _reel_Range = 3;
+        for (let i = 0; i < this._listButton.length; i++) {
+            if (_status_ButtonActive == true) {
+                this._listButton[i].interactable = _status_ButtonActive;
             }
             else {
-                if (CurrentRound == Reel_Range) {
-                    this.ListButton[i].interactable = Status_ButtonActive;
+                if (_currentRound == _reel_Range) {
+                    this._listButton[i].interactable = _status_ButtonActive;
                 }
                 else {
                     if (i > 0) {
-                        this.ListButton[i].interactable = Status_ButtonActive;
+                        this._listButton[i].interactable = _status_ButtonActive;
                     }
                 }
             }
         }
     }
 
-    public PlayerGetBouns() {
+    public playerGetBouns() {
 
-        this.Bonus_Animation.node.active = true;
-        this.Bonus_Animation.animation = "animate";
-        this.Bonus_Animation.loop = false;
-        this.timer = setTimeout(() => this.Bonus_Animation.animation = "idle", 800);
-        this.Bonus_Animation.loop = true;
+        this.bonus_Animation.node.active = true;
+        this.bonus_Animation.animation = "animate";
+        this.bonus_Animation.loop = false;
+        this._timer = setTimeout(() => this.bonus_Animation.animation = "idle", 800);
+        this.bonus_Animation.loop = true;
     }
 
-    public ShowPriceBonus(Reward: number, Bonus: boolean) {
+    public showPriceBonus(_Reward: number, _Bonus: boolean) {
 
-        this.RewardNode.active = true;
-        this.Cliam_reward.node.getParent().active = true;
+        this.reward_Node.active = true;
+        this.receive_reward.node.getParent().active = true;
 
-        if (Bonus == true) {
-            this.TextBonus.string = "Bonus : " + Reward.toString();
+        if (_Bonus == true) {
+            this.bonus_Text.string = "Bonus : " + _Reward.toString();
         }
         else {
-            this.TextBonus.string = "Reward : " + Reward.toString();
+            this.bonus_Text.string = "Reward : " + _Reward.toString();
         }
     }
 
-    private Unactive_Line_Payline() {
+    private _unactive_Line_Payline() {
 
-        for (let i = 0; i < this.Line_Payline.length; i++) {
-            this.Line_Payline[i].active = false;
+        for (let i = 0; i < this.line_Payline.length; i++) {
+            this.line_Payline[i].active = false;
         }
     }
 
-    public Show_Use_Payline(CurrentLineUse: number) {
+    public show_Use_Payline(_currentLineUse: number) {
 
-        this.Unactive_Line_Payline();
-        for (let i = CurrentLineUse - 1; i >= 0; i--) {
-            this.Active_Line_Payline(i);
+        this._unactive_Line_Payline();
+        for (let i = _currentLineUse - 1; i >= 0; i--) {
+            this.active_Line_Payline(i);
         }
     }
 
-    public Active_Line_Payline(Payline_number: number) {
+    public active_Line_Payline(_payline_number: number) {
 
-        this.Line_Payline[Payline_number].active = true;
+        this.line_Payline[_payline_number].active = true;
     }
 
-    public ShowCurrentBalance(Currnet_Balance: number) {
+    public showCurrentBalance(_currnet_Balance: number) {
 
-        this.Balance_Text.string = Currnet_Balance.toString();
+        this.balance_Text.string = _currnet_Balance.toString();
     }
 
-    public ShowCurrentBet(CurrentBet: number) {
+    public showCurrentBet(_current_Bet: number) {
 
-        this.CurrentBet_Text.string = CurrentBet.toString();
+        this.currentBet_Text.string = _current_Bet.toString();
     }
 
-    public ShowCurrentLineBet(CurrentLineBet: number) {
+    public showCurrentLineBet(_current_LineBet: number) {
 
-        this.BetLine_Text.string = CurrentLineBet.toString();
+        this.betLine_Text.string = _current_LineBet.toString();
     }
 
-    public TotalBet_Show(value: number) {
-        this.TotalBet.string = value.toString();
+    public show_totalBet(_total_BetPrice: number) {
+        this.totalBet_Text.string = _total_BetPrice.toString();
     }
 
-    public SetSlot_BG_Bonuse(Node_BG: cc.Node[]) {
+    public setSlot_BG_Bonuse(_background_Node: cc.Node[]) {
 
-        this.Bonuse_ScaleUp = new Array();
-        this.Stack_Array = Node_BG;
+        this._bonuse_ScaleUp = new Array();
+        this._stack_BackgroundNode = _background_Node;
 
-        for (let i = 0; i < Node_BG.length; i++) {
+        for (let i = 0; i < _background_Node.length; i++) {
 
-            let ColorGold = new cc.Color(255, 207, 0)
-            Node_BG[i].color = ColorGold;
-            Node_BG[i].children[0].opacity = 255;
+            let _colorGold = new cc.Color(255, 207, 0)
+            _background_Node[i].color = _colorGold;
+            _background_Node[i].children[0].opacity = 255;
 
-            let ScalUp = cc.tween().to(0.3, { scale: 1.1 }, { easing: 'sineIn' });
-            let ScalDown = cc.tween().to(0.3, { scale: 1 }, { easing: 'sineIn' });
-            let Play = cc.tween(Node_BG[i]).sequence(ScalUp, ScalDown);
-            this.Bonuse_ScaleUp.push(cc.tween(Node_BG[i]).repeat(5, Play).start());
+            let _scalUp = cc.tween().to(0.3, { scale: 1.1 }, { easing: 'sineIn' });
+            let _scalDown = cc.tween().to(0.3, { scale: 1 }, { easing: 'sineIn' });
+            let _play = cc.tween(_background_Node[i]).sequence(_scalUp, _scalDown);
+            this._bonuse_ScaleUp.push(cc.tween(_background_Node[i]).repeat(5, _play).start());
         }
     }
 
-    public Balance_ReadytoPlay(Status: boolean) {
+    public balance_ReadytoPlay(_playStatus: boolean) {
 
-        if (Status == true) {
-            this.Panal_NotPlay.active = true
+        if (_playStatus == true) {
+            this.notPlay_Node.active = true
         }
         else {
-            this.Panal_NotPlay.active = false;
+            this.notPlay_Node.active = false;
         }
     }
 
-    public Hide_ClamReward() {
+    public hide_ReceiveReward() {
 
-        this.Cliam_reward.node.getParent().active = false;
-        if (this.Bonuse_ScaleUp != null) {
-            this.StopAllTween();
+        this.receive_reward.node.getParent().active = false;
+        if (this._bonuse_ScaleUp != null) {
+            this._stopAllTween();
         }
         this.startPlayBonusAnimation();
     }
 
-    private StopAllTween() {
+    private _stopAllTween() {
 
-        for (let i = 0; i < this.Bonuse_ScaleUp.length; i++) {
-            this.Bonuse_ScaleUp[i].stop();
-            cc.tween(this.Stack_Array[i]).to(0.1, { scale: 1 }, { easing: 'sineIn' }).start();
+        for (let i = 0; i < this._bonuse_ScaleUp.length; i++) {
+            this._bonuse_ScaleUp[i].stop();
+            cc.tween(this._stack_BackgroundNode[i]).to(0.1, { scale: 1 }, { easing: 'sineIn' }).start();
         }
 
     }
