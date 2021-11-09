@@ -115,10 +115,10 @@ export default class Reel_Control extends cc.Component {
     }
 
     public _setPicture_Slot(_reelNumber: number) {
-        
-        this.reelNode[_reelNumber].active = true;
+               
         this.reelAnimation[_reelNumber].stop();
-        this.reelAnimation[_reelNumber].node.active = false;        
+        this.reelAnimation[_reelNumber].node.active = false;
+        this.reelNode[_reelNumber].active = true;      
 
         if (_reelNumber == 0) {
             this._roundShowSlot(SlotLine.slot_0, SlotLine.slot_3);

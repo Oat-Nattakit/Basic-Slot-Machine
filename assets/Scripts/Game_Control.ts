@@ -36,15 +36,16 @@ export default class Game_Control extends cc.Component {
     private _list: number = 1;
     private _reelSpin_list: number[] = new Array();
 
+    private Testwaiting: boolean = false;
 
     onLoad() {
-
         this._ui_Manager = this.node.getComponent(UI_Manager);
         this._reel_Control = this.node.getComponent(Reel_Control);
 
         this._payline = Payline_Manager.getPayline_Manager();
         this._bet = Bet_Manager.getIns();
         this._server = Server_Manager.getInstant();
+        this._server.connect();
         this._ui_Manager.add_ArrayButton();
 
     }
@@ -68,7 +69,7 @@ export default class Game_Control extends cc.Component {
         this._ui_Manager.betPrice.add_Button.node.on('click', this._bet_Manager_Add, this);
         this._ui_Manager.betPrice.del_Button.node.on('click', this.Bet_Manager_Del, this);
         this._ui_Manager.linePayout.add_Button.node.on('click', this._lineBet_Add, this);
-        this._ui_Manager.linePayout.del_Button.node.on('click', this._lineBet_Del, this);        
+        this._ui_Manager.linePayout.del_Button.node.on('click', this._lineBet_Del, this);
     }
 
     private _setReelButton() {
@@ -84,15 +85,17 @@ export default class Game_Control extends cc.Component {
         }
     }
     private async _set_DefultReel() {
-
         await this._reel_Control.set_SlotSymbol();
         this._payline.checkPayLine_Reward(this._data_Player.l);
+        this.Testwaiting = true;
 
     }
     private _checkCurrentBalance() {
 
         this._reelRun = true;
         this._balance_Status = false;
+        this.Testwaiting = false;
+        this._list = 1;
         this._reelSpin_list = new Array();
         this._ui_Manager.startPlayBonusAnimation();
         this._data_Player = this._server.dataPlayer_BeforeSpin(this._data_Player);
@@ -127,37 +130,44 @@ export default class Game_Control extends cc.Component {
 
         if (this._reelRun == false) {
             this._checkCurrentBalance();
-        }            
+        }
 
         if (this._balance_Status == true) {
-            let _reelNumber = ButtonReel.node.getComponent(Reel_Description).reel_Description;
+
+            let _reelNumber: number = ButtonReel.node.getComponent(Reel_Description).reel_Description;
             this._last_animation = this._reel_Control.reel_PlayAnimation(ButtonReel, _reelNumber);
             this._totalReel++;
             this._ui_Manager.button_Status(false, this._totalReel);
             this._reelSpin_list.push(_reelNumber);
 
-            if (this._reelSpin_list.length == 3) {
-                this._testwaiting();
+            if (this.Testwaiting == false) {
+                await this._set_DefultReel();
             }
-            /*await this.Set_DefultReel();
-            setTimeout(() => this.Stop_Once_Reel(ReelNumber), 500 * this.List);*/
-            //this.List++;
+            let _defTimeWaiting: number = 500;
+            _defTimeWaiting = _defTimeWaiting * this._list;
+            this._list++;
+            this._reel_stopCheckPosition(_defTimeWaiting);
+
+            /* _defTimeWaiting += this.CountWaiting;   */
+            //setTimeout(() => this._stop_Once_Reel(this._reelSpin_list[_reelNumber]), 500 * this._list);
+            /*setTimeout(() => this._stop_Once_Reel(_reelNumber), _defTimeWaiting * this._list);
+            this._list++;*/
+
         }
         else {
             this._ui_Manager.balance_ReadytoPlay(true);
         }
     }
-    private async _testwaiting() {
+    private _reel_stopCheckPosition(deftime: number) {
 
-        await this._set_DefultReel();    
-        for (let i = 0; i < this._reelSpin_list.length; i++) {
-            setTimeout(() => this._stop_Once_Reel(this._reelSpin_list[i]), 500 * this._list);
-            this._list++;
-        }
+        let _reelNumber: number = this._reelSpin_list[0];
+        setTimeout(() => this._stop_Once_Reel(_reelNumber), deftime);
+        this._reelSpin_list.splice(0, 1);
     }
 
-    private _stop_Once_Reel(ReelNumber: number) {
 
+    private _stop_Once_Reel(ReelNumber: number) {
+        //console.log(ReelNumber+"  Stop");
         setTimeout(() => this._reel_Control._setPicture_Slot(ReelNumber), 100 * this._totalReel);
 
         if (this._totalReel == this._reel_Control.reelNode.length) {
@@ -168,17 +178,17 @@ export default class Game_Control extends cc.Component {
 
     private _end_AnimationCheckResult() {
 
-        this._list = 0;
+        //this._list = 0;
         this._totalReel = 0;
         this._reelRun = false;
         this._checkPlayer_reward = true;
     }
 
-    update() {
+    update(dt) {
 
         if (this._checkPlayer_reward == true) {
             //if (this._last_animation.getAnimationState('ReelAnimation').isPlaying == false) {
-                if (this._last_animation.getAnimationState('reelSpin_animation').isPlaying == false) {
+            if (this._last_animation.getAnimationState('reelSpin_animation').isPlaying == false) {
                 this._checkPlayer_reward = false;
                 setTimeout(() => this._checkResult_Player(), 200);
             }

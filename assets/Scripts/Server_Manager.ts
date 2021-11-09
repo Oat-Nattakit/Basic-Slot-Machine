@@ -25,6 +25,16 @@ export class Server_Manager {
         Server_Manager._insServer_Manager = this;
     }
 
+    public connect() {
+        const serverURL = "http://10.5.70.38:3310/socket.io";
+        const socket = window.io(serverURL);
+
+        console.log('connect to server', serverURL);
+        socket.on("connect", () => {
+            console.log(socket.id); // "G5p5..."
+        });
+    }
+
     public static getInstant(): Server_Manager {
         return Server_Manager._insServer_Manager;
     }
@@ -34,12 +44,12 @@ export class Server_Manager {
     }
 
     public player_DefultData(): Data_Play {
-        this._data_Player = new Data_Play(this._balance, 1, 5, 5);        
+        this._data_Player = new Data_Play(this._balance, 1, 5, 5);
         return this._data_Player;
-    }  
+    }
 
-    public slot_GetSymbolValue() {
-       
+    public async slot_GetSymbolValue() {
+
         if (this.getValueRound == false) {
             this.getValueRound = true;
             return new Promise(resolve => {
@@ -52,20 +62,20 @@ export class Server_Manager {
             return new Promise(resolve => {
                 setTimeout(() => {
                     resolve(0);
-                }, 2000);
+                }, 1000);
             });
         }
     }
 
-    private _testAwiteValue() {        
+    private _testAwiteValue() {
 
         for (let i = 0; i < this._result_symbol.length; i++) {
             this._result_symbol[i] = Math.floor(Math.random() * 5);
-        }       
+        }
     }
 
-    public slot_Result(): number[] {       
-        console.log(this._result_symbol);
+    public slot_Result(): number[] {
+        //console.log(this._result_symbol);
         return this._result_symbol;
     }
 
@@ -78,9 +88,9 @@ export class Server_Manager {
         /*let _jsonData = JSON.stringify(this._data_Player);
         let _data_Respon : SlotDataPatten = JSON.parse(_jsonData);
 
-        this._data_Player = new Data_Play(_data_Respon.bl , this._data_Player.b , this._data_Player.l ,this._data_Player.tb);    */  
+        this._data_Player = new Data_Play(_data_Respon.bl , this._data_Player.b , this._data_Player.l ,this._data_Player.tb);    */
         //#endregion       
-        
+
         return this._data_Player;
     }
 
