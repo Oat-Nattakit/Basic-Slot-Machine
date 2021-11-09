@@ -174,15 +174,8 @@ export default class UI_Manager extends cc.Component {
     }
 
     public balance_ReadytoPlay(_playStatus: boolean) {
-        
-        this.balanceNot_reandy.node.getParent().active = _playStatus;
-        /*if (_playStatus == true) {
-           
-            //this.notPlay_Node.active = true
-        }
-        else {
-            //this.notPlay_Node.active = false;
-        }*/
+                
+        this.balanceNot_reandy.node.getParent().active = _playStatus;        
     }
 
     public hide_ReceiveReward() {

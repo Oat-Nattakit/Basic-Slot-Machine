@@ -1,0 +1,301 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "TestAnimation",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.8333333333333334,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "paths": {
+      "Bg_Pos5/Slot_3": {
+        "comps": {
+          "cc.Sprite": {
+            "spriteFrame": [
+              {
+                "frame": 0,
+                "value": {
+                  "__uuid__": "60c640f7-14fe-4f49-81f5-6d931cc2431c"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "Bg_Pos1/Slot_1": {
+        "comps": {
+          "cc.Sprite": {
+            "spriteFrame": [
+              {
+                "frame": 0,
+                "value": {
+                  "__uuid__": "8a1faf5d-f8e5-464a-8a64-6b8152f81508"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "Bg_Pos2/Slot_2": {
+        "comps": {
+          "cc.Sprite": {
+            "spriteFrame": [
+              {
+                "frame": 0,
+                "value": {
+                  "__uuid__": "4576e3af-69e7-48a3-96e4-bc30e1e85ad2"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "Bg_Pos3/Slot_3": {
+        "comps": {
+          "cc.Sprite": {
+            "spriteFrame": [
+              {
+                "frame": 0,
+                "value": {
+                  "__uuid__": "8c14f89d-04fb-4e17-bad4-78faa06d61fd"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "Bg_Pos4/Slot_3": {
+        "comps": {
+          "cc.Sprite": {
+            "spriteFrame": [
+              {
+                "frame": 0,
+                "value": {
+                  "__uuid__": "423a4356-3d23-42d8-9b71-6c1950310cbc"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "Bg_Pos5": {
+        "props": {
+          "active": [
+            {
+              "frame": 0,
+              "value": true
+            },
+            {
+              "frame": 0.6666666666666666,
+              "value": false
+            },
+            {
+              "frame": 0.8333333333333334,
+              "value": true
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 110
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": 0
+            },
+            {
+              "frame": 0.3333333333333333,
+              "value": -110
+            },
+            {
+              "frame": 0.5,
+              "value": -220
+            },
+            {
+              "frame": 0.6666666666666666,
+              "value": -330
+            },
+            {
+              "frame": 0.8333333333333334,
+              "value": 110
+            }
+          ]
+        }
+      },
+      "Bg_Pos1": {
+        "props": {
+          "active": [
+            {
+              "frame": 0,
+              "value": true
+            },
+            {
+              "frame": 0.5,
+              "value": false
+            },
+            {
+              "frame": 0.6666666666666666,
+              "value": true
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": -110
+            },
+            {
+              "frame": 0.3333333333333333,
+              "value": -220
+            },
+            {
+              "frame": 0.5,
+              "value": -330
+            },
+            {
+              "frame": 0.6666666666666666,
+              "value": 110
+            },
+            {
+              "frame": 0.8333333333333334,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "Bg_Pos2": {
+        "props": {
+          "active": [
+            {
+              "frame": 0,
+              "value": true
+            },
+            {
+              "frame": 0.3333333333333333,
+              "value": false
+            },
+            {
+              "frame": 0.5,
+              "value": true
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": -110
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": -220
+            },
+            {
+              "frame": 0.3333333333333333,
+              "value": -330
+            },
+            {
+              "frame": 0.5,
+              "value": 110
+            },
+            {
+              "frame": 0.6666666666666666,
+              "value": 0
+            },
+            {
+              "frame": 0.8333333333333334,
+              "value": -110
+            }
+          ]
+        }
+      },
+      "Bg_Pos3": {
+        "props": {
+          "active": [
+            {
+              "frame": 0,
+              "value": true
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": false
+            },
+            {
+              "frame": 0.3333333333333333,
+              "value": true
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": -220
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": -330
+            },
+            {
+              "frame": 0.3333333333333333,
+              "value": 110
+            },
+            {
+              "frame": 0.5,
+              "value": 0
+            },
+            {
+              "frame": 0.6666666666666666,
+              "value": -110
+            },
+            {
+              "frame": 0.8333333333333334,
+              "value": -220
+            }
+          ]
+        }
+      },
+      "Bg_Pos4": {
+        "props": {
+          "active": [
+            {
+              "frame": 0,
+              "value": false
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": true
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": -330
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": 110
+            },
+            {
+              "frame": 0.3333333333333333,
+              "value": 0
+            },
+            {
+              "frame": 0.5,
+              "value": -110
+            },
+            {
+              "frame": 0.6666666666666666,
+              "value": -220
+            },
+            {
+              "frame": 0.8333333333333334,
+              "value": -330
+            }
+          ]
+        }
+      }
+    }
+  },
+  "events": []
+}
