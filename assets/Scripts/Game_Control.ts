@@ -127,7 +127,7 @@ export default class Game_Control extends cc.Component {
 
         if (this._reelRun == false) {
             this._checkCurrentBalance();
-        }
+        }            
 
         if (this._balance_Status == true) {
             let _reelNumber = ButtonReel.node.getComponent(Reel_Description).reel_Description;
@@ -177,7 +177,8 @@ export default class Game_Control extends cc.Component {
     update() {
 
         if (this._checkPlayer_reward == true) {
-            if (this._last_animation.getAnimationState('ReelAnimation').isPlaying == false) {
+            //if (this._last_animation.getAnimationState('ReelAnimation').isPlaying == false) {
+                if (this._last_animation.getAnimationState('reelSpin_animation').isPlaying == false) {
                 this._checkPlayer_reward = false;
                 setTimeout(() => this._checkResult_Player(), 200);
             }

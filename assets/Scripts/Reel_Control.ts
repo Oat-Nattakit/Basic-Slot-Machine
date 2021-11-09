@@ -20,7 +20,9 @@ export default class Reel_Control extends cc.Component {
     @property(cc.Node)
     public reelNode: cc.Node[] = new Array();
 
-    private _reelAnimation: cc.Animation[];
+    @property(cc.Animation)
+    private reelAnimation: cc.Animation[] = new Array();
+
     public reel_Button: cc.Button[];
 
     @property(cc.SpriteFrame)
@@ -43,12 +45,17 @@ export default class Reel_Control extends cc.Component {
 
     private _getComponentInNode() {
 
-        this._reelAnimation = new Array(this.reelNode.length);
+        //this.reelAnimation = new Array(this.reelNode.length);
 
         for (let i = 0; i < this.reelNode.length; i++) {
             this.reelNode[i].addComponent(Reel_Description).reel_Description = (i);
-            this._reelAnimation[i] = (this.reelNode[i].getComponent(cc.Animation));
+            this.reelAnimation[i].node.getComponent(cc.Layout).enabled = false;
+            let getStage = this.reelAnimation[i].getAnimationState("reelSpin_animation");
+            getStage.speed = 2;
+            //this.reelAnimation[i] = (this.reelNode[i].getComponent(cc.Animation));           
         }
+        
+
     }
 
     public setDefult_Blackground() {
@@ -57,7 +64,7 @@ export default class Reel_Control extends cc.Component {
             let _parentBg_ = this.slotNode[i].getParent();
             this.slotNode[i].opacity = 255;
             _parentBg_.color = cc.Color.BLACK;
-        }
+        }       
     }
 
     private _preGame_SetSymbolID(): number[] {
@@ -96,18 +103,22 @@ export default class Reel_Control extends cc.Component {
                 }, 0);
             });
         }
-    }
+    }    
 
     public reel_PlayAnimation(_button_Reel: cc.Button, _reelNumber: number) {
 
-        this._reelAnimation[_reelNumber].play();        
+        this.reelNode[_reelNumber].active = false;
+        this.reelAnimation[_reelNumber].node.active = true;        
+        this.reelAnimation[_reelNumber].play();        
         _button_Reel.enabled = false;
-        return this._reelAnimation[_reelNumber];
+        return this.reelAnimation[_reelNumber];
     }
 
     public _setPicture_Slot(_reelNumber: number) {
-
-        this._reelAnimation[_reelNumber].stop();
+        
+        this.reelNode[_reelNumber].active = true;
+        this.reelAnimation[_reelNumber].stop();
+        this.reelAnimation[_reelNumber].node.active = false;        
 
         if (_reelNumber == 0) {
             this._roundShowSlot(SlotLine.slot_0, SlotLine.slot_3);
@@ -137,7 +148,7 @@ export default class Reel_Control extends cc.Component {
 
         this._stack_ReelRun = new Array();        
         for (let i = 0; i < this.reelNode.length; i++) {
-            this.reel_Button[i].enabled = true;           
+            this.reel_Button[i].enabled = true;              
         }
     }
 
