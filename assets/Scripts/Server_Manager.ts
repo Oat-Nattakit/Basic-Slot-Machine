@@ -27,11 +27,26 @@ export class Server_Manager {
 
     public connect() {
         const serverURL = "http://10.5.70.38:3310/socket.io";
-        const socket = window.io(serverURL);
+        let url = new URL(serverURL);
+        let path = url.pathname;
+        let hostPath = url.toString().replace(path, "");
 
-        console.log('connect to server', serverURL);
-        socket.on("connect", () => {
-            console.log(socket.id); // "G5p5..."
+        let config: SocketIOClient.ConnectOpts = {
+            path: path,
+            transports: ['websocket'],
+            upgrade: false
+        };
+
+        let socket: any = io(hostPath, config);
+        socket.reconnects = false;
+        console.log('try to connect');
+        socket.on('connect', (param: any) => {
+            console.log('connected');
+            console.log('socket', socket);
+        });
+        
+        socket.on("connect_error", (error) => {
+            console.log('connect_error', error);
         });
     }
 
