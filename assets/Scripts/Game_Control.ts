@@ -38,27 +38,31 @@ export default class Game_Control extends cc.Component {
 
     private Testwaiting: boolean = false;
 
-    onLoad() {
+    async onLoad() {
+
+        this._server = Server_Manager.getInstant();
+        await this._server.connect();
+        this._server.player_DefultData(this);
+
         this._ui_Manager = this.node.getComponent(UI_Manager);
         this._reel_Control = this.node.getComponent(Reel_Control);
-
         this._payline = Payline_Manager.getPayline_Manager();
         this._bet = Bet_Manager.getIns();
-        this._server = Server_Manager.getInstant();
-        this._server.connect();
-        this._ui_Manager.add_ArrayButton();
-
     }
 
-    start() {
+    public waitingstart(Data: Data_Play) {
+
+        this._data_Player = Data;
 
         this._setButton_Function();
         this._setReelButton();
 
-        this._data_Player = this._server.player_DefultData();
-        this._bet.lineBet_Start(this._data_Player.l);
+        this._bet.lineBet_Start(this._data_Player.total_bet);
         this._updateData_TotalBet();
+        this._ui_Manager.add_ArrayButton();
     }
+
+
 
     private _setButton_Function() {
 
@@ -85,13 +89,16 @@ export default class Game_Control extends cc.Component {
         }
     }
     private async _set_DefultReel() {
-        await this._reel_Control.set_SlotSymbol();
-        this._payline.checkPayLine_Reward(this._data_Player.l);
+        
+        //await this._reel_Control.set_SlotSymbol();
+        //this._reel_Control.getSymbol_ID_FromServer();
+        await this._reel_Control.set_SlotSymbol();   
+        this._payline.checkPayLine_Reward(this._data_Player.total_bet);
         this.Testwaiting = true;
 
     }
     private _checkCurrentBalance() {
-
+        
         this._reelRun = true;
         this._balance_Status = false;
         this.Testwaiting = false;
@@ -105,11 +112,11 @@ export default class Game_Control extends cc.Component {
     private async _spin_All_Reel() {
 
         if (this._reelRun == false) {
-            this._checkCurrentBalance();
+            this._checkCurrentBalance();        
         }
 
         if (this._balance_Status == true) {
-
+            this._server.test_ReqSym();
             let _waitingTime = 0;
             let _reel_Button = this._reel_Control.reel_Button;
             this._ui_Manager.button_Status(false, _reel_Button.length);
@@ -139,7 +146,7 @@ export default class Game_Control extends cc.Component {
             this._totalReel++;
             this._ui_Manager.button_Status(false, this._totalReel);
             this._reelSpin_list.push(_reelNumber);
-
+            
             if (this.Testwaiting == false) {
                 await this._set_DefultReel();
             }
@@ -147,17 +154,26 @@ export default class Game_Control extends cc.Component {
             _defTimeWaiting = _defTimeWaiting * this._list;
             this._list++;
             this._reel_stopCheckPosition(_defTimeWaiting);
-
-            /* _defTimeWaiting += this.CountWaiting;   */
-            //setTimeout(() => this._stop_Once_Reel(this._reelSpin_list[_reelNumber]), 500 * this._list);
-            /*setTimeout(() => this._stop_Once_Reel(_reelNumber), _defTimeWaiting * this._list);
-            this._list++;*/
-
         }
         else {
             this._ui_Manager.balance_ReadytoPlay(true);
         }
     }
+
+    public readytoStop(list : number[]){
+        console.log(list);
+    }
+
+    /*public readyToStop(){
+        
+        this._set_DefultReel();
+
+        let _defTimeWaiting: number = 500;
+            _defTimeWaiting = _defTimeWaiting * this._list;
+            this._list++;
+            this._reel_stopCheckPosition(_defTimeWaiting);
+    }*/
+
     private _reel_stopCheckPosition(deftime: number) {
 
         let _reelNumber: number = this._reelSpin_list[0];
@@ -167,7 +183,7 @@ export default class Game_Control extends cc.Component {
 
 
     private _stop_Once_Reel(ReelNumber: number) {
-        //console.log(ReelNumber+"  Stop");
+
         setTimeout(() => this._reel_Control._setPicture_Slot(ReelNumber), 100 * this._totalReel);
 
         if (this._totalReel == this._reel_Control.reelNode.length) {
@@ -177,8 +193,6 @@ export default class Game_Control extends cc.Component {
     }
 
     private _end_AnimationCheckResult() {
-
-        //this._list = 0;
         this._totalReel = 0;
         this._reelRun = false;
         this._checkPlayer_reward = true;
@@ -238,8 +252,8 @@ export default class Game_Control extends cc.Component {
 
     private _endRound_Game() {
 
-        this._data_Player.bl += this._total_Reward;
-        this._ui_Manager.showCurrentBalance(this._data_Player.bl);
+        this._data_Player.balance += this._total_Reward;
+        this._ui_Manager.showCurrentBalance(this._data_Player.balance);
         this._ui_Manager.button_Status(true);
         this._server.getValueRound = false;
     }
@@ -263,34 +277,34 @@ export default class Game_Control extends cc.Component {
     private _lineBet_Add() {
 
         this._bet.line_Control(this._data_Player, 1);
-        this._ui_Manager.show_Use_Payline(this._data_Player.l);
+        this._ui_Manager.show_Use_Payline(this._data_Player.total_bet);
         this._updateData_TotalBet();
     }
 
     private _lineBet_Del() {
 
         this._bet.line_Control(this._data_Player, -1);
-        this._ui_Manager.show_Use_Payline(this._data_Player.l);
+        this._ui_Manager.show_Use_Payline(this._data_Player.total_bet);
         this._updateData_TotalBet();
     }
 
     private _updateData_TotalBet() {
 
-        this._ui_Manager.showCurrentBet(this._data_Player.b);
-        this._ui_Manager.showCurrentLineBet(this._data_Player.l);
-        this._ui_Manager.showCurrentBalance(this._data_Player.bl);
-        let _totalBetValue = this._data_Player.l * this._data_Player.b;
-        this._data_Player.tb = _totalBetValue
-        this._ui_Manager.show_totalBet(this._data_Player.tb);
+        this._ui_Manager.showCurrentBet(this._data_Player.bet_size);
+        this._ui_Manager.showCurrentLineBet(this._data_Player.total_bet);
+        this._ui_Manager.showCurrentBalance(this._data_Player.balance);
+        let _totalBetValue = this._data_Player.total_bet * this._data_Player.bet_size;
+        this._data_Player.total_bet = _totalBetValue
+        this._ui_Manager.show_totalBet(this._data_Player.total_bet);
     }
 
     private _balance_Update(): boolean {
 
         let _balance_Ready: boolean = false;
-        let _balance = this._data_Player.bl - this._data_Player.tb;
+        let _balance = this._data_Player.balance - this._data_Player.total_bet;
         if (_balance >= 0) {
-            this._data_Player.bl = _balance;
-            this._ui_Manager.showCurrentBalance(this._data_Player.bl);
+            this._data_Player.balance = _balance;
+            this._ui_Manager.showCurrentBalance(this._data_Player.balance);
             _balance_Ready = true;
         }
         return _balance_Ready;

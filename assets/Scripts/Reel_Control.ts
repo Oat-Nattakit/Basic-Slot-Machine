@@ -31,8 +31,9 @@ export default class Reel_Control extends cc.Component {
     private _payline: Payline_Manager;
     private _server: Server_Manager;
 
-    private _slotSymbol_ID: number[] = new Array();    
+    private _slotSymbol_ID: number[] = new Array();
     private _stack_ReelRun: boolean[] = new Array();
+    private TestCounting: boolean = false;
 
     start() {
 
@@ -45,16 +46,13 @@ export default class Reel_Control extends cc.Component {
 
     private _getComponentInNode() {
 
-        //this.reelAnimation = new Array(this.reelNode.length);
-
         for (let i = 0; i < this.reelNode.length; i++) {
             this.reelNode[i].addComponent(Reel_Description).reel_Description = (i);
             this.reelAnimation[i].node.getComponent(cc.Layout).enabled = false;
             let getStage = this.reelAnimation[i].getAnimationState("reelSpin_animation");
             getStage.speed = 2;
-            //this.reelAnimation[i] = (this.reelNode[i].getComponent(cc.Animation));           
         }
-        
+
 
     }
 
@@ -64,7 +62,7 @@ export default class Reel_Control extends cc.Component {
             let _parentBg_ = this.slotNode[i].getParent();
             this.slotNode[i].opacity = 255;
             _parentBg_.color = cc.Color.BLACK;
-        }       
+        }
     }
 
     private _preGame_SetSymbolID(): number[] {
@@ -77,7 +75,7 @@ export default class Reel_Control extends cc.Component {
     }
 
     private _preGame_RandomPicture() {
-        
+
         this._slotSymbol_ID = this._preGame_SetSymbolID();
 
         for (let i = 0; i < this.slotNode.length; i++) {
@@ -87,38 +85,42 @@ export default class Reel_Control extends cc.Component {
         }
     }
 
-    private async _getSymbol_ID_FromServer() {
-
-        await this._server.slot_GetSymbolValue();
+    public async _getSymbol_ID_FromServer() {
+        await this._server.slot_GetSymbolValue();      
+        //console.log(this._server.slot_Result());
         this._slotSymbol_ID = this._server.slot_Result();
         this._payline.managePayline(this._slotSymbol_ID);
+
     }
 
-    public set_SlotSymbol() {
+    public async set_SlotSymbol() {
 
         if (this._stack_ReelRun.length == 0) {
+            //this.TestCounting = true;
             return new Promise(resolve => {
                 setTimeout(() => {
                     resolve(this._getSymbol_ID_FromServer());
                 }, 0);
             });
         }
-    }    
+    }
 
     public reel_PlayAnimation(_button_Reel: cc.Button, _reelNumber: number) {
 
         this.reelNode[_reelNumber].active = false;
-        this.reelAnimation[_reelNumber].node.active = true;        
-        this.reelAnimation[_reelNumber].play();        
+        this.reelAnimation[_reelNumber].node.active = true;
+        this.reelAnimation[_reelNumber].play();
         _button_Reel.enabled = false;
+
         return this.reelAnimation[_reelNumber];
+
     }
 
     public _setPicture_Slot(_reelNumber: number) {
-               
+
         this.reelAnimation[_reelNumber].stop();
         this.reelAnimation[_reelNumber].node.active = false;
-        this.reelNode[_reelNumber].active = true;      
+        this.reelNode[_reelNumber].active = true;
 
         if (_reelNumber == 0) {
             this._roundShowSlot(SlotLine.slot_0, SlotLine.slot_3);
@@ -146,10 +148,11 @@ export default class Reel_Control extends cc.Component {
 
     private _reset_Slot() {
 
-        this._stack_ReelRun = new Array();        
+        this._stack_ReelRun = new Array();
         for (let i = 0; i < this.reelNode.length; i++) {
-            this.reel_Button[i].enabled = true;              
+            this.reel_Button[i].enabled = true;
         }
+        this.TestCounting = false;
     }
 
     public slotBonus(): cc.Node[] {

@@ -45,7 +45,7 @@ export class Bet_Manager {
         else if (this._countBet >= this._bet_Price.betStep.length) {
             this._countBet = this._bet_Price.betStep.length - 1;
         }
-        _data.b = this._bet_Price.betStep[this._countBet];
+        _data.bet_size = this._bet_Price.betStep[this._countBet];
     }
 
     public lineBet_Start(_maxLine: number): number {
@@ -56,12 +56,12 @@ export class Bet_Manager {
 
     public line_Control(_data: Data_Play, _lineValueChange: number = 0) {
 
-        _data.l += _lineValueChange;
-        if (_data.l >= this._maxLine) {
-            _data.l = this._maxLine;
+        _data.total_bet += _lineValueChange;
+        if (_data.total_bet >= this._maxLine) {
+            _data.total_bet = this._maxLine;
         }
-        else if (_data.l <= 1) {
-            _data.l = 1;
+        else if (_data.total_bet <= 1) {
+            _data.total_bet = 1;
         }        
     }
 }
