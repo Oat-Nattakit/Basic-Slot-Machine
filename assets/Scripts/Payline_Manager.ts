@@ -52,7 +52,7 @@ export class Payline_Manager {
 
         this._bonus_Position = new Array();
         this._payline_HitReward = new Array();
-        //console.log(this._slotNumber_list + " side");
+
         for (let i = 0; i < _line_Bet; i++) {
 
             let _check_PayoutType2 = this._payoutCheck(this._slotNumber_list[this.payline_List[i][Reel_Number.reel_1]], this._slotNumber_list[this.payline_List[i][Reel_Number.reel_2]]);

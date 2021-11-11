@@ -34,7 +34,7 @@ export default class UI_Manager extends cc.Component {
     private reward_Node: cc.Node = null;
 
     @property(cc.Node)
-    private notPlay_Node: cc.Node = null;
+    public waiting: cc.Node = null;
 
     @property(sp.Skeleton)
     private bonus_Animation: sp.Skeleton = null;

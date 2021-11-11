@@ -107,8 +107,12 @@ export class Server_Manager {
 
     public async test_ReqSym() {
 ////////////////////////////////////////////////////////* ส่งก่อนค่อยหัก///////////////////////////////////////
-        console.log("in");
+       
+   
         this.socket.emit('requestSpin', { balance: this._data_Player.balance, bet_size: this._data_Player.bet_size, line: this._data_Player.line, total_bet: this._data_Player.total_bet }, (para: any) => {
+            //console.log(this._data_Player.total_bet+" TO");
+            console.log("Send : "+this._data_Player.balance+" "+this._data_Player.bet_size);
+            this._data_Player.balance = this._data_Player.balance - this._data_Player.total_bet;
             let Getsting: string = JSON.stringify(para.data);
             this.setSlotSymbol(Getsting);
         });
@@ -116,13 +120,17 @@ export class Server_Manager {
     private setSlotSymbol(value: string) {
 
         let dataPlayer: slotSymbol = JSON.parse(value);
-        let TestData: SlotID = new SlotID(dataPlayer.balance, dataPlayer.bet_array, dataPlayer.timestamp);
+        let TestData: SlotID = new SlotID(dataPlayer.balance, dataPlayer.bet_array/*, dataPlayer.timestamp*/);
+
         this._result_symbol = TestData.bet_array;
-        console.log(TestData.balance);
+        this._gameCon.TEstJa();
+        console.log(this._data_Player.balance);
+        console.log("ServerRe : "+TestData.balance);
         this._gameCon.readytoStop(TestData.bet_array);
     }
 
     public slot_Result(): number[] {
+        //this._result_symbol =  [3, 0, 1, 3, 2, 2, 4, 4, 0];
         return this._result_symbol;
     }
 
@@ -158,19 +166,19 @@ export class Server_Manager {
 interface slotSymbol {
     balance: number;
     bet_array: number[];
-    timestamp: string;
+    //timestamp: string;
 }
 
 class SlotID implements slotSymbol {
     balance: number;
     bet_array: number[] = new Array();
-    timestamp: string;
+    //timestamp: string;
 
 
-    constructor(bal: number, listSym: number[], time) {
+    constructor(bal: number, listSym: number[]/*, time*/) {
         this.balance = bal;
         this.bet_array = listSym;
-        this.timestamp = time;
+        //this.timestamp = time;
     }
 }
 

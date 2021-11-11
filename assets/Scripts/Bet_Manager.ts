@@ -50,19 +50,19 @@ export class Bet_Manager {
 
     public lineBet_Start(_maxLine: number): number {
         this._countLine = _maxLine;
-        this._maxLine = _maxLine;        
+        this._maxLine = _maxLine;
         return this._countLine;
     }
 
     public line_Control(_data: Data_Play, _lineValueChange: number = 0) {
 
-        _data.total_bet += _lineValueChange;
-        if (_data.total_bet >= this._maxLine) {
-            _data.total_bet = this._maxLine;
+        _data.line += _lineValueChange;
+        if (_data.line >= this._maxLine) {
+            _data.line = this._maxLine;
         }
-        else if (_data.total_bet <= 1) {
-            _data.total_bet = 1;
-        }        
+        else if (_data.line  <= 1) {
+            _data.line = 1;
+        }
     }
 }
 
