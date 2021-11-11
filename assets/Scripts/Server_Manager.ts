@@ -28,7 +28,11 @@ export class Server_Manager {
         Server_Manager._insServer_Manager = this;
     }
 
-    public connect() {
+    public static getInstant(): Server_Manager {
+        return Server_Manager._insServer_Manager;
+    }
+
+    private gameConnectServer() {
 
         let serverURL = "http://10.5.70.38:3310/socket.io";
         let url = new URL(serverURL);
@@ -46,38 +50,33 @@ export class Server_Manager {
 
         this.socket.on('connect', (param: any) => {
             console.log('connected');
-        });
-
+        });        
 
         this.socket.on("connect_error", (error) => {
             console.log('connect_error', error);
         });
     }
 
+    public async gameGetDataPlayer(game: Game_Control): Promise<Data_Play> {
+        this._gameCon = game;
 
-    public static getInstant(): Server_Manager {
-        return Server_Manager._insServer_Manager;
-    }
+        await this.gameConnectServer();
+        await this.getStartDataPlayer();
 
-    public player_DefultData(gameCon: Game_Control) {
-
-        this._gameCon = gameCon;
-        this.socket.on('resetPlayer', (param: any) => {
-            let Getdata: string = JSON.stringify(param.data);
-            this.data_Convent(Getdata);
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(this._data_Player);
+            }, 500);
         });
     }
 
-    private data_Convent(preData: string) {
-
-        let dataPlayer: SlotDataPatten = JSON.parse(preData);
-        this._data_Player = new Data_Play(dataPlayer.balance, dataPlayer.bet_size, dataPlayer.line, dataPlayer.total_bet);
-        this.playerGetData();
-    }
-
-    public playerGetData() {
-        this._gameCon.waitingstart(this._data_Player);
-    }
+    private getStartDataPlayer() {
+        this.socket.on('resetPlayer', (param: IGameDataResponse) => {
+            const playerData = param.player_data;
+            this._data_Player = new Data_Play(playerData);
+            //console.log(this._data_Player.balance);
+        });
+    }    
 
     public async slot_GetSymbolValue() {
 
@@ -92,102 +91,96 @@ export class Server_Manager {
         else {
             return new Promise(resolve => {
                 setTimeout(() => {
-                    resolve(0);
+                    resolve(this._testAwiteValue());
                 }, 1000);
             });
         }
     }
 
     private _testAwiteValue() {
-
-        /*for (let i = 0; i < this._result_symbol.length; i++) {
-            this._result_symbol[i] = Math.floor(Math.random() * 5);
-        }*/
+        //console.log("Waiting");        
     }
 
     public async test_ReqSym() {
-////////////////////////////////////////////////////////* ส่งก่อนค่อยหัก///////////////////////////////////////
-       
-   
-        this.socket.emit('requestSpin', { balance: this._data_Player.balance, bet_size: this._data_Player.bet_size, line: this._data_Player.line, total_bet: this._data_Player.total_bet }, (para: any) => {
-            //console.log(this._data_Player.total_bet+" TO");
-            console.log("Send : "+this._data_Player.balance+" "+this._data_Player.bet_size);
-            this._data_Player.balance = this._data_Player.balance - this._data_Player.total_bet;
-            let Getsting: string = JSON.stringify(para.data);
-            this.setSlotSymbol(Getsting);
-        });
-    }
-    private setSlotSymbol(value: string) {
 
-        let dataPlayer: slotSymbol = JSON.parse(value);
-        let TestData: SlotID = new SlotID(dataPlayer.balance, dataPlayer.bet_array/*, dataPlayer.timestamp*/);
+        const param: any = { balance: this._data_Player.balance, bet_size: this._data_Player.bet_size, line: this._data_Player.line, total_bet: this._data_Player.total_bet };
+        this.socket.emit(
+            'requestSpin',
+            param,
+            (response: IGameResponseSpin) => {               
+                let dataPlayer = response.player_data;
+                this._data_Player.balance = this._data_Player.balance - this._data_Player.total_bet;
 
-        this._result_symbol = TestData.bet_array;
-        this._gameCon.TEstJa();
-        console.log(this._data_Player.balance);
-        console.log("ServerRe : "+TestData.balance);
-        this._gameCon.readytoStop(TestData.bet_array);
+                let GetData: SlotID = new SlotID(dataPlayer);                
+                this._result_symbol = GetData.bet_array;
+                this._data_Player.balance = GetData.balance;
+                this._reward = new Player_Reward(GetData.pay_out2, GetData.pay_out3);
+                this._gameCon.updateData_TotalBet();
+            });
     }
 
-    public slot_Result(): number[] {
-        //this._result_symbol =  [3, 0, 1, 3, 2, 2, 4, 4, 0];
+    public getSlot_Result(): number[] {
         return this._result_symbol;
-    }
+    }  
 
-    public dataPlayer_BeforeSpin(Data: Data_Play) {
-
-        this._data_Player = Data;
-
-        return this._data_Player;
-    }
-
-    public player_WinRound(_symbol2: number[], _symbol3: number[], _data: Data_Play) {
-
-        let _payout2: CreatePayout2 = new CreatePayout2();
-        let _payout3: CreatePayout3 = new CreatePayout3();
-
-        let _total_Payout2: number = 0;
-        let _total_Payout3: number = 0;
-
-        for (let i = 0; i < _symbol2.length; i++) {
-            let _getPrice = _payout2.listPayout2[_symbol2[i]];
-            _total_Payout2 += _getPrice * _data.bet_size;
-        }
-        for (let i = 0; i < _symbol3.length; i++) {
-            let _getPrice = _payout3.listPayout3[_symbol3[i]];
-            _total_Payout3 += _getPrice * _data.bet_size;
-        }
-
-        this._reward = new Player_Reward(_total_Payout2, _total_Payout3);
+    public reward_Value() {
         return this._reward;
     }
+}
+
+
+interface SlotDataPattern {
+
+    balance: number;
+    bet_size: number;
+    line: number;
+    total_bet: number;
+    bet_array: number[];
+    pay_out2: number;
+    pay_out3: number;
+    total_payout: number;
+
 }
 
 interface slotSymbol {
     balance: number;
     bet_array: number[];
-    //timestamp: string;
+    pay_out2: number,
+    pay_out3: number,
+    total_payout: number,
+}
+
+interface IGameResponseSpin {
+    error: string;
+    player_data: SlotDataPattern;
+    request_id: string;
+    response_name: string;
 }
 
 class SlotID implements slotSymbol {
+
     balance: number;
     bet_array: number[] = new Array();
-    //timestamp: string;
+    pay_out2: number;
+    pay_out3: number;
+    total_payout: number;
 
-
-    constructor(bal: number, listSym: number[]/*, time*/) {
-        this.balance = bal;
-        this.bet_array = listSym;
-        //this.timestamp = time;
+    constructor(res_Data : slotSymbol ) {
+        this.balance = res_Data.balance;
+        this.bet_array = res_Data.bet_array;
+        this.pay_out2 = res_Data.pay_out2;
+        this.pay_out3 = res_Data.pay_out3;
+        this.total_payout = res_Data.total_payout;
     }
 }
 
-interface SlotDataPatten {
 
-    balance: number; // Balance    
-    bet_size: number;  // Bet  
-    line: number;  // Line
-    total_bet: number; // Total_Bet       
+interface IGameDataResponse {
+
+    player_data: SlotDataPattern,
+    request_id: string,
+    response_name: string,
+    timestamp: string
 }
 
 interface Payout_Price {
@@ -195,18 +188,19 @@ interface Payout_Price {
     payout3: number;
 }
 
-export class Data_Play implements SlotDataPatten {
+export class Data_Play {
 
     public balance: number;
     public bet_size: number;
     public line: number;
-    public total_bet: number;
+    public total_bet: number;   
 
-    constructor(Current_Balance: number, bet: number, line: number, Total_Bet: number) {
-        this.balance = Current_Balance;
-        this.bet_size = bet;
-        this.line = line;
-        this.total_bet = line * bet;
+    constructor(Dataplayer : SlotDataPattern) {
+
+        this.balance = Dataplayer.balance;
+        this.bet_size = Dataplayer.bet_size;
+        this.line = Dataplayer.line;
+        this.total_bet = Dataplayer.line * Dataplayer.bet_size;
     }
 }
 
@@ -220,3 +214,4 @@ export class Player_Reward implements Payout_Price {
         this.payout3 = _price_Payout3;
     }
 }
+

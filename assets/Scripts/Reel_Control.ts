@@ -87,16 +87,15 @@ export default class Reel_Control extends cc.Component {
 
     public async _getSymbol_ID_FromServer() {
 
-        await this._server.slot_GetSymbolValue();      
-        //console.log(this._server.slot_Result());
-        this._slotSymbol_ID = this._server.slot_Result();
+        await this._server.slot_GetSymbolValue();
+        this._slotSymbol_ID = this._server.getSlot_Result();
         this._payline.managePayline(this._slotSymbol_ID);
 
     }
 
     public async set_SlotSymbol() {
 
-        if (this._stack_ReelRun.length == 0) {    
+        if (this._stack_ReelRun.length == 0) {
             return new Promise(resolve => {
                 setTimeout(() => {
                     resolve(this._getSymbol_ID_FromServer());

@@ -5,17 +5,24 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class ButtonNode_Manager extends cc.Component {
 
     @property(cc.Button)
-    public add_Button : cc.Button = null;
+    public add_Button: cc.Button = null;
 
     @property(cc.Button)
-    public del_Button : cc.Button = null;
+    public del_Button: cc.Button = null;
 
     @property(cc.Label)
-    public showValue_Text : cc.Label = null;
+    public showValue_Text: cc.Label = null;
+
+    public setBtnCallback(onClickAdd: () => void, onClickDel: () => void) {
+        this.add_Button.node.on("click", onClickAdd, this);
+        this.del_Button.node.on("click", onClickDel, this);
+    }
+    
+    
 }

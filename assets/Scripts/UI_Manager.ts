@@ -52,7 +52,7 @@ export default class UI_Manager extends cc.Component {
 
     private _listButton: cc.Button[] = new Array();
 
-    private _bonuse_ScaleUp: cc.Tween[] = null;
+    private _bonuse_ScaleUp: cc.Tween[] = [];
     private _stack_BackgroundNode: cc.Node[] = null;
 
     public add_ArrayButton() {
@@ -174,8 +174,8 @@ export default class UI_Manager extends cc.Component {
     }
 
     public balance_ReadytoPlay(_playStatus: boolean) {
-                
-        this.balanceNot_reandy.node.getParent().active = _playStatus;        
+
+        this.balanceNot_reandy.node.getParent().active = _playStatus;
     }
 
     public hide_ReceiveReward() {

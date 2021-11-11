@@ -13,13 +13,12 @@ export class Bet_Manager {
 
     private static _insBet_Manager: Bet_Manager = new Bet_Manager();
     private _bet_Price: CreateBet = null;
-    private _countBet: number;
+    private _countBet: number = 0;
 
     private _countLine: number = 0;
     private _maxLine: number = 0;
 
     constructor() {
-        this._countBet = 0;
         Bet_Manager._insBet_Manager = this;
     }
 
@@ -30,21 +29,15 @@ export class Bet_Manager {
         return Bet_Manager._insBet_Manager;
     }
 
-    public bet_StartValue() {
-        let _startBet = this._bet_Price.betStep[0];
+    /*public bet_StartValue() {
+        let _startBet = this._bet_Price.betStep[0];        
         return _startBet;
-    }
+    }*/
 
     public bet_Control(_data: Data_Play, _valueChange: number) {
 
-        this._countBet += _valueChange;
-
-        if (this._countBet <= 0) {
-            this._countBet = 0;
-        }
-        else if (this._countBet >= this._bet_Price.betStep.length) {
-            this._countBet = this._bet_Price.betStep.length - 1;
-        }
+        const maxBetStep = this._bet_Price.betStep.length - 1;
+        this._countBet = cc.misc.clampf(this._countBet + _valueChange, 0, maxBetStep);
         _data.bet_size = this._bet_Price.betStep[this._countBet];
     }
 
@@ -55,14 +48,7 @@ export class Bet_Manager {
     }
 
     public line_Control(_data: Data_Play, _lineValueChange: number = 0) {
-
-        _data.line += _lineValueChange;
-        if (_data.line >= this._maxLine) {
-            _data.line = this._maxLine;
-        }
-        else if (_data.line  <= 1) {
-            _data.line = 1;
-        }
+        _data.line = cc.misc.clampf(_data.line + _lineValueChange, 1, this._maxLine);
     }
 }
 
