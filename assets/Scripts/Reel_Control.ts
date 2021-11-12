@@ -33,7 +33,6 @@ export default class Reel_Control extends cc.Component {
 
     private _slotSymbol_ID: number[] = new Array();
     private _stack_ReelRun: boolean[] = new Array();
-    private TestCounting: boolean = false;
 
     start() {
 
@@ -85,23 +84,20 @@ export default class Reel_Control extends cc.Component {
         }
     }
 
-    public async _getSymbol_ID_FromServer() {
+    public async _getSymbol_ID_FromServer(): Promise<void> {
 
-        await this._server.slot_GetSymbolValue();
-        this._slotSymbol_ID = this._server.getSlot_Result();
-        this._payline.managePayline(this._slotSymbol_ID);
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(this.getDataslot())
+            }, 1000)
+        });
+
 
     }
-
-    public async set_SlotSymbol() {
-
-        if (this._stack_ReelRun.length == 0) {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    resolve(this._getSymbol_ID_FromServer());
-                }, 0);
-            });
-        }
+    private getDataslot() {
+        this._slotSymbol_ID = this._server.slot_GetSymbolValue();
+        console.log(this._slotSymbol_ID);
+        this._payline.managePayline(this._slotSymbol_ID);
     }
 
     public reel_PlayAnimation(_button_Reel: cc.Button, _reelNumber: number) {
@@ -151,7 +147,7 @@ export default class Reel_Control extends cc.Component {
         for (let i = 0; i < this.reelNode.length; i++) {
             this.reel_Button[i].enabled = true;
         }
-        this.TestCounting = false;
+
     }
 
     public slotBonus(): cc.Node[] {
@@ -167,8 +163,8 @@ export default class Reel_Control extends cc.Component {
     }
 }
 
-export enum Reel_Number {
+/*export enum Reel_Number {
     reel_1 = 0,
     reel_2 = 1,
     reel_3 = 2,
-}
+}*/

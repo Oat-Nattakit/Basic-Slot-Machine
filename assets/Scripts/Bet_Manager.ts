@@ -5,6 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import { CreateBet } from "./interfaceClass";
 import { Data_Play } from "./Server_Manager";
 
 const { ccclass, property } = cc._decorator;
@@ -23,7 +24,7 @@ export class Bet_Manager {
     }
 
     public static getIns(): Bet_Manager {
-        if (Bet_Manager._insBet_Manager._bet_Price == null) {
+        if (Bet_Manager._insBet_Manager._bet_Price == null) {            
             Bet_Manager._insBet_Manager._bet_Price = new CreateBet();
         }
         return Bet_Manager._insBet_Manager;
@@ -32,7 +33,7 @@ export class Bet_Manager {
     /*public bet_StartValue() {
         let _startBet = this._bet_Price.betStep[0];        
         return _startBet;
-    }*/
+    }*/ 
 
     public bet_Control(_data: Data_Play, _valueChange: number) {
 
@@ -52,7 +53,7 @@ export class Bet_Manager {
     }
 }
 
-export enum Bet_Price {
+/*export enum Bet_Price {
     bet_Price1 = 1,
     bet_Price2 = 2,
     bet_Price3 = 5,
@@ -72,4 +73,4 @@ class CreateBet implements Bet_Step {
     constructor() {
         this.betStep = [Bet_Price.bet_Price1, Bet_Price.bet_Price2, Bet_Price.bet_Price3, Bet_Price.bet_Price4, Bet_Price.bet_Price5, Bet_Price.bet_Price6];
     }
-}
+}*/

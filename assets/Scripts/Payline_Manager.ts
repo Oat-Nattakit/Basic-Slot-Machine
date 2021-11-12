@@ -5,7 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { Reel_Number } from "./Reel_Control";
+import { CreatePayLine, Reel_Number, TypePayout } from "./interfaceClass";
 
 const { ccclass, property } = cc._decorator;
 
@@ -49,7 +49,7 @@ export class Payline_Manager {
     }
 
     public checkPayLine_Reward(_line_Bet: number) {
-
+        
         this._bonus_Position = new Array();
         this._payline_HitReward = new Array();
 
@@ -119,8 +119,8 @@ export class Payline_Manager {
         return this._listSymbol3;
     }
 }
-
-enum TypePayout {
+/*
+export enum TypePayout {
     _payout2 = 2,
     _payout3 = 3,
 }
@@ -181,7 +181,7 @@ class PayLine implements SlotPayLine {
     }
 }
 
-class CreatePayLine extends PayLine {
+export class CreatePayLine extends PayLine {
 
     private _listPayLine = new Array();
 
@@ -224,4 +224,4 @@ export class CreatePayout3 {
         this.listPayout3.push(PayoutCount3._payoutType3_3);
         this.listPayout3.push(PayoutCount3._payoutType3_4);
     }
-}
+}*/
