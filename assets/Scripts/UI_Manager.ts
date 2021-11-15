@@ -31,6 +31,9 @@ export default class UI_Manager extends cc.Component {
     @property(cc.Label)
     private totalBet_Text: cc.Label = null;
 
+    @property(cc.Label)
+    private connectGamestatus : cc.Label = null;
+
     @property(cc.Node)
     private reward_Node: cc.Node = null;
 
@@ -109,6 +112,10 @@ export default class UI_Manager extends cc.Component {
         this.reward_Node.active = true;
         this.receive_reward.node.getParent().active = true;
         this.bonus_Text.string = _text+ _reward.toString();       
+    }
+
+    public connectServer_Error(){
+        this.connectGamestatus.string = "Connect Server Error";
     }
 
     private _unactive_Line_Payline() {

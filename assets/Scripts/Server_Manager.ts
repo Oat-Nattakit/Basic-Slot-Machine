@@ -15,13 +15,13 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export class Server_Manager {
 
-    private static _insServer_Manager: Server_Manager = new Server_Manager();
-    private _result_symbol: number[] = new Array(9);
+    private static _insServer_Manager: Server_Manager = new Server_Manager();   
 
     private _data_Player: Data_Play;
     private _reward: Player_Reward;
     private _gameCon: Game_Control;
-
+    
+    private _result_symbol: number[] = new Array(9);
     public getValueRound: boolean = false;
     private socket;
 
@@ -77,13 +77,7 @@ export class Server_Manager {
             const playerData = param.player_data;
             this._data_Player = new Data_Play(playerData);
         });
-    }
-    public errorCase(): Data_Play {
-
-        let sim : simpleData = new simpleData(1000,1,1);
-        this._data_Player = new Data_Play(sim);
-        return this._data_Player;
-    }
+    } 
 
     public slot_GetSymbolValue() : number[]{
         return this._result_symbol;       

@@ -6,6 +6,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { animation_Command, server_Command, SlotLine } from "./Class_Pattern/enum_Pattern";
+import Game_Control from "./Game_Control";
 import { Payline_Manager } from "./Payline_Manager";
 import Reel_Description from "./Reel_Description";
 import { Server_Manager } from "./Server_Manager";
@@ -33,9 +34,10 @@ export default class Reel_Control extends cc.Component {
     private _server: Server_Manager;
 
     private _slotSymbol_ID: number[] = new Array();
-    private _stack_ReelRun: boolean[] = new Array();
+    private _stack_ReelStop: boolean[] = new Array();
 
-    public _Stack_ReelNumber : number[] = new Array();
+    public _stack_ReelSpin : number[] = new Array();
+    private TEstCount : number = 0;
 
     start() {
 
@@ -106,17 +108,15 @@ export default class Reel_Control extends cc.Component {
         this.reelAnimation[_reelNumber].node.active = true;
         this.reelAnimation[_reelNumber].play();
         _button_Reel.enabled = false;
-        this._Stack_ReelNumber.push(_reelNumber);
-        return this.reelAnimation[_reelNumber];
-
+        this._stack_ReelSpin.push(_reelNumber);
     }
 
-    public _setPicture_Slot(_reelNumber: number) {
+    public _setPicture_Slot(_reelNumber: number,Game_Con : Game_Control) {
 
         this.reelAnimation[_reelNumber].stop();
         this.reelAnimation[_reelNumber].node.active = false;
         this.reelNode[_reelNumber].active = true;
-
+   
         if (_reelNumber == 0) {
             this._roundShowSlot(SlotLine.slot_0, SlotLine.slot_3);
         }
@@ -126,9 +126,10 @@ export default class Reel_Control extends cc.Component {
         else if (_reelNumber == 2) {
             this._roundShowSlot(SlotLine.slot_6, this.slotNode.length);
         }
-        if (this._stack_ReelRun.length == this.reelNode.length) {
+        if (this._stack_ReelStop.length == this.reelNode.length) {            
+            Game_Con.CheckPlayerReward();            
             this._reset_Slot();
-        }
+        }       
     }
 
     private _roundShowSlot(_minlist: number, _maxlist: number) {
@@ -138,16 +139,17 @@ export default class Reel_Control extends cc.Component {
             this.slotNode[i].opacity = 120;
             _getSprite.spriteFrame = this.picture_Symbol[this._slotSymbol_ID[i]];
         }
-        this._stack_ReelRun.push(true);   
+        this._stack_ReelStop.push(true);   
     }
 
-    private _reset_Slot() {
+    private _reset_Slot() {        
 
-        this._stack_ReelRun = new Array();
+        this._stack_ReelStop = new Array();
+        this._stack_ReelSpin = new Array();
+
         for (let i = 0; i < this.reelNode.length; i++) {
             this.reel_Button[i].enabled = true;
-        }
-        this._Stack_ReelNumber = new Array();
+        }        
     }
 
     public slotBonus(): cc.Node[] {
@@ -160,5 +162,5 @@ export default class Reel_Control extends cc.Component {
             _background_list.push(_parentBackground);
         }
         return _background_list;
-    }
+    }    
 }

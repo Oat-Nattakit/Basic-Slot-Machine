@@ -13258,6 +13258,9 @@
     "totalBet_Text": {
       "__id__": 27
     },
+    "connectGamestatus": {
+      "__id__": 279
+    },
     "reward_Node": {
       "__id__": 79
     },
