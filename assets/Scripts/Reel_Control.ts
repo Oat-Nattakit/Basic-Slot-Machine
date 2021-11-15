@@ -5,7 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { SlotLine } from "./interfaceClass";
+import { animation_Command, server_Command, SlotLine } from "./Class_Pattern/enum_Pattern";
 import { Payline_Manager } from "./Payline_Manager";
 import Reel_Description from "./Reel_Description";
 import { Server_Manager } from "./Server_Manager";
@@ -35,6 +35,8 @@ export default class Reel_Control extends cc.Component {
     private _slotSymbol_ID: number[] = new Array();
     private _stack_ReelRun: boolean[] = new Array();
 
+    public _Stack_ReelNumber : number[] = new Array();
+
     start() {
 
         this._payline = Payline_Manager.getinstance_Payline();
@@ -49,11 +51,9 @@ export default class Reel_Control extends cc.Component {
         for (let i = 0; i < this.reelNode.length; i++) {
             this.reelNode[i].addComponent(Reel_Description).reel_Description = (i);
             this.reelAnimation[i].node.getComponent(cc.Layout).enabled = false;
-            let getStage = this.reelAnimation[i].getAnimationState("reelSpin_animation");
+            let getStage = this.reelAnimation[i].getAnimationState(animation_Command.reel_Animation);
             getStage.speed = 2;
         }
-
-
     }
 
     public setDefult_Blackground() {
@@ -92,12 +92,11 @@ export default class Reel_Control extends cc.Component {
                 resolve(this.getDataslot())
             }, 1000)
         });
-
-
     }
+
     private getDataslot() {
-        this._slotSymbol_ID = this._server.slot_GetSymbolValue();
-        console.log(this._slotSymbol_ID);
+
+        this._slotSymbol_ID = this._server.slot_GetSymbolValue();        
         this._payline.managePayline(this._slotSymbol_ID);
     }
 
@@ -107,7 +106,7 @@ export default class Reel_Control extends cc.Component {
         this.reelAnimation[_reelNumber].node.active = true;
         this.reelAnimation[_reelNumber].play();
         _button_Reel.enabled = false;
-
+        this._Stack_ReelNumber.push(_reelNumber);
         return this.reelAnimation[_reelNumber];
 
     }
@@ -139,7 +138,7 @@ export default class Reel_Control extends cc.Component {
             this.slotNode[i].opacity = 120;
             _getSprite.spriteFrame = this.picture_Symbol[this._slotSymbol_ID[i]];
         }
-        this._stack_ReelRun.push(true);
+        this._stack_ReelRun.push(true);   
     }
 
     private _reset_Slot() {
@@ -148,7 +147,7 @@ export default class Reel_Control extends cc.Component {
         for (let i = 0; i < this.reelNode.length; i++) {
             this.reel_Button[i].enabled = true;
         }
-
+        this._Stack_ReelNumber = new Array();
     }
 
     public slotBonus(): cc.Node[] {

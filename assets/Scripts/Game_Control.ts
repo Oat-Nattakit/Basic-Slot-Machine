@@ -6,7 +6,8 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { Bet_Manager } from "./Bet_Manager";
-import { Data_Play } from "./interfaceClass";
+import { Data_Play } from "./Class_Pattern/class_Pattern";
+import { animation_Command, reward_Text, server_Command } from "./Class_Pattern/enum_Pattern";
 import { Payline_Manager } from "./Payline_Manager";
 import Reel_Control from "./Reel_Control";
 import Reel_Description from "./Reel_Description";
@@ -33,7 +34,7 @@ export default class Game_Control extends cc.Component {
 
     private _data_Player: Data_Play;
     private _list: number = 1;
-    private _reelSpin_list: number[] = new Array();
+    //private _reelSpin_list: number[] = new Array();
 
     async onLoad() {
 
@@ -45,8 +46,6 @@ export default class Game_Control extends cc.Component {
 
         this._payline = Payline_Manager.getinstance_Payline();
         this._bet = Bet_Manager.getInstance_Bet();
-
-
     }
 
     private async gameConnectServer() {
@@ -103,7 +102,7 @@ export default class Game_Control extends cc.Component {
         this._reelRun = true;
         this._balance_Status = false;
         this._list = 1;
-        this._reelSpin_list = new Array();
+        //this._reelSpin_list = new Array();
         this._ui_Manager.startPlayBonusAnimation();
         this._balance_Status = this._balance_Update();
         this._server.requestSlotSymbol();
@@ -146,15 +145,13 @@ export default class Game_Control extends cc.Component {
 
             this._last_animation = this._reel_Control.reel_PlayAnimation(ButtonReel, _reelNumber);
             this._totalReel++;
-            this._ui_Manager.button_Status(false, this._totalReel);
-            this._reelSpin_list.push(_reelNumber);
-            
+            this._ui_Manager.button_Status(false, this._totalReel);           
             await this._set_DefultReel();
 
             let _defTimeWaiting: number = 500;
             _defTimeWaiting = _defTimeWaiting * this._list;
             this._list++;
-            this._reel_stopCheckPosition(_defTimeWaiting);
+            this._reel_stopCheckPosition(_defTimeWaiting);            
         }
         else {
             this._ui_Manager.balance_ReadytoPlay(true);
@@ -163,11 +160,10 @@ export default class Game_Control extends cc.Component {
 
     private _reel_stopCheckPosition(deftime: number) {
 
-        let _reelNumber: number = this._reelSpin_list[0];
-        setTimeout(() => this._stop_Once_Reel(_reelNumber), deftime);
-        this._reelSpin_list.splice(0, 1);
+        let _reelNumber : number = this._reel_Control._Stack_ReelNumber[0];        
+        setTimeout(() => this._stop_Once_Reel(_reelNumber), deftime);        
+        this._reel_Control._Stack_ReelNumber.splice(0,1);      
     }
-
 
     private _stop_Once_Reel(ReelNumber: number) {
 
@@ -188,7 +184,7 @@ export default class Game_Control extends cc.Component {
     update() {
 
         if (this._checkPlayer_reward == true) {
-            if (this._last_animation.getAnimationState('reelSpin_animation').isPlaying == false) {
+            if (this._last_animation.getAnimationState(animation_Command.reel_Animation).isPlaying == false) {
                 this._checkPlayer_reward = false;
                 setTimeout(() => this._show_Reward(), 200);
             }
@@ -197,9 +193,8 @@ export default class Game_Control extends cc.Component {
 
     private _show_Reward() {
 
-        let _reward = this._server.reward_Value();
-
-        let _payline3_Bonus = false;
+        let _reward = this._server.reward_Value();        
+        let _reward_Text = reward_Text.reward;
 
         if (_reward.totalPayout != 0) {
 
@@ -209,12 +204,12 @@ export default class Game_Control extends cc.Component {
             for (let i = 0; i < _payline_Bonus.length; i++) {
                 this._ui_Manager.active_Line_Payline(_payline_Bonus[i]);
             }
-            if (_reward.payout3 != 0) {
-                _payline3_Bonus = true;
+            if (_reward.payout3 != 0) {                
+                _reward_Text = reward_Text.bonus;
                 this._ui_Manager.playerGetBouns();
             }
             this._ui_Manager.setSlot_BG_Bonuse(_slotBackground);
-            this._ui_Manager.showPriceBonus(_reward.totalPayout, _payline3_Bonus);
+            this._ui_Manager.showPriceBonus(_reward.totalPayout, _reward_Text);
         }
 
         else {
@@ -225,13 +220,12 @@ export default class Game_Control extends cc.Component {
         this._endRound_Game();
     }
 
-    private _endRound_Game() {
-
-        console.log("endGame")
+    private _endRound_Game() {        
         this._ui_Manager.showCurrentBalance(this._data_Player.balance);
         this._ui_Manager.button_Status(true);
         this._server.getValueRound = false;
     }
+
     private _hide_UI_Reward() {
         this._reel_Control.setDefult_Blackground();
         this._ui_Manager.hide_ReceiveReward();

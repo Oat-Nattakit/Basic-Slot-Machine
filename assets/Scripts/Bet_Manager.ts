@@ -5,7 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { CreateBet, Data_Play } from "./interfaceClass";
+import { CreateBet, Data_Play } from "./Class_Pattern/class_Pattern";
 
 const { ccclass, property } = cc._decorator;
 

@@ -5,8 +5,10 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import { Data_Play, Player_Reward, simpleData, slot_SymbolID } from "./Class_Pattern/class_Pattern";
+import { server_Command } from "./Class_Pattern/enum_Pattern";
+import { IGameDataResponse, IGameResponseSpin } from "./Class_Pattern/interface_Pattern";
 import Game_Control from "./Game_Control";
-import { Data_Play, IGameDataResponse, IGameResponseSpin, Player_Reward, simpleData, slot_SymbolID } from "./interfaceClass";
 
 const { ccclass, property } = cc._decorator;
 
@@ -48,11 +50,11 @@ export class Server_Manager {
         this.socket = io(hostPath, config);
         console.log('try to connect');
 
-        this.socket.on('connect', (param: any) => {
+        this.socket.on(server_Command.server_Connect, (param: any) => {
             console.log('connected');
         });
 
-        this.socket.on("connect_error", (error) => {
+        this.socket.on(server_Command.server_Connect_Error, (error) => {
             console.log('connect_error', error);
         });
     }
@@ -65,14 +67,13 @@ export class Server_Manager {
 
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                resolve(this._data_Player);
-                //reject(this.errorCase());
+                resolve(this._data_Player);               
             }, 1000);
         });
     }
 
     private getStartDataPlayer() {
-        this.socket.on('resetPlayer', (param: IGameDataResponse) => {
+        this.socket.on(server_Command.prepair_Data, (param: IGameDataResponse) => {
             const playerData = param.player_data;
             this._data_Player = new Data_Play(playerData);
         });
@@ -84,25 +85,8 @@ export class Server_Manager {
         return this._data_Player;
     }
 
-    public slot_GetSymbolValue() : number[]/*: Promise<number[]>*/ {
-
-        return this._result_symbol;
-
-       /* if (this.getValueRound == false) {
-            this.getValueRound = true;
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    resolve(this._result_symbol);
-                }, 2000);
-            });
-        }
-        else {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    resolve(this._result_symbol);
-                }, 1000);
-            });
-        }*/
+    public slot_GetSymbolValue() : number[]{
+        return this._result_symbol;       
     }  
 
     public async requestSlotSymbol() {    
@@ -115,7 +99,7 @@ export class Server_Manager {
         };
 
         this.socket.emit(
-            'requestSpin',
+            server_Command.request_Data,
             paramiter,
             (response: IGameResponseSpin) => {
                 let dataPlayer = response.player_data;
@@ -134,113 +118,3 @@ export class Server_Manager {
         return this._reward;
     }
 }
-/*
-
-interface SlotDataPattern {
-
-    balance: number;
-    bet_size: number;
-    line: number;
-    total_bet: number;
-    bet_array: number[];
-    pay_out2: number;
-    pay_out3: number;
-    total_payout: number;
-
-}
-
-interface slotSymbol {
-    balance: number;
-    bet_array: number[];
-    pay_out2: number,
-    pay_out3: number,
-    total_payout: number,
-}
-
-interface IGameResponseSpin {
-    error: string;
-    player_data: SlotDataPattern;
-    request_id: string;
-    response_name: string;
-}
-
-class SlotID implements slotSymbol {
-
-    balance: number;
-    bet_array: number[] = new Array();
-    pay_out2: number;
-    pay_out3: number;
-    total_payout: number;
-
-    constructor(res_Data: slotSymbol) {
-        this.balance = res_Data.balance;
-        this.bet_array = res_Data.bet_array;
-        this.pay_out2 = res_Data.pay_out2;
-        this.pay_out3 = res_Data.pay_out3;
-        this.total_payout = res_Data.total_payout;
-    }
-}
-
-
-interface IGameDataResponse {
-
-    player_data: SlotDataPattern,
-    request_id: string,
-    response_name: string,
-    timestamp: string,
-}
-
-
-interface Payout_Price {
-    payout2: number;
-    payout3: number;
-    totalPayout : number;
-}
-
-
-class simpleData implements SlotDataPattern {
-    balance: number;
-    bet_size: number;
-    line: number;
-    total_bet: number;
-    bet_array: number[];
-    pay_out2: number;
-    pay_out3: number;
-    total_payout: number;
-
-    constructor(_balance, _bet_size, _line) {
-        this.balance = _balance;
-        this.bet_size = _bet_size;
-        this.line = _line;
-        this.total_bet = _line * _bet_size;
-    }
-}
-export class Data_Play {
-
-    public balance: number;
-    public bet_size: number;
-    public line: number;
-    public total_bet: number;
-
-    constructor(Dataplayer: SlotDataPattern) {
-
-        this.balance = Dataplayer.balance;
-        this.bet_size = Dataplayer.bet_size;
-        this.line = Dataplayer.line;
-        this.total_bet = Dataplayer.line * Dataplayer.bet_size;
-    }
-}
-
-export class Player_Reward implements Payout_Price {
-
-    public payout2: number;
-    public payout3: number;
-    public totalPayout : number;
-
-    constructor(_price_Payout2: number, _price_Payout3: number , total : number) {
-        this.payout2 = _price_Payout2;
-        this.payout3 = _price_Payout3;
-        this.totalPayout = total;
-    }
-}
-*/

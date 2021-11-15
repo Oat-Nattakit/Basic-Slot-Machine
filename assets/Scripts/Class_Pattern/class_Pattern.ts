@@ -1,21 +1,5 @@
-export enum Bet_Price {
-    bet_Price1 = 1,
-    bet_Price2 = 2,
-    bet_Price3 = 5,
-    bet_Price4 = 10,
-    bet_Price5 = 50,
-    bet_Price6 = 100,
-}
-
-export enum Reel_Number {
-    reel_1 = 0,
-    reel_2 = 1,
-    reel_3 = 2,
-}
-
-interface bet_Order {
-    bet_Order: number[];
-}
+import { Bet_Price, SlotLine } from "./enum_Pattern";
+import { bet_Order, Payout_Price, SlotPayLine, slotSymbol, slot_DataPattern } from "./interface_Pattern";
 
 export class CreateBet implements bet_Order {
 
@@ -24,34 +8,6 @@ export class CreateBet implements bet_Order {
     constructor() {
         this.bet_Order = [Bet_Price.bet_Price1, Bet_Price.bet_Price2, Bet_Price.bet_Price3, Bet_Price.bet_Price4, Bet_Price.bet_Price5, Bet_Price.bet_Price6];
     }
-}
-
-interface slot_DataPattern {
-
-    balance: number;
-    bet_size: number;
-    line: number;
-    total_bet: number;
-    bet_array: number[];
-    pay_out2: number;
-    pay_out3: number;
-    total_payout: number;
-
-}
-
-interface slotSymbol {
-    balance: number;
-    bet_array: number[];
-    pay_out2: number,
-    pay_out3: number,
-    total_payout: number,
-}
-
-export interface IGameResponseSpin {
-    error: string;
-    player_data: slot_DataPattern;
-    request_id: string;
-    response_name: string;
 }
 
 export class slot_SymbolID implements slotSymbol {
@@ -70,23 +26,6 @@ export class slot_SymbolID implements slotSymbol {
         this.total_payout = res_Data.total_payout;
     }
 }
-
-
-export interface IGameDataResponse {
-
-    player_data: slot_DataPattern,
-    request_id: string,
-    response_name: string,
-    timestamp: string,
-}
-
-
-interface Payout_Price {
-    payout2: number;
-    payout3: number;
-    totalPayout : number;
-}
-
 
 export class simpleData implements slot_DataPattern {
     balance: number;
@@ -134,47 +73,6 @@ export class Player_Reward implements Payout_Price {
     }
 }
 
-export enum TypePayout {
-    _payout2 = 2,
-    _payout3 = 3,
-}
-
-export enum SlotLine {
-    slot_0 = 0,
-    slot_1 = 1,
-    slot_2 = 2,
-    slot_3 = 3,
-    slot_4 = 4,
-    slot_5 = 5,
-    slot_6 = 6,
-    slot_7 = 7,
-    slot_8 = 8,
-}
-/*
-enum PayoutCount2 {
-    _payoutType2_0 = 5,
-    _payoutType2_1 = 7,
-    _payoutType2_2 = 10,
-    _payoutType2_3 = 15,
-    _payoutType2_4 = 30,
-}
-
-enum PayoutCount3 {
-    _payoutType3_0 = 10,
-    _payoutType3_1 = 20,
-    _payoutType3_2 = 50,
-    _payoutType3_3 = 100,
-    _payoutType3_4 = 500,
-}*/
-
-interface SlotPayLine {
-    _payLine_1: number[];
-    _payLine_2: number[];
-    _payLine_3: number[];
-    _payLine_4: number[];
-    _payLine_5: number[];
-}
-
 class PayLine implements SlotPayLine {
 
     private _slotPosition = SlotLine;
@@ -214,30 +112,3 @@ export class CreatePayLine extends PayLine {
         return this._listPayLine;
     }
 }
-
-/*
-export class CreatePayout2 {
-
-    public listPayout2: number[] = new Array();
-
-    constructor() {
-        this.listPayout2.push(PayoutCount2._payoutType2_0);
-        this.listPayout2.push(PayoutCount2._payoutType2_1);
-        this.listPayout2.push(PayoutCount2._payoutType2_2);
-        this.listPayout2.push(PayoutCount2._payoutType2_3);
-        this.listPayout2.push(PayoutCount2._payoutType2_4);
-    }
-}
-
-export class CreatePayout3 {
-
-    public listPayout3: number[] = new Array();
-
-    constructor() {
-        this.listPayout3.push(PayoutCount3._payoutType3_0);
-        this.listPayout3.push(PayoutCount3._payoutType3_1);
-        this.listPayout3.push(PayoutCount3._payoutType3_2);
-        this.listPayout3.push(PayoutCount3._payoutType3_3);
-        this.listPayout3.push(PayoutCount3._payoutType3_4);
-    }
-}*/

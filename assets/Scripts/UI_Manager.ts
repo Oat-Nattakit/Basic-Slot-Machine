@@ -6,6 +6,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import ButtonNode_Manager from "./ButtonNode_Manager";
+import { animation_Command } from "./Class_Pattern/enum_Pattern";
 
 const { ccclass, property } = cc._decorator;
 
@@ -69,7 +70,7 @@ export default class UI_Manager extends cc.Component {
         this._bonuse_ScaleUp = null;
         this.bonus_Animation.node.active = false;
         this.reward_Node.active = false;
-        this.bonus_Animation.animation = "in";
+        this.bonus_Animation.animation = animation_Command.reset_Animation;
         this._unactive_Line_Payline();
         clearTimeout(this._timer);
     }
@@ -97,23 +98,17 @@ export default class UI_Manager extends cc.Component {
     public playerGetBouns() {
 
         this.bonus_Animation.node.active = true;
-        this.bonus_Animation.animation = "animate";
+        this.bonus_Animation.animation = animation_Command.bouns_Animation;
         this.bonus_Animation.loop = false;
-        this._timer = setTimeout(() => this.bonus_Animation.animation = "idle", 800);
+        this._timer = setTimeout(() => this.bonus_Animation.animation = animation_Command.bonus_Idel, 800);
         this.bonus_Animation.loop = true;
     }
 
-    public showPriceBonus(_Reward: number, _Bonus: boolean) {
+    public showPriceBonus(_reward: number, _text : string) {
 
         this.reward_Node.active = true;
         this.receive_reward.node.getParent().active = true;
-
-        if (_Bonus == true) {
-            this.bonus_Text.string = "Bonus : " + _Reward.toString();
-        }
-        else {
-            this.bonus_Text.string = "Reward : " + _Reward.toString();
-        }
+        this.bonus_Text.string = _text+ _reward.toString();       
     }
 
     private _unactive_Line_Payline() {
@@ -166,8 +161,8 @@ export default class UI_Manager extends cc.Component {
             _background_Node[i].color = _colorGold;
             _background_Node[i].children[0].opacity = 255;
 
-            let _scalUp = cc.tween().to(0.3, { scale: 1.1 }, { easing: 'sineIn' });
-            let _scalDown = cc.tween().to(0.3, { scale: 1 }, { easing: 'sineIn' });
+            let _scalUp = cc.tween().to(0.3, { scale: 1.1 }, { easing: animation_Command.easing_Playtype });
+            let _scalDown = cc.tween().to(0.3, { scale: 1 }, { easing: animation_Command.easing_Playtype });
             let _play = cc.tween(_background_Node[i]).sequence(_scalUp, _scalDown);
             this._bonuse_ScaleUp.push(cc.tween(_background_Node[i]).repeat(5, _play).start());
         }
@@ -191,7 +186,7 @@ export default class UI_Manager extends cc.Component {
 
         for (let i = 0; i < this._bonuse_ScaleUp.length; i++) {
             this._bonuse_ScaleUp[i].stop();
-            cc.tween(this._stack_BackgroundNode[i]).to(0.1, { scale: 1 }, { easing: 'sineIn' }).start();
+            cc.tween(this._stack_BackgroundNode[i]).to(0.1, { scale: 1 }, { easing: animation_Command.easing_Playtype }).start();
         }
 
     }
