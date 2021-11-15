@@ -167,11 +167,13 @@ export default class Game_Control extends cc.Component {
     }
 
     private _stop_Once_Reel(ReelNumber: number) {
-        setTimeout(() => this._reel_Control._setPicture_Slot( ReelNumber,this), 100 * this._countReelSpin);        
+        let _waitTimeStopspin = 100;
+        setTimeout(() => this._reel_Control._setPicture_Slot( ReelNumber,this), _waitTimeStopspin * this._countReelSpin);        
     }
 
-    public CheckPlayerReward() : void {        
-        setTimeout(() => this._show_Reward(), 200);      
+    public CheckPlayerReward() : void {  
+        let _waitTime_CheckResult = 200;      
+        setTimeout(() => this._show_Reward(), _waitTime_CheckResult);      
     }    
 
     private _show_Reward() : void{
