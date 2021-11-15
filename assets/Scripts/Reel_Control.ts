@@ -5,7 +5,8 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { Payline_Manager, SlotLine } from "./Payline_Manager";
+import { SlotLine } from "./interfaceClass";
+import { Payline_Manager } from "./Payline_Manager";
 import Reel_Description from "./Reel_Description";
 import { Server_Manager } from "./Server_Manager";
 
@@ -36,8 +37,8 @@ export default class Reel_Control extends cc.Component {
 
     start() {
 
-        this._payline = Payline_Manager.getPayline_Manager();
-        this._server = Server_Manager.getInstant();
+        this._payline = Payline_Manager.getinstance_Payline();
+        this._server = Server_Manager.getinstance_Server();
 
         this._getComponentInNode();
         this._preGame_RandomPicture();
@@ -162,9 +163,3 @@ export default class Reel_Control extends cc.Component {
         return _background_list;
     }
 }
-
-/*export enum Reel_Number {
-    reel_1 = 0,
-    reel_2 = 1,
-    reel_3 = 2,
-}*/

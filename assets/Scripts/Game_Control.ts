@@ -6,10 +6,11 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { Bet_Manager } from "./Bet_Manager";
+import { Data_Play } from "./interfaceClass";
 import { Payline_Manager } from "./Payline_Manager";
 import Reel_Control from "./Reel_Control";
 import Reel_Description from "./Reel_Description";
-import { Data_Play, Player_Reward, Server_Manager } from "./Server_Manager";
+import { Server_Manager } from "./Server_Manager";
 import UI_Manager from "./UI_Manager";
 
 const { ccclass, property } = cc._decorator;
@@ -36,13 +37,14 @@ export default class Game_Control extends cc.Component {
 
     async onLoad() {
 
-        this._server = Server_Manager.getInstant();
+        this._server = Server_Manager.getinstance_Server();
         this.gameConnectServer();
 
         this._ui_Manager = this.node.getComponent(UI_Manager);
         this._reel_Control = this.node.getComponent(Reel_Control);
-        this._payline = Payline_Manager.getPayline_Manager();
-        this._bet = Bet_Manager.getIns();
+
+        this._payline = Payline_Manager.getinstance_Payline();
+        this._bet = Bet_Manager.getInstance_Bet();
 
 
     }
@@ -66,8 +68,6 @@ export default class Game_Control extends cc.Component {
         this.updateData_TotalBet();
         this._ui_Manager.add_ArrayButton();
     }
-
-
 
     private _setButton_Function() {
 

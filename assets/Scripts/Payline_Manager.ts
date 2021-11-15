@@ -28,7 +28,7 @@ export class Payline_Manager {
         Payline_Manager._insPayline_Manager = this;
     }
 
-    public static getPayline_Manager(): Payline_Manager {
+    public static getinstance_Payline(): Payline_Manager {
         if (Payline_Manager._insPayline_Manager._payline == null) {
             Payline_Manager._insPayline_Manager._payline = new CreatePayLine();
             Payline_Manager._insPayline_Manager._createPayline();
@@ -119,109 +119,3 @@ export class Payline_Manager {
         return this._listSymbol3;
     }
 }
-/*
-export enum TypePayout {
-    _payout2 = 2,
-    _payout3 = 3,
-}
-
-export enum SlotLine {
-    slot_0 = 0,
-    slot_1 = 1,
-    slot_2 = 2,
-    slot_3 = 3,
-    slot_4 = 4,
-    slot_5 = 5,
-    slot_6 = 6,
-    slot_7 = 7,
-    slot_8 = 8,
-}
-
-enum PayoutCount2 {
-    _payoutType2_0 = 5,
-    _payoutType2_1 = 7,
-    _payoutType2_2 = 10,
-    _payoutType2_3 = 15,
-    _payoutType2_4 = 30,
-}
-
-enum PayoutCount3 {
-    _payoutType3_0 = 10,
-    _payoutType3_1 = 20,
-    _payoutType3_2 = 50,
-    _payoutType3_3 = 100,
-    _payoutType3_4 = 500,
-}
-
-interface SlotPayLine {
-    _payLine_1: number[];
-    _payLine_2: number[];
-    _payLine_3: number[];
-    _payLine_4: number[];
-    _payLine_5: number[];
-}
-
-class PayLine implements SlotPayLine {
-
-    private _slotPosition = SlotLine;
-
-    _payLine_1: number[];
-    _payLine_2: number[];
-    _payLine_3: number[];
-    _payLine_4: number[];
-    _payLine_5: number[];
-
-    constructor() {
-
-        this._payLine_1 = [this._slotPosition.slot_1, this._slotPosition.slot_4, this._slotPosition.slot_7];
-        this._payLine_2 = [this._slotPosition.slot_0, this._slotPosition.slot_3, this._slotPosition.slot_6];
-        this._payLine_3 = [this._slotPosition.slot_2, this._slotPosition.slot_5, this._slotPosition.slot_8];
-        this._payLine_4 = [this._slotPosition.slot_2, this._slotPosition.slot_4, this._slotPosition.slot_6];
-        this._payLine_5 = [this._slotPosition.slot_0, this._slotPosition.slot_4, this._slotPosition.slot_8];
-    }
-}
-
-export class CreatePayLine extends PayLine {
-
-    private _listPayLine = new Array();
-
-    constructor() {
-        super();
-    }
-
-    CreatePaylineList() {
-
-        this._listPayLine.push(this._payLine_1);
-        this._listPayLine.push(this._payLine_2);
-        this._listPayLine.push(this._payLine_3);
-        this._listPayLine.push(this._payLine_4);
-        this._listPayLine.push(this._payLine_5);
-
-        return this._listPayLine;
-    }
-}
-export class CreatePayout2 {
-
-    public listPayout2: number[] = new Array();
-
-    constructor() {
-        this.listPayout2.push(PayoutCount2._payoutType2_0);
-        this.listPayout2.push(PayoutCount2._payoutType2_1);
-        this.listPayout2.push(PayoutCount2._payoutType2_2);
-        this.listPayout2.push(PayoutCount2._payoutType2_3);
-        this.listPayout2.push(PayoutCount2._payoutType2_4);
-    }
-}
-
-export class CreatePayout3 {
-
-    public listPayout3: number[] = new Array();
-
-    constructor() {
-        this.listPayout3.push(PayoutCount3._payoutType3_0);
-        this.listPayout3.push(PayoutCount3._payoutType3_1);
-        this.listPayout3.push(PayoutCount3._payoutType3_2);
-        this.listPayout3.push(PayoutCount3._payoutType3_3);
-        this.listPayout3.push(PayoutCount3._payoutType3_4);
-    }
-}*/

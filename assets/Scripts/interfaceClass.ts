@@ -13,20 +13,20 @@ export enum Reel_Number {
     reel_3 = 2,
 }
 
-interface Bet_Step {
-    betStep: number[];
+interface bet_Order {
+    bet_Order: number[];
 }
 
-export class CreateBet implements Bet_Step {
+export class CreateBet implements bet_Order {
 
-    public betStep: number[];
+    public bet_Order: number[];
 
     constructor() {
-        this.betStep = [Bet_Price.bet_Price1, Bet_Price.bet_Price2, Bet_Price.bet_Price3, Bet_Price.bet_Price4, Bet_Price.bet_Price5, Bet_Price.bet_Price6];
+        this.bet_Order = [Bet_Price.bet_Price1, Bet_Price.bet_Price2, Bet_Price.bet_Price3, Bet_Price.bet_Price4, Bet_Price.bet_Price5, Bet_Price.bet_Price6];
     }
 }
 
-interface SlotDataPattern {
+interface slot_DataPattern {
 
     balance: number;
     bet_size: number;
@@ -49,12 +49,12 @@ interface slotSymbol {
 
 export interface IGameResponseSpin {
     error: string;
-    player_data: SlotDataPattern;
+    player_data: slot_DataPattern;
     request_id: string;
     response_name: string;
 }
 
-export class SlotID implements slotSymbol {
+export class slot_SymbolID implements slotSymbol {
 
     balance: number;
     bet_array: number[] = new Array();
@@ -74,7 +74,7 @@ export class SlotID implements slotSymbol {
 
 export interface IGameDataResponse {
 
-    player_data: SlotDataPattern,
+    player_data: slot_DataPattern,
     request_id: string,
     response_name: string,
     timestamp: string,
@@ -88,7 +88,7 @@ interface Payout_Price {
 }
 
 
-export class simpleData implements SlotDataPattern {
+export class simpleData implements slot_DataPattern {
     balance: number;
     bet_size: number;
     line: number;
@@ -112,7 +112,7 @@ export class Data_Play {
     public line: number;
     public total_bet: number;
 
-    constructor(Dataplayer: SlotDataPattern) {
+    constructor(Dataplayer: slot_DataPattern) {
 
         this.balance = Dataplayer.balance;
         this.bet_size = Dataplayer.bet_size;
@@ -150,7 +150,7 @@ export enum SlotLine {
     slot_7 = 7,
     slot_8 = 8,
 }
-
+/*
 enum PayoutCount2 {
     _payoutType2_0 = 5,
     _payoutType2_1 = 7,
@@ -165,7 +165,7 @@ enum PayoutCount3 {
     _payoutType3_2 = 50,
     _payoutType3_3 = 100,
     _payoutType3_4 = 500,
-}
+}*/
 
 interface SlotPayLine {
     _payLine_1: number[];
@@ -214,6 +214,8 @@ export class CreatePayLine extends PayLine {
         return this._listPayLine;
     }
 }
+
+/*
 export class CreatePayout2 {
 
     public listPayout2: number[] = new Array();
@@ -238,4 +240,4 @@ export class CreatePayout3 {
         this.listPayout3.push(PayoutCount3._payoutType3_3);
         this.listPayout3.push(PayoutCount3._payoutType3_4);
     }
-}
+}*/

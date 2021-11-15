@@ -6,7 +6,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import Game_Control from "./Game_Control";
-import { Data_Play, IGameDataResponse, IGameResponseSpin, Player_Reward, simpleData, SlotID } from "./interfaceClass";
+import { Data_Play, IGameDataResponse, IGameResponseSpin, Player_Reward, simpleData, slot_SymbolID } from "./interfaceClass";
 
 const { ccclass, property } = cc._decorator;
 
@@ -15,7 +15,6 @@ export class Server_Manager {
 
     private static _insServer_Manager: Server_Manager = new Server_Manager();
     private _result_symbol: number[] = new Array(9);
-    //private _balance: number = 1000;
 
     private _data_Player: Data_Play;
     private _reward: Player_Reward;
@@ -28,7 +27,7 @@ export class Server_Manager {
         Server_Manager._insServer_Manager = this;
     }
 
-    public static getInstant(): Server_Manager {
+    public static getinstance_Server(): Server_Manager {
         return Server_Manager._insServer_Manager;
     }
 
@@ -122,7 +121,7 @@ export class Server_Manager {
                 let dataPlayer = response.player_data;
                 this._data_Player.balance = this._data_Player.balance - this._data_Player.total_bet;
 
-                let GetData: SlotID = new SlotID(dataPlayer);
+                let GetData: slot_SymbolID = new slot_SymbolID(dataPlayer);
                 this._result_symbol = GetData.bet_array;                
 
                 this._reward = new Player_Reward(GetData.pay_out2, GetData.pay_out3,GetData.total_payout);
