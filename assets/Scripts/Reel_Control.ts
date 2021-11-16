@@ -5,7 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { animation_Command, server_Command, SlotLine } from "./Commence_Class/enum_Pattern";
+import { animation_Command, SlotLine } from "./Commence_Class/enum_Pattern";
 import Game_Control from "./Game_Control";
 import { Payline_Manager } from "./Payline_Manager";
 import Reel_Description from "./Reel_Description";

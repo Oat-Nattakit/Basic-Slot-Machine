@@ -7,7 +7,7 @@
 
 import { Bet_Manager } from "./Bet_Manager";
 import { Data_Play } from "./Commence_Class/class_Pattern";
-import { animation_Command, hideButton_Command, reward_Text, server_Command } from "./Commence_Class/enum_Pattern";
+import { hideButton_Command, reward_Text } from "./Commence_Class/enum_Pattern";
 import { Payline_Manager } from "./Payline_Manager";
 import Reel_Control from "./Reel_Control";
 import Reel_Description from "./Reel_Description";
@@ -90,20 +90,24 @@ export default class Game_Control extends cc.Component {
         await this._reel_Control._getSymbol_ID_FromServer();        
     }
 
-    private async _checkBalance_ReqSymbol() {
+    private _checkBalance() {
 
         this._ui_Manager.startPlayBonusAnimation();
         this._balance_Status = this._balance_Update();
 
         if (this._balance_Status == true) {
-            this._reqSymbolStatus = await this._server.requestSlotSymbol();
+            this._request_Symbol();            
         }
+    }
+    
+    private async _request_Symbol(){
+        this._reqSymbolStatus = await this._server.requestSlotSymbol();
     }
 
     private _spin_All_Reel() {
 
         if (this._reqSymbolStatus == false) {
-            this._checkBalance_ReqSymbol();
+            this._checkBalance();
         }
 
         if (this._balance_Status == true) {
@@ -126,7 +130,7 @@ export default class Game_Control extends cc.Component {
     private async _spin_One_Reel(ButtonReel: cc.Button) {
 
         if (this._reqSymbolStatus == false) {
-            this._checkBalance_ReqSymbol();
+            this._checkBalance();
         }
 
         if (this._balance_Status == true) {

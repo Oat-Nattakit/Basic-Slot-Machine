@@ -1,4 +1,3 @@
-import { Bet_Price, SlotLine } from "./enum_Pattern";
 
 export interface bet_Order {
     
