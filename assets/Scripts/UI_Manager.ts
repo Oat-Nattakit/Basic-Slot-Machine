@@ -6,7 +6,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import ButtonNode_Manager from "./ButtonNode_Manager";
-import { animation_Command } from "./Class_Pattern/enum_Pattern";
+import { animation_Command } from "./Commence_Class/enum_Pattern";
 
 const { ccclass, property } = cc._decorator;
 

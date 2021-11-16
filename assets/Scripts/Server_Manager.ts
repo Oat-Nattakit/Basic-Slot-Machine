@@ -5,9 +5,9 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { Data_Play, Player_Reward, simpleData, slot_SymbolID } from "./Class_Pattern/class_Pattern";
-import { server_Command } from "./Class_Pattern/enum_Pattern";
-import { IGameDataResponse, IGameResponseSpin } from "./Class_Pattern/interface_Pattern";
+import { Data_Play, Player_Reward, simpleData, slot_SymbolID } from "./Commence_Class/class_Pattern";
+import { server_Command } from "./Commence_Class/enum_Pattern";
+import { IGameDataResponse, IGameResponseSpin } from "./Commence_Class/interface_Pattern";
 import Game_Control from "./Game_Control";
 
 const { ccclass, property } = cc._decorator;

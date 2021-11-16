@@ -6,8 +6,8 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { Bet_Manager } from "./Bet_Manager";
-import { Data_Play } from "./Class_Pattern/class_Pattern";
-import { animation_Command, hideButton_Command, reward_Text, server_Command } from "./Class_Pattern/enum_Pattern";
+import { Data_Play } from "./Commence_Class/class_Pattern";
+import { animation_Command, hideButton_Command, reward_Text, server_Command } from "./Commence_Class/enum_Pattern";
 import { Payline_Manager } from "./Payline_Manager";
 import Reel_Control from "./Reel_Control";
 import Reel_Description from "./Reel_Description";
@@ -87,15 +87,14 @@ export default class Game_Control extends cc.Component {
 
     private async _set_DefultReel(): Promise<void> {
 
-        await this._reel_Control._getSymbol_ID_FromServer();
-        this._payline.checkPayLine_Reward(this._data_Player.line);
+        await this._reel_Control._getSymbol_ID_FromServer();        
     }
 
     private async _checkBalance_ReqSymbol() {
 
         this._ui_Manager.startPlayBonusAnimation();
         this._balance_Status = this._balance_Update();
-        
+
         if (this._balance_Status == true) {
             this._reqSymbolStatus = await this._server.requestSlotSymbol();
         }
@@ -160,6 +159,8 @@ export default class Game_Control extends cc.Component {
     }
 
     public checkPlayerReward(): void {
+
+        this._payline.checkPayLine_Reward(this._data_Player.line);
 
         let _waitTime_CheckResult = 200;
         setTimeout(() => this._show_Reward(), _waitTime_CheckResult);

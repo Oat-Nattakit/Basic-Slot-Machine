@@ -5,8 +5,8 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { CreatePayLine } from "./Class_Pattern/class_Pattern";
-import { Reel_Number, TypePayout } from "./Class_Pattern/enum_Pattern";
+import { CreatePayLine } from "./Commence_Class/class_Pattern";
+import { Reel_Number, TypePayout } from "./Commence_Class/enum_Pattern";
 
 const { ccclass, property } = cc._decorator;
 
@@ -78,16 +78,16 @@ export class Payline_Manager {
 
     private _collectBonus_Payout2(linePayout: number) {
 
-        for (let j = 0; j < TypePayout._payout2; j++) {
-            this._collectPositionSlot_Bonus(this.payline_List[linePayout][j]);
+        for (let _symbolOrder = 0; _symbolOrder < TypePayout._payout2; _symbolOrder++) {
+            this._collectPositionSlot_Bonus(this.payline_List[linePayout][_symbolOrder]);
         }
         this._collectLinePayout(linePayout);
     }
 
     private _collectBonus_Payout3(linePayout: number) {
 
-        for (let j = 0; j < TypePayout._payout3; j++) {
-            this._collectPositionSlot_Bonus(this.payline_List[linePayout][j]);
+        for (let _symbolOrder = 0; _symbolOrder < TypePayout._payout3; _symbolOrder++) {
+            this._collectPositionSlot_Bonus(this.payline_List[linePayout][_symbolOrder]);
         }
         this._collectLinePayout(linePayout);
     }
