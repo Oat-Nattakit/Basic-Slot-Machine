@@ -5,14 +5,14 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { Bet_Manager } from "./Bet_Manager";
-import { Data_Play } from "./Commence_Class/class_Pattern";
-import { hideButton_Command, reward_Text } from "./Commence_Class/enum_Pattern";
-import { Payline_Manager } from "./Payline_Manager";
-import Reel_Control from "./Reel_Control";
-import Reel_Description from "./Reel_Description";
-import { Server_Manager } from "./Server_Manager";
-import UI_Manager from "./UI_Manager";
+import { Bet_Manager } from "../Bet_Related/Bet_Manager";
+import { Payline_Manager } from "../Bet_Related/Payline_Manager";
+import { Data_Play } from "../Commence_Class/class_Pattern";
+import { hideButton_Command, reward_Text } from "../Commence_Class/enum_Pattern";
+import Reel_Control from "../Reel_Related/Reel_Control";
+import Reel_Description from "../Reel_Related/Reel_Description";
+import { Server_Manager } from "../Server_Related/Server_Manager";
+import UI_Manager from "../UI_Related/UI_Manager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -22,7 +22,7 @@ export default class Game_Control extends cc.Component {
     private _ui_Manager: UI_Manager = null;
     private _reel_Control: Reel_Control = null;
     private _payline: Payline_Manager;
-    private _bet: Bet_Manager
+    private _bet: Bet_Manager;
     private _server: Server_Manager;
     private _data_Player: Data_Play;
 
@@ -99,7 +99,7 @@ export default class Game_Control extends cc.Component {
             this._request_Symbol();            
         }
     }
-    
+
     private async _request_Symbol(){
         this._reqSymbolStatus = await this._server.requestSlotSymbol();
     }
@@ -206,13 +206,7 @@ export default class Game_Control extends cc.Component {
         this._reqSymbolStatus = false;
         this._balance_Status = false;
         this._server.getValueRound = false;
-    }
-
-    private _hide_UI_Reward() {
-
-        this._reel_Control.setDefult_Blackground();
-        this._ui_Manager.hide_ReceiveReward();
-    }
+    }    
 
     private _bet_Manager_Add() {
 
@@ -265,5 +259,11 @@ export default class Game_Control extends cc.Component {
 
         this._reqSymbolStatus = false;
         this._ui_Manager.balance_ReadytoPlay(false);
+    }
+    
+    private _hide_UI_Reward() {
+
+        this._reel_Control.setDefult_Blackground();
+        this._ui_Manager.hide_ReceiveReward();
     }
 }

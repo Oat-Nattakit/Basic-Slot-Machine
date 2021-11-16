@@ -5,7 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import Game_Control from "./Game_Control";
+import Game_Control from "../GameControl_Related/Game_Control";
 
 const { ccclass, property } = cc._decorator;
 

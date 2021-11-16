@@ -5,8 +5,8 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { CreatePayLine } from "./Commence_Class/class_Pattern";
-import { Reel_Number, TypePayout } from "./Commence_Class/enum_Pattern";
+import { CreatePayLine } from "../Commence_Class/class_Pattern";
+import { Reel_Number, TypePayout } from "../Commence_Class/enum_Pattern";
 
 const { ccclass, property } = cc._decorator;
 

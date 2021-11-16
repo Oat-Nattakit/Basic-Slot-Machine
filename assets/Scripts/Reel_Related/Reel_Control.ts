@@ -5,11 +5,11 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { animation_Command, SlotLine } from "./Commence_Class/enum_Pattern";
-import Game_Control from "./Game_Control";
-import { Payline_Manager } from "./Payline_Manager";
+import { Payline_Manager } from "../Bet_Related/Payline_Manager";
+import { animation_Command, SlotLine } from "../Commence_Class/enum_Pattern";
+import Game_Control from "../GameControl_Related/Game_Control";
+import { Server_Manager } from "../Server_Related/Server_Manager";
 import Reel_Description from "./Reel_Description";
-import { Server_Manager } from "./Server_Manager";
 
 const { ccclass, property } = cc._decorator;
 
