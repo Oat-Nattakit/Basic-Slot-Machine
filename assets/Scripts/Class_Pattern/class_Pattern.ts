@@ -28,6 +28,7 @@ export class slot_SymbolID implements slotSymbol {
 }
 
 export class simpleData implements slot_DataPattern {
+    
     balance: number;
     bet_size: number;
     line: number;

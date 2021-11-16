@@ -32,7 +32,7 @@ export default class UI_Manager extends cc.Component {
     private totalBet_Text: cc.Label = null;
 
     @property(cc.Label)
-    private connectGamestatus : cc.Label = null;
+    private connectGamestatus: cc.Label = null;
 
     @property(cc.Node)
     private reward_Node: cc.Node = null;
@@ -58,6 +58,7 @@ export default class UI_Manager extends cc.Component {
 
     private _bonuse_ScaleUp: cc.Tween[] = [];
     private _stack_BackgroundNode: cc.Node[] = null;
+    private _stackReel: number = 0;
 
     public add_ArrayButton() {
 
@@ -78,23 +79,28 @@ export default class UI_Manager extends cc.Component {
         clearTimeout(this._timer);
     }
 
-    public button_Status(_status_ButtonActive: boolean, _currentRound: number = 0) {
+    public disableButton_BySpin(_currentRound: number = 1) {
 
+        this._stackReel += _currentRound;
         let _reel_Range = 3;
+
         for (let i = 0; i < this._listButton.length; i++) {
-            if (_status_ButtonActive == true) {
-                this._listButton[i].interactable = _status_ButtonActive;
+
+            if (this._stackReel >= _reel_Range) {
+                this._listButton[i].interactable = false;
             }
             else {
-                if (_currentRound == _reel_Range) {
-                    this._listButton[i].interactable = _status_ButtonActive;
-                }
-                else {
-                    if (i > 0) {
-                        this._listButton[i].interactable = _status_ButtonActive;
-                    }
+                if (i > 0) {
+                    this._listButton[i].interactable = false;
                 }
             }
+        }
+    }
+
+    public activeButton_EndSpin() {
+        this._stackReel = 0;
+        for (let i = 0; i < this._listButton.length; i++) {
+            this._listButton[i].interactable = true;
         }
     }
 
@@ -107,14 +113,14 @@ export default class UI_Manager extends cc.Component {
         this.bonus_Animation.loop = true;
     }
 
-    public showPriceBonus(_reward: number, _text : string) {
+    public showPriceBonus(_reward: number, _text: string) {
 
         this.reward_Node.active = true;
         this.receive_reward.node.getParent().active = true;
-        this.bonus_Text.string = _text+ _reward.toString();       
+        this.bonus_Text.string = _text + _reward.toString();
     }
 
-    public connectServer_Error(){
+    public connectServer_Error() {
         this.connectGamestatus.string = "Connect Server Error";
     }
 

@@ -60,6 +60,7 @@ export class Server_Manager {
     }
 
     public async gameGetDataPlayer(game: Game_Control): Promise<Data_Play> {
+
         this._gameCon = game;
 
         await this.gameConnectServer();
@@ -73,17 +74,14 @@ export class Server_Manager {
     }
 
     private getStartDataPlayer() {
+
         this.socket.on(server_Command.prepair_Data, (param: IGameDataResponse) => {
-            const playerData = param.player_data;
+            const playerData = param.player_data;            
             this._data_Player = new Data_Play(playerData);
         });
-    } 
+    }   
 
-    public slot_GetSymbolValue() : number[]{
-        return this._result_symbol;       
-    }  
-
-    public async requestSlotSymbol() {    
+    public async requestSlotSymbol(){    
         
         const paramiter: Data_Play = {
             balance: this._data_Player.balance,
@@ -106,9 +104,16 @@ export class Server_Manager {
                 this._gameCon.updateData_TotalBet();
                 this._data_Player.balance = GetData.balance;
             });
-    }
+        return true;
+    } 
+    
+    public slot_GetSymbolValue() : number[]{
+
+        return this._result_symbol;       
+    }  
 
     public reward_Value() {
+
         return this._reward;
     }
 }

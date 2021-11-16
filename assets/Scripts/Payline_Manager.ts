@@ -22,14 +22,13 @@ export class Payline_Manager {
 
     private _payline_HitReward: number[];
 
-    private _listSymbol2: number[];
-    private _listSymbol3: number[];
-
     constructor() {
+
         Payline_Manager._insPayline_Manager = this;
     }
 
     public static getinstance_Payline(): Payline_Manager {
+
         if (Payline_Manager._insPayline_Manager._payline == null) {
             Payline_Manager._insPayline_Manager._payline = new CreatePayLine();
             Payline_Manager._insPayline_Manager._createPayline();
@@ -40,12 +39,10 @@ export class Payline_Manager {
     public managePayline(_idSymbol_list: number[]) {
 
         this._slotNumber_list = _idSymbol_list;
-        this._listSymbol2 = new Array();
-        this._listSymbol3 = new Array();
-
     }
 
     private _createPayline() {
+
         this.payline_List = this._payline.CreatePaylineList();
     }
 
@@ -65,7 +62,7 @@ export class Payline_Manager {
             }
             else if (_check_symbolPos1_2 == true) {
 
-                this._collectBonus_Payout2(i);               
+                this._collectBonus_Payout2(i);
             }
         }
     }
@@ -81,46 +78,36 @@ export class Payline_Manager {
 
     private _collectBonus_Payout2(linePayout: number) {
 
-        let _range_Payout2 = 2;
-        for (let j = 0; j < _range_Payout2; j++) {
+        for (let j = 0; j < TypePayout._payout2; j++) {
             this._collectPositionSlot_Bonus(this.payline_List[linePayout][j]);
         }
-        this._collectLinePayout(linePayout,TypePayout._payout2);        
+        this._collectLinePayout(linePayout);
     }
 
     private _collectBonus_Payout3(linePayout: number) {
 
-        let _range_Payout3 = 3;
-        for (let j = 0; j < _range_Payout3; j++) {
+        for (let j = 0; j < TypePayout._payout3; j++) {
             this._collectPositionSlot_Bonus(this.payline_List[linePayout][j]);
         }
-        this._collectLinePayout(linePayout,TypePayout._payout3);       
+        this._collectLinePayout(linePayout);
     }
 
     private _collectPositionSlot_Bonus(_slotBonuse_Position: number) {
+
         this._bonus_Position.push(_slotBonuse_Position);
-    }    
-
-    private _collectLinePayout(linePayout : number ,payoutType : TypePayout){
-        this._payline_HitReward.push(linePayout);
-        let _symbol = this._slotNumber_list[this.payline_List[linePayout][Reel_Number.reel_1]];
-        this._payoutSymbol_Bonus(payoutType, _symbol);
-    }    
-
-    private _payoutSymbol_Bonus(_payout_Type: TypePayout, _idSymbol: number) {
-
-        if (_payout_Type == TypePayout._payout2) {
-            this._listSymbol2.push(_idSymbol);
-        }
-        else if (_payout_Type == TypePayout._payout3) {
-            this._listSymbol3.push(_idSymbol);
-        }
     }
-    
+
+    private _collectLinePayout(linePayout: number) {
+
+        this._payline_HitReward.push(linePayout);
+    }
+
     public positionBonuse() {
+
         return this._bonus_Position;
     }
     public payline_Reward() {
+
         return this._payline_HitReward;
     }
 }

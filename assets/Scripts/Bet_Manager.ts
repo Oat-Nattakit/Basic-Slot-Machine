@@ -19,10 +19,12 @@ export class Bet_Manager {
     private _maxLine: number = 0;
 
     constructor() {
+
         Bet_Manager._insBet_Manager = this;
     }
 
     public static getInstance_Bet(): Bet_Manager {
+
         if (Bet_Manager._insBet_Manager._bet_Price == null) {            
             Bet_Manager._insBet_Manager._bet_Price = new CreateBet();
         }
@@ -37,12 +39,14 @@ export class Bet_Manager {
     }
 
     public lineBet_Start(_maxLine: number): number {
+
         this._countLine = _maxLine;
         this._maxLine = _maxLine;
         return this._countLine;
     }
 
     public line_Control(_data: Data_Play, _lineValueChange: number = 0) {
+        
         _data.line = cc.misc.clampf(_data.line + _lineValueChange, 1, this._maxLine);
     }
 }

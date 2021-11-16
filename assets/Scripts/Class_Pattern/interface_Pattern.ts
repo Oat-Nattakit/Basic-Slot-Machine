@@ -1,6 +1,7 @@
 import { Bet_Price, SlotLine } from "./enum_Pattern";
 
 export interface bet_Order {
+    
     bet_Order: number[];
 }
 
@@ -17,6 +18,7 @@ export interface slot_DataPattern {
 }
 
 export interface slotSymbol {
+
     balance: number;
     bet_array: number[];
     pay_out2: number,
@@ -25,12 +27,14 @@ export interface slotSymbol {
 }
 
 export interface Payout_Price {
+
     payout2: number;
     payout3: number;
     totalPayout : number;
 }
 
 export interface SlotPayLine {
+
     _payLine_1: number[];
     _payLine_2: number[];
     _payLine_3: number[];
@@ -47,6 +51,7 @@ export interface IGameDataResponse {
 }
 
 export interface IGameResponseSpin {
+
     error: string;
     player_data: slot_DataPattern;
     request_id: string;

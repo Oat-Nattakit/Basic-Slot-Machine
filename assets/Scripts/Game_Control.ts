@@ -7,7 +7,7 @@
 
 import { Bet_Manager } from "./Bet_Manager";
 import { Data_Play } from "./Class_Pattern/class_Pattern";
-import { animation_Command, reward_Text, server_Command } from "./Class_Pattern/enum_Pattern";
+import { animation_Command, hideButton_Command, reward_Text, server_Command } from "./Class_Pattern/enum_Pattern";
 import { Payline_Manager } from "./Payline_Manager";
 import Reel_Control from "./Reel_Control";
 import Reel_Description from "./Reel_Description";
@@ -24,13 +24,10 @@ export default class Game_Control extends cc.Component {
     private _payline: Payline_Manager;
     private _bet: Bet_Manager
     private _server: Server_Manager;
-
-    private _reelRun: boolean = false;
-    private _balance_Status: boolean = false;
-
-    private _countReelSpin: number = 0;
     private _data_Player: Data_Play;
-    private _waittingStack: number = 1;
+
+    private _reqSymbolStatus: boolean = false;
+    private _balance_Status: boolean = false;
 
     async onLoad() {
 
@@ -94,28 +91,27 @@ export default class Game_Control extends cc.Component {
         this._payline.checkPayLine_Reward(this._data_Player.line);
     }
 
-    private _checkCurrentBalance() {
+    private async _checkBalance_ReqSymbol() {
 
-        this._reelRun = true;
-        this._balance_Status = false;
-        this._waittingStack = 1;
         this._ui_Manager.startPlayBonusAnimation();
         this._balance_Status = this._balance_Update();
-        this._server.requestSlotSymbol();
+        
+        if (this._balance_Status == true) {
+            this._reqSymbolStatus = await this._server.requestSlotSymbol();
+        }
     }
 
     private _spin_All_Reel() {
 
-        if (this._reelRun == false) {
-            this._checkCurrentBalance();
+        if (this._reqSymbolStatus == false) {
+            this._checkBalance_ReqSymbol();
         }
 
         if (this._balance_Status == true) {
 
             let _waitingTime = 0;
             let _reel_Button = this._reel_Control.reel_Button;
-            this._ui_Manager.button_Status(false, _reel_Button.length);
-
+            this._ui_Manager.disableButton_BySpin(hideButton_Command.hideAllButton);
             for (let i = 0; i < _reel_Button.length; i++) {
                 if (_reel_Button[i].enabled == true) {
                     setTimeout(() => this._spin_One_Reel(_reel_Button[i]), _waitingTime);
@@ -130,53 +126,46 @@ export default class Game_Control extends cc.Component {
 
     private async _spin_One_Reel(ButtonReel: cc.Button) {
 
-        if (this._reelRun == false) {
-            this._checkCurrentBalance();
+        if (this._reqSymbolStatus == false) {
+            this._checkBalance_ReqSymbol();
         }
 
         if (this._balance_Status == true) {
 
             let getDescription = ButtonReel.node.getComponent(Reel_Description);
             let _reelNumber: number = getDescription.reel_Description;
-            
             this._reel_Control.reel_PlayAnimation(ButtonReel, _reelNumber);
-            this._countReelSpin++;
 
-            this._ui_Manager.button_Status(false, this._countReelSpin);
+            this._ui_Manager.disableButton_BySpin(hideButton_Command.hideSomeButton);
+
             await this._set_DefultReel();
-            this.waittingTimeStopReel();
+            this._waittingTimeStopReel();
         }
         else {
             this._ui_Manager.balance_ReadytoPlay(true);
         }
     }
 
-    private waittingTimeStopReel() {
-
-        let _defTimeWaiting: number = 500;
-        _defTimeWaiting = _defTimeWaiting * this._waittingStack;
-        this._waittingStack++;
-        this._reel_stopCheckPosition(_defTimeWaiting);
-    }
-
-    private _reel_stopCheckPosition(deftime: number) {
+    private _waittingTimeStopReel() {
 
         let _reelNumber: number = this._reel_Control._stack_ReelSpin[0];
-        setTimeout(() => this._stop_Once_Reel(_reelNumber), deftime);
-        this._reel_Control._stack_ReelSpin.splice(0, 1);
+        this._stop_Once_Reel(_reelNumber);
     }
 
     private _stop_Once_Reel(ReelNumber: number) {
-        let _waitTimeStopspin = 100;
-        setTimeout(() => this._reel_Control._setPicture_Slot( ReelNumber,this), _waitTimeStopspin * this._countReelSpin);        
+
+        let _waitTimeStopspin = 1000;
+        setTimeout(() => this._reel_Control._setPicture_Slot(ReelNumber, this), _waitTimeStopspin);
+        this._reel_Control._stack_ReelSpin.splice(0, 1);
     }
 
-    public CheckPlayerReward() : void {  
-        let _waitTime_CheckResult = 200;      
-        setTimeout(() => this._show_Reward(), _waitTime_CheckResult);      
-    }    
+    public checkPlayerReward(): void {
 
-    private _show_Reward() : void{
+        let _waitTime_CheckResult = 200;
+        setTimeout(() => this._show_Reward(), _waitTime_CheckResult);
+    }
+
+    private _show_Reward(): void {
 
         let _reward = this._server.reward_Value();
         let _reward_Text = reward_Text.reward;
@@ -206,14 +195,16 @@ export default class Game_Control extends cc.Component {
     }
 
     private _endRound_Game() {
+
         this._ui_Manager.showCurrentBalance(this._data_Player.balance);
-        this._ui_Manager.button_Status(true);
-        this._countReelSpin = 0;
-        this._reelRun = false;
+        this._ui_Manager.activeButton_EndSpin();
+        this._reqSymbolStatus = false;
+        this._balance_Status = false;
         this._server.getValueRound = false;
     }
 
     private _hide_UI_Reward() {
+
         this._reel_Control.setDefult_Blackground();
         this._ui_Manager.hide_ReceiveReward();
     }
@@ -266,7 +257,8 @@ export default class Game_Control extends cc.Component {
     }
 
     private _hidePanal_BalanceNotReady() {
-        this._reelRun = false;
+
+        this._reqSymbolStatus = false;
         this._ui_Manager.balance_ReadytoPlay(false);
     }
 }
