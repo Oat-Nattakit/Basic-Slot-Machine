@@ -76,12 +76,13 @@ export class Server_Manager {
     private getStartDataPlayer() {
 
         this.socket.on(server_Command.prepair_Data, (param: IGameDataResponse) => {
-            const playerData = param.player_data;            
-            this._data_Player = new Data_Play(playerData);
+            const playerData = param.player_data;     
+
+            this._data_Player = new Data_Play(playerData);            
         });
     }   
 
-    public async requestSlotSymbol(){    
+    public requestSlotSymbol() : boolean{    
         
         const paramiter: Data_Play = {
             balance: this._data_Player.balance,

@@ -87,7 +87,7 @@ export default class Game_Control extends cc.Component {
 
     private async _set_DefultReel(): Promise<void> {
 
-        await this._reel_Control._getSymbol_ID_FromServer();        
+        await this._reel_Control._getSymbol_ID_FromServer();
     }
 
     private _checkBalance() {
@@ -96,12 +96,12 @@ export default class Game_Control extends cc.Component {
         this._balance_Status = this._balance_Update();
 
         if (this._balance_Status == true) {
-            this._request_Symbol();            
+            this._request_Symbol();
         }
     }
 
-    private async _request_Symbol(){
-        this._reqSymbolStatus = await this._server.requestSlotSymbol();
+    private _request_Symbol() {
+        this._reqSymbolStatus = this._server.requestSlotSymbol();
     }
 
     private _spin_All_Reel() {
@@ -206,7 +206,7 @@ export default class Game_Control extends cc.Component {
         this._reqSymbolStatus = false;
         this._balance_Status = false;
         this._server.getValueRound = false;
-    }    
+    }
 
     private _bet_Manager_Add() {
 
@@ -256,11 +256,10 @@ export default class Game_Control extends cc.Component {
     }
 
     private _hidePanal_BalanceNotReady() {
-
-        this._reqSymbolStatus = false;
+                
         this._ui_Manager.balance_ReadytoPlay(false);
     }
-    
+
     private _hide_UI_Reward() {
 
         this._reel_Control.setDefult_Blackground();
