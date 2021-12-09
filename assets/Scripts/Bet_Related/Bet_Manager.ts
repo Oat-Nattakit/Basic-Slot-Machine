@@ -11,8 +11,8 @@ const { ccclass, property } = cc._decorator;
 
 export class Bet_Manager {
 
-    private static _insBet_Manager: Bet_Manager = new Bet_Manager();
-    private _bet_Price: CreateBet = null;
+    private static _insBetManager: Bet_Manager = new Bet_Manager();
+    private _betPrice: CreateBet = null;
     private _countBet: number = 0;
 
     private _countLine: number = 0;
@@ -20,32 +20,32 @@ export class Bet_Manager {
 
     constructor() {
 
-        Bet_Manager._insBet_Manager = this;
+        Bet_Manager._insBetManager = this;
     }
 
-    public static getInstance_Bet(): Bet_Manager {
+    public static getInstanceBet(): Bet_Manager {
 
-        if (Bet_Manager._insBet_Manager._bet_Price == null) {            
-            Bet_Manager._insBet_Manager._bet_Price = new CreateBet();
+        if (Bet_Manager._insBetManager._betPrice == null) {            
+            Bet_Manager._insBetManager._betPrice = new CreateBet();
         }
-        return Bet_Manager._insBet_Manager;
+        return Bet_Manager._insBetManager;
     }
 
-    public bet_Control(_data: Data_Play, _valueChange: number) {
+    public betControl(_data: Data_Play, _valueChange: number) {
 
-        const maxBetStep = this._bet_Price.bet_Order.length - 1;
+        const maxBetStep = this._betPrice.betOrder.length - 1;
         this._countBet = cc.misc.clampf(this._countBet + _valueChange, 0, maxBetStep);
-        _data.bet_size = this._bet_Price.bet_Order[this._countBet];
+        _data.bet_size = this._betPrice.betOrder[this._countBet];
     }
 
-    public lineBet_Start(_maxLine: number): number {
+    public lineBetStart(_maxLine: number): number {
 
         this._countLine = _maxLine;
         this._maxLine = _maxLine;
         return this._countLine;
     }
 
-    public line_Control(_data: Data_Play, _lineValueChange: number = 0) {
+    public lineControl(_data: Data_Play, _lineValueChange: number = 0) {
         
         _data.line = cc.misc.clampf(_data.line + _lineValueChange, 1, this._maxLine);
     }

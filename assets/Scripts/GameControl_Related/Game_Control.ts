@@ -8,7 +8,7 @@
 import { Bet_Manager } from "../Bet_Related/Bet_Manager";
 import { Payline_Manager } from "../Bet_Related/Payline_Manager";
 import { Data_Play } from "../Commence_Class/class_Pattern";
-import { hideButton_Command, reward_Text } from "../Commence_Class/enum_Pattern";
+import { hideButton_Command, Reel_Number, reward_Text } from "../Commence_Class/enum_Pattern";
 import Reel_Control from "../Reel_Related/Reel_Control";
 import Reel_Description from "../Reel_Related/Reel_Description";
 import { Server_Manager } from "../Server_Related/Server_Manager";
@@ -19,33 +19,33 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class Game_Control extends cc.Component {
 
-    private _ui_Manager: UI_Manager = null;
-    private _reel_Control: Reel_Control = null;
+    private _uiManager: UI_Manager = null;
+    private _reelControl: Reel_Control = null;
     private _payline: Payline_Manager;
     private _bet: Bet_Manager;
     private _server: Server_Manager;
-    private _data_Player: Data_Play;
+    private _dataPlayer: Data_Play;
 
     private _reqSymbolStatus: boolean = false;
-    private _balance_Status: boolean = false;
+    private _balanceStatus: boolean = false;
 
-    async onLoad() {
+    onLoad() {
 
-        this._server = Server_Manager.getinstance_Server();
+        this._server = Server_Manager.getinstanceServer();
         this.gameConnectServer();
 
-        this._ui_Manager = this.node.getComponent(UI_Manager);
-        this._reel_Control = this.node.getComponent(Reel_Control);
+        this._uiManager = this.node.getComponent(UI_Manager);
+        this._reelControl = this.node.getComponent(Reel_Control);
 
-        this._payline = Payline_Manager.getinstance_Payline();
-        this._bet = Bet_Manager.getInstance_Bet();
+        this._payline = Payline_Manager.getinstancePayline();
+        this._bet = Bet_Manager.getInstanceBet();
     }
 
     private async gameConnectServer() {
 
-        this._data_Player = await this._server.gameGetDataPlayer(this);
-        if (this._data_Player == null) {
-            this._ui_Manager.connectServer_Error();
+        this._dataPlayer = await this._server.gameGetDataPlayer(this);
+        if (this._dataPlayer == null) {
+            this._uiManager.connectServerError();
         }
         else {
             this.waitingstart();
@@ -54,215 +54,217 @@ export default class Game_Control extends cc.Component {
 
     public waitingstart() {
 
-        this._ui_Manager.waiting.active = false;
-        this._setButton_Function();
+        this._uiManager.waiting.active = false;
+        this._setButtonFunction();
         this._setReelButton();
-        this._bet.lineBet_Start(this._data_Player.line);
-        this.updateData_TotalBet();
-        this._ui_Manager.add_ArrayButton();
+        this._bet.lineBetStart(this._dataPlayer.line);
+        this.updateDataTotalBet();
     }
 
-    private _setButton_Function() {
+    private _setButtonFunction() {
 
-        this._ui_Manager.spin_Button.node.on('click', this._spin_All_Reel, this);
-        this._ui_Manager.balanceNot_reandy.node.on('click', this._hidePanal_BalanceNotReady, this);
-        this._ui_Manager.receive_reward.node.on('click', this._hide_UI_Reward, this);
+        this._uiManager.spin_Button.node.on('click', this._spinAllReel, this);
+        this._uiManager.balanceNot_reandy.node.on('click', this._hidePanalBalanceNotEnough, this);
+        this._uiManager.receive_reward.node.on('click', this._hideRewardUI, this);
 
-        this._ui_Manager.betPrice.setBtnCallback(this._bet_Manager_Add, this._bet_Manager_Del, this);
-        this._ui_Manager.linePayout.setBtnCallback(this._lineBet_Add, this._lineBet_Del, this);
+        this._uiManager.betPrice.setBtnCallback(this._betManagerAdd, this._betManagerDel, this);
+        this._uiManager.linePayout.setBtnCallback(this._lineBetAdd, this._lineBetDel, this);
     }
 
     private _setReelButton() {
 
-        let ReelNode = this._reel_Control.reelNode;
+        let ReelNode = this._reelControl.reelNode;
         let Reel_Button: cc.Button[];
-        this._reel_Control.reel_Button = new Array(ReelNode.length);
-        Reel_Button = this._reel_Control.reel_Button;
+        this._reelControl.reelButton = new Array(ReelNode.length);
+        Reel_Button = this._reelControl.reelButton;
 
         for (let i = 0; i < ReelNode.length; i++) {
             Reel_Button[i] = ReelNode[i].getComponent(cc.Button);
-            Reel_Button[i].node.on('click', this._spin_One_Reel, this);
+            Reel_Button[i].node.on('click', this._spinOneReel, this);
         }
     }
 
-    private async _set_DefultReel(): Promise<void> {
+    private async _getIDSymbol(): Promise<void> {
 
-        await this._reel_Control._getSymbol_ID_FromServer();
+        await this._reelControl.isRequestSymbolIDFromServer();
     }
 
     private _checkBalance() {
 
-        this._ui_Manager.startPlayBonusAnimation();
-        this._balance_Status = this._balance_Update();
+        this._uiManager.startPlayBonusAnimation();
+        this._balanceStatus = this._balanceUpdate();
 
-        if (this._balance_Status == true) {
-            this._request_Symbol();
+        if (this._balanceStatus == true) {
+            this._requestSymbol();
         }
     }
 
-    private _request_Symbol() {
+    private _requestSymbol() {
         this._reqSymbolStatus = this._server.requestSlotSymbol();
     }
 
-    private _spin_All_Reel() {
+    private _spinAllReel() {
 
         if (this._reqSymbolStatus == false) {
             this._checkBalance();
         }
 
-        if (this._balance_Status == true) {
+        if (this._balanceStatus == true) {
 
             let _waitingTime = 0;
-            let _reel_Button = this._reel_Control.reel_Button;
-            this._ui_Manager.disableButton_BySpin(hideButton_Command.hideAllButton);
+            let _reel_Button = this._reelControl.reelButton;
+            this._uiManager.disableButtonBySpin(hideButton_Command.hideAllButton);
             for (let i = 0; i < _reel_Button.length; i++) {
                 if (_reel_Button[i].enabled == true) {
-                    setTimeout(() => this._spin_One_Reel(_reel_Button[i]), _waitingTime);
+                    this.scheduleOnce(()=> this._spinOneReel(_reel_Button[i]),_waitingTime);
+                    //setTimeout(() => this._spin_One_Reel(_reel_Button[i]), _waitingTime);
                     _waitingTime += 200;
                 }
             }
         }
         else {
-            this._ui_Manager.balance_ReadytoPlay(true);
+            this._uiManager.balanceReadytoPlay(true);
         }
     }
 
-    private async _spin_One_Reel(ButtonReel: cc.Button) {
+    private async _spinOneReel(ButtonReel: cc.Button) {
 
         if (this._reqSymbolStatus == false) {
             this._checkBalance();
         }
 
-        if (this._balance_Status == true) {
+        if (this._balanceStatus == true) {
 
             let getDescription = ButtonReel.node.getComponent(Reel_Description);
             let _reelNumber: number = getDescription.reel_Description;
-            this._reel_Control.reel_PlayAnimation(ButtonReel, _reelNumber);
+            this._reelControl.reelPlayAnimation(ButtonReel, _reelNumber);
 
-            this._ui_Manager.disableButton_BySpin(hideButton_Command.hideSomeButton);
+            this._uiManager.disableButtonBySpin(hideButton_Command.hideSomeButton);
 
-            await this._set_DefultReel();
+            await this._getIDSymbol();
             this._waittingTimeStopReel();
         }
         else {
-            this._ui_Manager.balance_ReadytoPlay(true);
+            this._uiManager.balanceReadytoPlay(true);
         }
     }
 
     private _waittingTimeStopReel() {
 
-        let _reelNumber: number = this._reel_Control._stack_ReelSpin[0];
-        this._stop_Once_Reel(_reelNumber);
+        let _reelNumber: number = this._reelControl.stackReelSpin[0];
+        this._stopOnceReel(_reelNumber);
     }
 
-    private _stop_Once_Reel(ReelNumber: number) {
+    private _stopOnceReel(ReelNumber: number) {
 
         let _waitTimeStopspin = 1000;
-        setTimeout(() => this._reel_Control._setPicture_Slot(ReelNumber, this), _waitTimeStopspin);
-        this._reel_Control._stack_ReelSpin.splice(0, 1);
+        //setTimeout(() => this._reel_Control.setPictureSlot(ReelNumber, this), _waitTimeStopspin);
+        this.scheduleOnce(()=> this._reelControl.setPictureSlot(ReelNumber,this),_waitTimeStopspin);
+        this._reelControl.stackReelSpin.splice(0, 1);
     }
 
     public checkPlayerReward(): void {
 
-        this._payline.checkPayLine_Reward(this._data_Player.line);
+        this._payline.checkPaylineReward(this._dataPlayer.line);
 
-        let _waitTime_CheckResult = 200;
-        setTimeout(() => this._show_Reward(), _waitTime_CheckResult);
+        let _waitTimeCheckResult = 200;
+        //setTimeout(() => this._show_Reward(), _waitTimeCheckResult);
+        this.scheduleOnce(()=> this._showReward(),_waitTimeCheckResult);
     }
 
-    private _show_Reward(): void {
+    private _showReward(): void {
 
-        let _reward = this._server.reward_Value();
-        let _reward_Text = reward_Text.reward;
+        let _reward = this._server.rewardValue();
+        let _rewardText = reward_Text.reward;
 
         if (_reward.totalPayout != 0) {
 
-            let _slotBackground = this._reel_Control.slotBonus();
-            let _payline_Bonus = this._payline.payline_Reward();
+            let _slotBackground = this._reelControl.slotBonus();
+            let _paylineBonus = this._payline.paylineReward();
 
-            for (let i = 0; i < _payline_Bonus.length; i++) {
-                this._ui_Manager.active_Line_Payline(_payline_Bonus[i]);
+            for (let i = 0; i < _paylineBonus.length; i++) {
+                this._uiManager.activeLinePayline(_paylineBonus[i]);
             }
             if (_reward.payout3 != 0) {
-                _reward_Text = reward_Text.bonus;
-                this._ui_Manager.playerGetBouns();
+                _rewardText = reward_Text.bonus;
+                this._uiManager.playerGetBouns();
             }
-            this._ui_Manager.setSlot_BG_Bonuse(_slotBackground);
-            this._ui_Manager.showPriceBonus(_reward.totalPayout, _reward_Text);
+            this._uiManager.setSlotBGBonuse(_slotBackground);
+            this._uiManager.showPriceBonus(_reward.totalPayout, _rewardText);
         }
 
         else {
-            this._reel_Control.setDefult_Blackground();
-            this._ui_Manager.startPlayBonusAnimation();
+            this._reelControl.setDefultBackground();
+            this._uiManager.startPlayBonusAnimation();
         }
 
-        this._endRound_Game();
+        this._endRoundGame();
     }
 
-    private _endRound_Game() {
+    private _endRoundGame() {
 
-        this._ui_Manager.showCurrentBalance(this._data_Player.balance);
-        this._ui_Manager.activeButton_EndSpin();
+        this._uiManager.showCurrentBalance(this._dataPlayer.balance);
+        this._uiManager.activeButtonEndSpin();
         this._reqSymbolStatus = false;
-        this._balance_Status = false;
+        this._balanceStatus = false;
         this._server.getValueRound = false;
     }
 
-    private _bet_Manager_Add() {
+    private _betManagerAdd() {
 
-        this._bet.bet_Control(this._data_Player, 1);
-        this.updateData_TotalBet();
+        this._bet.betControl(this._dataPlayer, 1);
+        this.updateDataTotalBet();
     }
 
-    private _bet_Manager_Del() {
+    private _betManagerDel() {
 
-        this._bet.bet_Control(this._data_Player, -1);
-        this.updateData_TotalBet();
+        this._bet.betControl(this._dataPlayer, -1);
+        this.updateDataTotalBet();
     }
 
-    private _lineBet_Add() {
+    private _lineBetAdd() {
 
-        this._bet.line_Control(this._data_Player, 1);
-        this._ui_Manager.show_Use_Payline(this._data_Player.line);
-        this.updateData_TotalBet();
+        this._bet.lineControl(this._dataPlayer, 1);
+        this._uiManager.showUsePayline(this._dataPlayer.line);
+        this.updateDataTotalBet();
     }
 
-    private _lineBet_Del() {
+    private _lineBetDel() {
 
-        this._bet.line_Control(this._data_Player, -1);
-        this._ui_Manager.show_Use_Payline(this._data_Player.line);
-        this.updateData_TotalBet();
+        this._bet.lineControl(this._dataPlayer, -1);
+        this._uiManager.showUsePayline(this._dataPlayer.line);
+        this.updateDataTotalBet();
     }
 
-    public updateData_TotalBet() {
+    public updateDataTotalBet() {
 
-        this._ui_Manager.showCurrentBet(this._data_Player.bet_size);
-        this._ui_Manager.showCurrentLineBet(this._data_Player.line);
-        this._ui_Manager.showCurrentBalance(this._data_Player.balance);
-        let _totalBetValue = this._data_Player.line * this._data_Player.bet_size;
-        this._data_Player.total_bet = _totalBetValue
-        this._ui_Manager.show_totalBet(this._data_Player.total_bet);
+        this._uiManager.showCurrentBet(this._dataPlayer.bet_size);
+        this._uiManager.showCurrentLineBet(this._dataPlayer.line);
+        this._uiManager.showCurrentBalance(this._dataPlayer.balance);
+        let _totalBetValue = this._dataPlayer.line * this._dataPlayer.bet_size;
+        this._dataPlayer.total_bet = _totalBetValue
+        this._uiManager.showTotalBet(this._dataPlayer.total_bet);
     }
 
-    private _balance_Update(): boolean {
+    private _balanceUpdate(): boolean {
 
-        let _balance_Ready: boolean = false;
-        let _balance = this._data_Player.balance - this._data_Player.total_bet;
+        let _balanceEnoughtoPlay: boolean = false;
+        let _balance = this._dataPlayer.balance - this._dataPlayer.total_bet;
         if (_balance >= 0) {
-            this._ui_Manager.showCurrentBalance(this._data_Player.balance);
-            _balance_Ready = true;
+            this._uiManager.showCurrentBalance(this._dataPlayer.balance);
+            _balanceEnoughtoPlay = true;
         }
-        return _balance_Ready;
+        return _balanceEnoughtoPlay;
     }
 
-    private _hidePanal_BalanceNotReady() {
+    private _hidePanalBalanceNotEnough() {
                 
-        this._ui_Manager.balance_ReadytoPlay(false);
+        this._uiManager.balanceReadytoPlay(false);
     }
 
-    private _hide_UI_Reward() {
+    private _hideRewardUI() {
 
-        this._reel_Control.setDefult_Blackground();
-        this._ui_Manager.hide_ReceiveReward();
+        this._reelControl.setDefultBackground();
+        this._uiManager.hideReceiveReward();
     }
 }

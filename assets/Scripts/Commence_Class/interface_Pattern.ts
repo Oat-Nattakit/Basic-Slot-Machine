@@ -1,7 +1,7 @@
 
 export interface bet_Order {
     
-    bet_Order: number[];
+    betOrder: number[];
 }
 
 export interface slot_DataPattern {

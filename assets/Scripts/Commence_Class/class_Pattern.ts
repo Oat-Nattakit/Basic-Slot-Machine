@@ -3,10 +3,10 @@ import { bet_Order, Payout_Price, SlotPayLine, slotSymbol, slot_DataPattern } fr
 
 export class CreateBet implements bet_Order {
 
-    public bet_Order: number[];
+    public betOrder: number[];
 
     constructor() {
-        this.bet_Order = [Bet_Price.bet_Price1, Bet_Price.bet_Price2, Bet_Price.bet_Price3, Bet_Price.bet_Price4, Bet_Price.bet_Price5, Bet_Price.bet_Price6];
+        this.betOrder = [Bet_Price.bet_Price1, Bet_Price.bet_Price2, Bet_Price.bet_Price3, Bet_Price.bet_Price4, Bet_Price.bet_Price5, Bet_Price.bet_Price6];
     }
 }
 

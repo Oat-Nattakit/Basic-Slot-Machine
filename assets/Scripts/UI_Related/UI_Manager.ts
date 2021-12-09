@@ -54,53 +54,55 @@ export default class UI_Manager extends cc.Component {
 
     private _timer: ReturnType<typeof setTimeout>;
 
-    private _listButton: cc.Button[] = new Array();
+    @property(cc.Node)
+    private listButton: cc.Button[] = new Array();
 
-    private _bonuse_ScaleUp: cc.Tween[] = [];
-    private _stack_BackgroundNode: cc.Node[] = null;
+
+    private _bonuseScaleUp: cc.Tween[] = [];
+    private _stackBackgroundNode: cc.Node[] = null;
     private _stackReel: number = 0;
 
-    public add_ArrayButton() {
+    /*public add_ArrayButton() {
 
-        this._listButton.push(this.spin_Button);
-        this._listButton.push(this.betPrice.add_Button);
-        this._listButton.push(this.betPrice.del_Button);
-        this._listButton.push(this.linePayout.add_Button);
-        this._listButton.push(this.linePayout.del_Button);
-    }
+        this.listButton.push(this.spin_Button);
+        this.listButton.push(this.betPrice.add_Button);
+        this.listButton.push(this.betPrice.del_Button);
+        this.listButton.push(this.linePayout.add_Button);
+        this.listButton.push(this.linePayout.del_Button);
+    }*/
 
     public startPlayBonusAnimation() {
 
-        this._bonuse_ScaleUp = null;
+        this._bonuseScaleUp = null;
         this.bonus_Animation.node.active = false;
         this.reward_Node.active = false;
         this.bonus_Animation.animation = animation_Command.reset_Animation;
-        this._unactive_Line_Payline();
+        this._unactiveLinePayline();
         clearTimeout(this._timer);
     }
 
-    public disableButton_BySpin(_currentRound: number = 1) {
+    public disableButtonBySpin(_currentRound: number = 1) {
 
         this._stackReel += _currentRound;
         let _reel_Range = 3;
 
-        for (let i = 0; i < this._listButton.length; i++) {
+        for (let i = 0; i < this.listButton.length; i++) {
 
             if (this._stackReel >= _reel_Range) {
-                this._listButton[i].interactable = false;
+                this.listButton[i].interactable = false;
             }
             else {
                 if (i > 0) {
-                    this._listButton[i].interactable = false;
+                    this.listButton[i].interactable = false;
                 }
             }
         }
     }
 
-    public activeButton_EndSpin() {
+    public activeButtonEndSpin() {
         this._stackReel = 0;
-        for (let i = 0; i < this._listButton.length; i++) {
-            this._listButton[i].interactable = true;
+        for (let i = 0; i < this.listButton.length; i++) {
+            this.listButton[i].interactable = true;
         }
     }
 
@@ -120,76 +122,76 @@ export default class UI_Manager extends cc.Component {
         this.bonus_Text.string = _text + _reward.toString();
     }
 
-    public connectServer_Error() {
+    public connectServerError() {
         this.connectGamestatus.string = "Connect Server Error";
     }
 
-    private _unactive_Line_Payline() {
+    private _unactiveLinePayline() {
 
         for (let i = 0; i < this.line_Payline.length; i++) {
             this.line_Payline[i].active = false;
         }
     }
 
-    public show_Use_Payline(_currentLineUse: number) {
+    public showUsePayline(_currentLineUse: number) {
 
-        this._unactive_Line_Payline();
+        this._unactiveLinePayline();
         for (let i = _currentLineUse - 1; i >= 0; i--) {
-            this.active_Line_Payline(i);
+            this.activeLinePayline(i);
         }
     }
 
-    public active_Line_Payline(_payline_number: number) {
+    public activeLinePayline(_paylineNumber: number) {
 
-        this.line_Payline[_payline_number].active = true;
+        this.line_Payline[_paylineNumber].active = true;
     }
 
-    public showCurrentBalance(_currnet_Balance: number) {
+    public showCurrentBalance(_currnetBalance: number) {
 
-        this.balance_Text.string = _currnet_Balance.toString();
+        this.balance_Text.string = _currnetBalance.toString();
     }
 
-    public showCurrentBet(_current_Bet: number) {
+    public showCurrentBet(_currentBet: number) {
 
-        this.betPrice.showValue_Text.string = _current_Bet.toString();
+        this.betPrice.showValue_Text.string = _currentBet.toString();
     }
 
-    public showCurrentLineBet(_current_LineBet: number) {
+    public showCurrentLineBet(_currentLineBet: number) {
 
-        this.linePayout.showValue_Text.string = _current_LineBet.toString();
+        this.linePayout.showValue_Text.string = _currentLineBet.toString();
     }
 
-    public show_totalBet(_total_BetPrice: number) {
-        this.totalBet_Text.string = _total_BetPrice.toString();
+    public showTotalBet(_totalBetPrice: number) {
+        this.totalBet_Text.string = _totalBetPrice.toString();
     }
 
-    public setSlot_BG_Bonuse(_background_Node: cc.Node[]) {
+    public setSlotBGBonuse(_backgroundNode: cc.Node[]) {
 
-        this._bonuse_ScaleUp = new Array();
-        this._stack_BackgroundNode = _background_Node;
+        this._bonuseScaleUp = new Array();
+        this._stackBackgroundNode = _backgroundNode;
 
-        for (let i = 0; i < _background_Node.length; i++) {
+        for (let i = 0; i < _backgroundNode.length; i++) {
 
             let _colorGold = new cc.Color(255, 207, 0)
-            _background_Node[i].color = _colorGold;
-            _background_Node[i].children[0].opacity = 255;
+            _backgroundNode[i].color = _colorGold;
+            _backgroundNode[i].children[0].opacity = 255;
 
             let _scalUp = cc.tween().to(0.3, { scale: 1.1 }, { easing: animation_Command.easing_Playtype });
             let _scalDown = cc.tween().to(0.3, { scale: 1 }, { easing: animation_Command.easing_Playtype });
-            let _play = cc.tween(_background_Node[i]).sequence(_scalUp, _scalDown);
-            this._bonuse_ScaleUp.push(cc.tween(_background_Node[i]).repeat(5, _play).start());
+            let _play = cc.tween(_backgroundNode[i]).sequence(_scalUp, _scalDown);
+            this._bonuseScaleUp.push(cc.tween(_backgroundNode[i]).repeat(5, _play).start());
         }
     }
 
-    public balance_ReadytoPlay(_playStatus: boolean) {
+    public balanceReadytoPlay(_playStatus: boolean) {
 
         this.balanceNot_reandy.node.getParent().active = _playStatus;
     }
 
-    public hide_ReceiveReward() {
+    public hideReceiveReward() {
 
         this.receive_reward.node.getParent().active = false;
-        if (this._bonuse_ScaleUp != null) {
+        if (this._bonuseScaleUp != null) {
             this._stopAllTween();
         }
         this.startPlayBonusAnimation();
@@ -197,9 +199,9 @@ export default class UI_Manager extends cc.Component {
 
     private _stopAllTween() {
 
-        for (let i = 0; i < this._bonuse_ScaleUp.length; i++) {
-            this._bonuse_ScaleUp[i].stop();
-            cc.tween(this._stack_BackgroundNode[i]).to(0.1, { scale: 1 }, { easing: animation_Command.easing_Playtype }).start();
+        for (let i = 0; i < this._bonuseScaleUp.length; i++) {
+            this._bonuseScaleUp[i].stop();
+            cc.tween(this._stackBackgroundNode[i]).to(0.1, { scale: 1 }, { easing: animation_Command.easing_Playtype }).start();
         }
 
     }

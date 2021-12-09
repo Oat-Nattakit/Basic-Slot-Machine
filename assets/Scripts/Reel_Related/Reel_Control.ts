@@ -25,7 +25,7 @@ export default class Reel_Control extends cc.Component {
     @property(cc.Animation)
     private reelAnimation: cc.Animation[] = new Array();
 
-    public reel_Button: cc.Button[];
+    public reelButton: cc.Button[];
 
     @property(cc.SpriteFrame)
     private picture_Symbol: cc.SpriteFrame[] = new Array();
@@ -33,17 +33,17 @@ export default class Reel_Control extends cc.Component {
     private _payline: Payline_Manager;
     private _server: Server_Manager;
 
-    private _slotSymbol_ID: number[] = new Array();
-    private _stack_ReelStop: boolean[] = new Array();
-    public _stack_ReelSpin: number[] = new Array();
+    private _slotSymbolID: number[] = new Array();
+    private _stackReelStop: boolean[] = new Array();
+    public stackReelSpin: number[] = new Array();
 
     start() {
 
-        this._payline = Payline_Manager.getinstance_Payline();
-        this._server = Server_Manager.getinstance_Server();
+        this._payline = Payline_Manager.getinstancePayline();
+        this._server = Server_Manager.getinstanceServer();
 
         this._getComponentInNode();
-        this._preGame_RandomPicture();
+        this._preGameRandomPicture();
     }
 
     private _getComponentInNode() {
@@ -56,60 +56,60 @@ export default class Reel_Control extends cc.Component {
         }
     }
 
-    public setDefult_Blackground() {
+    public setDefultBackground() {
 
         for (let i = 0; i < this.slotNode.length; i++) {
-            let _parentBg_ = this.slotNode[i].getParent();
+            let _parentBg = this.slotNode[i].getParent();
             this.slotNode[i].opacity = 255;
-            _parentBg_.color = cc.Color.BLACK;
+            _parentBg.color = cc.Color.BLACK;
         }
     }
 
-    private _preGame_SetSymbolID(): number[] {
+    private _preGameSetSymbolID(): number[] {
 
         let _preID: number[] = new Array();
         for (let i = 0; i < this.slotNode.length; i++) {
-            _preID.push(Math.floor(Math.random() * 5));
+            _preID.push(Math.floor(Math.random() * this.picture_Symbol.length));
         }
         return _preID;
     }
 
-    private _preGame_RandomPicture() {
+    private _preGameRandomPicture() {
 
-        this._slotSymbol_ID = this._preGame_SetSymbolID();
+        this._slotSymbolID = this._preGameSetSymbolID();
 
         for (let i = 0; i < this.slotNode.length; i++) {
             this.slotNode[i].scale = 0.9;
             let _getSprite = this.slotNode[i].getComponent(cc.Sprite);
-            _getSprite.spriteFrame = this.picture_Symbol[this._slotSymbol_ID[i]];
+            _getSprite.spriteFrame = this.picture_Symbol[this._slotSymbolID[i]];
         }
     }
 
-    public async _getSymbol_ID_FromServer(): Promise<void> {
+    public async isRequestSymbolIDFromServer(): Promise<void> {
 
         return new Promise(resolve => {
             setTimeout(() => {
                 resolve(this.getDataslot())
-            }, 1000)
+            });
         });
     }
 
     private getDataslot() {
 
-        this._slotSymbol_ID = this._server.slot_GetSymbolValue();
-        this._payline.managePayline(this._slotSymbol_ID);
+        this._slotSymbolID = this._server.slotGetSymbolValue();
+        this._payline.managePayline(this._slotSymbolID);
     }
 
-    public reel_PlayAnimation(_button_Reel: cc.Button, _reelNumber: number) {
+    public reelPlayAnimation(_button_Reel: cc.Button, _reelNumber: number) {
 
         this.reelNode[_reelNumber].active = false;
         this.reelAnimation[_reelNumber].node.active = true;
         this.reelAnimation[_reelNumber].play();
         _button_Reel.enabled = false;
-        this._stack_ReelSpin.push(_reelNumber);
+        this.stackReelSpin.push(_reelNumber);
     }
 
-    public _setPicture_Slot(_reelNumber: number, Game_Con: Game_Control) {
+    public setPictureSlot(_reelNumber: number, _gameControl: Game_Control) {
 
         this.reelAnimation[_reelNumber].stop();
         this.reelAnimation[_reelNumber].node.active = false;
@@ -124,9 +124,9 @@ export default class Reel_Control extends cc.Component {
         else if (_reelNumber == 2) {
             this._roundShowSlot(SlotLine.slot_6, this.slotNode.length);
         }
-        if (this._stack_ReelStop.length == this.reelNode.length) {
-            Game_Con.checkPlayerReward();
-            this._reset_Slot();
+        if (this._stackReelStop.length == this.reelNode.length) {
+            _gameControl.checkPlayerReward();
+            this._resetSlot();
         }
        
     }
@@ -136,30 +136,30 @@ export default class Reel_Control extends cc.Component {
         for (let i = _minlist; i < _maxlist; i++) {
             let _getSprite = this.slotNode[i].getComponent(cc.Sprite);
             this.slotNode[i].opacity = 120;
-            _getSprite.spriteFrame = this.picture_Symbol[this._slotSymbol_ID[i]];
+            _getSprite.spriteFrame = this.picture_Symbol[this._slotSymbolID[i]];
         }
-        this._stack_ReelStop.push(true);        
+        this._stackReelStop.push(true);        
     }
 
-    private _reset_Slot() {
+    private _resetSlot() {
 
-        this._stack_ReelStop = new Array();
-        this._stack_ReelSpin = new Array();
+        this._stackReelStop = new Array();
+        this.stackReelSpin = new Array();
 
         for (let i = 0; i < this.reelNode.length; i++) {
-            this.reel_Button[i].enabled = true;
+            this.reelButton[i].enabled = true;
         }
     }
 
     public slotBonus(): cc.Node[] {
 
-        let _payline_BackGround = this._payline.positionBonuse();
-        let _background_list: cc.Node[] = new Array();
+        let _paylineBackground = this._payline.positionBonuse();
+        let _backgroundList: cc.Node[] = new Array();
 
-        for (let i = 0; i < _payline_BackGround.length; i++) {
-            let _parentBackground = this.slotNode[_payline_BackGround[i]].getParent();
-            _background_list.push(_parentBackground);
+        for (let i = 0; i < _paylineBackground.length; i++) {
+            let _parentBackground = this.slotNode[_paylineBackground[i]].getParent();
+            _backgroundList.push(_parentBackground);
         }
-        return _background_list;
+        return _backgroundList;
     }
 }

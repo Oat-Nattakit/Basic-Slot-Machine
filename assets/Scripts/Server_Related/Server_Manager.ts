@@ -15,22 +15,22 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export class Server_Manager {
 
-    private static _insServer_Manager: Server_Manager = new Server_Manager();   
+    private static _insServerManager: Server_Manager = new Server_Manager();
 
-    private _data_Player: Data_Play;
+    private _dataPlayer: Data_Play;
     private _reward: Player_Reward;
     private _gameCon: Game_Control;
-    
-    private _result_symbol: number[] = new Array(9);
+
+    private _resultSymbol: number[] = new Array(9);
     public getValueRound: boolean = false;
     private socket;
 
     constructor() {
-        Server_Manager._insServer_Manager = this;
+        Server_Manager._insServerManager = this;
     }
 
-    public static getinstance_Server(): Server_Manager {
-        return Server_Manager._insServer_Manager;
+    public static getinstanceServer(): Server_Manager {
+        return Server_Manager._insServerManager;
     }
 
     private gameConnectServer() {
@@ -66,29 +66,32 @@ export class Server_Manager {
         await this.gameConnectServer();
         await this.getStartDataPlayer();
 
-        return new Promise((resolve, reject) => {
+        /*return new Promise((resolve, reject) => {
             setTimeout(() => {
-                resolve(this._data_Player);               
-            }, 1000);
+                resolve(this._data_Player);
+            });
+        });*/
+        return this._dataPlayer;
+    }
+
+    private async getStartDataPlayer(): Promise<Data_Play> {
+        return new Promise((resolve) => {
+            this.socket.on(server_Command.prepair_Data, (param: IGameDataResponse) => {
+                const playerData = param.player_data;
+
+                this._dataPlayer = new Data_Play(playerData);
+                resolve(this._dataPlayer);
+            });
         });
     }
 
-    private getStartDataPlayer() {
+    public requestSlotSymbol(): boolean {
 
-        this.socket.on(server_Command.prepair_Data, (param: IGameDataResponse) => {
-            const playerData = param.player_data;     
-
-            this._data_Player = new Data_Play(playerData);            
-        });
-    }   
-
-    public requestSlotSymbol() : boolean{    
-        
         const paramiter: Data_Play = {
-            balance: this._data_Player.balance,
-            bet_size: this._data_Player.bet_size,
-            line: this._data_Player.line,
-            total_bet: this._data_Player.total_bet
+            balance: this._dataPlayer.balance,
+            bet_size: this._dataPlayer.bet_size,
+            line: this._dataPlayer.line,
+            total_bet: this._dataPlayer.total_bet
         };
 
         this.socket.emit(
@@ -96,24 +99,24 @@ export class Server_Manager {
             paramiter,
             (response: IGameResponseSpin) => {
                 let dataPlayer = response.player_data;
-                this._data_Player.balance = this._data_Player.balance - this._data_Player.total_bet;
+                this._dataPlayer.balance = this._dataPlayer.balance - this._dataPlayer.total_bet;
 
                 let GetData: slot_SymbolID = new slot_SymbolID(dataPlayer);
-                this._result_symbol = GetData.bet_array;                
+                this._resultSymbol = GetData.bet_array;
 
-                this._reward = new Player_Reward(GetData.pay_out2, GetData.pay_out3,GetData.total_payout);
-                this._gameCon.updateData_TotalBet();
-                this._data_Player.balance = GetData.balance;
+                this._reward = new Player_Reward(GetData.pay_out2, GetData.pay_out3, GetData.total_payout);
+                this._gameCon.updateDataTotalBet();
+                this._dataPlayer.balance = GetData.balance;
             });
         return true;
-    } 
-    
-    public slot_GetSymbolValue() : number[]{
+    }
 
-        return this._result_symbol;       
-    }  
+    public slotGetSymbolValue(): number[] {
 
-    public reward_Value() {
+        return this._resultSymbol;
+    }
+
+    public rewardValue() {
 
         return this._reward;
     }
