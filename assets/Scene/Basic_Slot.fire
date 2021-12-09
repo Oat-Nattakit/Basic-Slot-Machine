@@ -2125,7 +2125,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Del_Del",
+    "_name": "Del_Bet",
     "_objFlags": 0,
     "_parent": {
       "__id__": 32
@@ -13291,6 +13291,23 @@
       },
       {
         "__id__": 243
+      }
+    ],
+    "listButton": [
+      {
+        "__id__": 9
+      },
+      {
+        "__id__": 36
+      },
+      {
+        "__id__": 44
+      },
+      {
+        "__id__": 59
+      },
+      {
+        "__id__": 67
       }
     ],
     "_id": "6czEt/7OBPpKzSMNkYy6AQ"

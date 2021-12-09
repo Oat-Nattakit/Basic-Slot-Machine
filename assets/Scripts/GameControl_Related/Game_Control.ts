@@ -28,8 +28,6 @@ export default class Game_Control extends cc.Component {
     private _dataPlayer: Data_Play;
     private _reward: Player_Reward;
 
-    private _resultSymbol: number[] = new Array(9);
-
     private _reqSymbolStatus: boolean = false;
     private _isBalanceEnoughToPlay: boolean = false;
 
@@ -130,7 +128,7 @@ export default class Game_Control extends cc.Component {
         this.updateDataTotalBet();
         this._dataPlayer.balance = getResultData.balance;
     }
-    
+
     private _spinAllReel() {
 
         if (this._reqSymbolStatus == false) {
@@ -207,12 +205,9 @@ export default class Game_Control extends cc.Component {
     }
 
     private _showReward(): void {
-
-        //let _reward = this._server.rewardValue();
-        let _reward = this._reward;
         let _rewardText = reward_Text.reward;
 
-        if (_reward.totalPayout != 0) {
+        if (this._reward.totalPayout != 0) {
 
             let _slotBackground = this._reelControl.slotBonus();
             let _paylineBonus = this._payline.paylineReward();
@@ -220,12 +215,12 @@ export default class Game_Control extends cc.Component {
             for (let i = 0; i < _paylineBonus.length; i++) {
                 this._uiManager.activeLinePayline(_paylineBonus[i]);
             }
-            if (_reward.payout3 != 0) {
+            if (this._reward.payout3 != 0) {
                 _rewardText = reward_Text.bonus;
                 this._uiManager.playerGetBouns();
             }
             this._uiManager.setSlotBGBonuse(_slotBackground);
-            this._uiManager.showPriceBonus(_reward.totalPayout, _rewardText);
+            this._uiManager.showPriceBonus(this._reward.totalPayout, _rewardText);
         }
 
         else {

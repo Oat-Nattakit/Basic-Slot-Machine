@@ -31,7 +31,7 @@ export default class Reel_Control extends cc.Component {
     private picture_Symbol: cc.SpriteFrame[] = new Array();
 
     private _payline: Payline_Manager;
-    private _server: Server_Manager;
+    //private _server: Server_Manager;
 
     private _slotSymbolID: number[] = new Array();
     private _stackReelStop: boolean[] = new Array();
@@ -40,7 +40,7 @@ export default class Reel_Control extends cc.Component {
     start() {
 
         this._payline = Payline_Manager.getinstancePayline();
-        this._server = Server_Manager.getinstanceServer();
+        //this._server = Server_Manager.getinstanceServer();
 
         this._getComponentInNode();
         this._preGameRandomPicture();
@@ -89,7 +89,7 @@ export default class Reel_Control extends cc.Component {
 
         return new Promise(resolve => {
             setTimeout(() => {
-                resolve(this.getDataslot())
+                resolve(this._getDataslot())
             });
         });
     }
@@ -98,7 +98,7 @@ export default class Reel_Control extends cc.Component {
         this._slotSymbolID = _symbolID;
     }
 
-    private getDataslot() {
+    private _getDataslot() {
 
         //this._slotSymbolID = this._server.slotGetSymbolValue();
         //this._slotSymbolID = 

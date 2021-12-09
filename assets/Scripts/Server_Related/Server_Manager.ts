@@ -17,11 +17,11 @@ export class Server_Manager {
 
     private static _insServerManager: Server_Manager = new Server_Manager();
 
-    private _dataPlayer: Data_Play;
+    /*private _dataPlayer: Data_Play;
     private _reward: Player_Reward;
     private _gameCon: Game_Control;
 
-    private _resultSymbol: number[] = new Array(9);
+    private _resultSymbol: number[] = new Array(9);*/
     private socket;
 
     constructor() {
@@ -57,7 +57,7 @@ export class Server_Manager {
             console.log('connect_error', error);
         });
 
-        this._gameCon = game;
+       // this._gameCon = game;
     }
 
     public async gameGetDataPlayer(): Promise<Data_Play> {
@@ -77,9 +77,9 @@ export class Server_Manager {
             this.socket.on(server_Command.prepair_Data, (param: IGameDataResponse) => {
                 const playerData = param.player_data;
 
-                this._dataPlayer = new Data_Play(playerData);
+                let dataPlayer = new Data_Play(playerData);
                 this.socket.off(server_Command.prepair_Data);
-                resolve(this._dataPlayer);
+                resolve(dataPlayer);
             });
         });
 
@@ -99,16 +99,16 @@ export class Server_Manager {
 
     public requestSlotSymbol(_currentDataPlay: Data_Play): slot_DataPattern {
 
-        let dataReelSymbol : slot_DataPattern = null;
+        let dataReelSymbol: slot_DataPattern = null;
         this.socket.emit(
             server_Command.request_Data,
             _currentDataPlay,
             (response: IGameResponseSpin) => {
-                    if(response.error == "false"){                    
-                    dataReelSymbol = response.player_data;                    
-                    }
+                if (response.error == "false") {
+                    dataReelSymbol = response.player_data;
+                }
             });
         return dataReelSymbol;
-    }    
+    }
 }
 
