@@ -16,7 +16,7 @@ export class Payline_Manager {
     private _slotNumberlist: number[] = null;
     private _payline: CreatePayLine = null;
 
-    public paylineList = new Array();
+    public paylineList : number[][] = new Array();
 
     private _bonusPosition: number[];
 
@@ -53,8 +53,14 @@ export class Payline_Manager {
 
         for (let i = 0; i < _lineBet; i++) {
 
-            let _checkSymbolFirstCouple = this._payoutCheck(this._slotNumberlist[this.paylineList[i][Reel_Number.reel_1]], this._slotNumberlist[this.paylineList[i][Reel_Number.reel_2]]);
-            let _checkSymbolSecCouple = this._payoutCheck(this._slotNumberlist[this.paylineList[i][Reel_Number.reel_2]], this._slotNumberlist[this.paylineList[i][Reel_Number.reel_3]]);
+            let reelRow = this.paylineList[i];
+
+            let idSymbolCol1 = this._slotNumberlist[reelRow[Reel_Number.reel_1]];
+            let idSymbolCol2 = this._slotNumberlist[reelRow[Reel_Number.reel_2]];
+            let idSymbolCol3 = this._slotNumberlist[reelRow[Reel_Number.reel_3]];
+
+            let _checkSymbolFirstCouple = this._payoutCheck(idSymbolCol1,idSymbolCol2);
+            let _checkSymbolSecCouple = this._payoutCheck(idSymbolCol2,idSymbolCol3);
 
             if (_checkSymbolFirstCouple == true && _checkSymbolSecCouple == true) {
 
@@ -67,13 +73,8 @@ export class Payline_Manager {
         }
     }
 
-    private _payoutCheck(_idSymbolPos1: number, _idSymbolPos2: number) {
-
-        let _payoutHitReward: boolean = false;
-        if (_idSymbolPos1 == _idSymbolPos2) {
-            _payoutHitReward = true;
-        }
-        return _payoutHitReward
+    private _payoutCheck(_idSymbolPos1: number, _idSymbolPos2: number) : boolean {        
+        return _idSymbolPos1 == _idSymbolPos2;
     }
 
     private _collectBonusPayout2(_linePayout: number) {

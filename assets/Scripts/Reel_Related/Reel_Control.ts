@@ -94,9 +94,14 @@ export default class Reel_Control extends cc.Component {
         });
     }
 
+    public set slotSymbolData(_symbolID : number[]){
+        this._slotSymbolID = _symbolID;
+    }
+
     private getDataslot() {
 
-        this._slotSymbolID = this._server.slotGetSymbolValue();
+        //this._slotSymbolID = this._server.slotGetSymbolValue();
+        //this._slotSymbolID = 
         this._payline.managePayline(this._slotSymbolID);
     }
 
@@ -109,7 +114,11 @@ export default class Reel_Control extends cc.Component {
         this.stackReelSpin.push(_reelNumber);
     }
 
-    public setPictureSlot(_reelNumber: number, _gameControl: Game_Control) {
+    public get isSpinComplete(): boolean {
+        return this._stackReelStop.length == this.reelNode.length;
+    }
+
+    public setPictureSlot(_reelNumber: number) {
 
         this.reelAnimation[_reelNumber].stop();
         this.reelAnimation[_reelNumber].node.active = false;
@@ -124,11 +133,6 @@ export default class Reel_Control extends cc.Component {
         else if (_reelNumber == 2) {
             this._roundShowSlot(SlotLine.slot_6, this.slotNode.length);
         }
-        if (this._stackReelStop.length == this.reelNode.length) {
-            _gameControl.checkPlayerReward();
-            this._resetSlot();
-        }
-       
     }
 
     private _roundShowSlot(_minlist: number, _maxlist: number) {
@@ -138,10 +142,10 @@ export default class Reel_Control extends cc.Component {
             this.slotNode[i].opacity = 120;
             _getSprite.spriteFrame = this.picture_Symbol[this._slotSymbolID[i]];
         }
-        this._stackReelStop.push(true);        
+        this._stackReelStop.push(true);
     }
 
-    private _resetSlot() {
+    public resetSlot() {
 
         this._stackReelStop = new Array();
         this.stackReelSpin = new Array();

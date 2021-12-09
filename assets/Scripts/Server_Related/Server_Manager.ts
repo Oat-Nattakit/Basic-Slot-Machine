@@ -5,9 +5,9 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { Data_Play, Player_Reward, slot_SymbolID } from "../Commence_Class/class_Pattern";
+import { Data_Play, Player_Reward, IResultReelSpin } from "../Commence_Class/class_Pattern";
 import { server_Command } from "../Commence_Class/enum_Pattern";
-import { IGameDataResponse, IGameResponseSpin } from "../Commence_Class/interface_Pattern";
+import { IGameDataResponse, IGameResponseSpin, slot_DataPattern } from "../Commence_Class/interface_Pattern";
 import Game_Control from "../GameControl_Related/Game_Control";
 
 const { ccclass, property } = cc._decorator;
@@ -22,7 +22,6 @@ export class Server_Manager {
     private _gameCon: Game_Control;
 
     private _resultSymbol: number[] = new Array(9);
-    public getValueRound: boolean = false;
     private socket;
 
     constructor() {
@@ -33,7 +32,7 @@ export class Server_Manager {
         return Server_Manager._insServerManager;
     }
 
-    private gameConnectServer() {
+    public gameConnectServer(game: Game_Control) {
 
         //let serverURL = "http://10.5.70.38:3310/socket.io";
         let serverURL = "http://10.0.2.141:3310/socket.io";
@@ -57,67 +56,59 @@ export class Server_Manager {
         this.socket.on(server_Command.server_Connect_Error, (error) => {
             console.log('connect_error', error);
         });
-    }
-
-    public async gameGetDataPlayer(game: Game_Control): Promise<Data_Play> {
 
         this._gameCon = game;
+    }
 
-        await this.gameConnectServer();
-        await this.getStartDataPlayer();
+    public async gameGetDataPlayer(): Promise<Data_Play> {
+
+        //this._gameCon = game;
+        //await this.gameConnectServer();
+
+        //let dataPlay = await this.getStartDataPlayer();
 
         /*return new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve(this._data_Player);
             });
         });*/
-        return this._dataPlayer;
-    }
-
-    private async getStartDataPlayer(): Promise<Data_Play> {
-        return new Promise((resolve) => {
+        //return dataPlay;//
+        return new Promise((resolve, reject) => {
             this.socket.on(server_Command.prepair_Data, (param: IGameDataResponse) => {
                 const playerData = param.player_data;
 
                 this._dataPlayer = new Data_Play(playerData);
+                this.socket.off(server_Command.prepair_Data);
                 resolve(this._dataPlayer);
             });
         });
+
+
     }
+    /*private async getStartDataPlayer(): Promise<Data_Play> {
+        return new Promise((resolve) => {
+            this.socket.on(server_Command.prepair_Data, (param: IGameDataResponse) => {
+                const playerData = param.player_data;
 
-    public requestSlotSymbol(): boolean {
+                //this._dataPlayer = new Data_Play(playerData);
+                let dataPlay = new Data_Play(playerData);
+                resolve(dataPlay);
+            });
+        });
+    }*/
 
-        const paramiter: Data_Play = {
-            balance: this._dataPlayer.balance,
-            bet_size: this._dataPlayer.bet_size,
-            line: this._dataPlayer.line,
-            total_bet: this._dataPlayer.total_bet
-        };
+    public requestSlotSymbol(_currentDataPlay: Data_Play): slot_DataPattern {
 
+        let dataReelSymbol : slot_DataPattern = null;
         this.socket.emit(
             server_Command.request_Data,
-            paramiter,
+            _currentDataPlay,
             (response: IGameResponseSpin) => {
-                let dataPlayer = response.player_data;
-                this._dataPlayer.balance = this._dataPlayer.balance - this._dataPlayer.total_bet;
-
-                let GetData: slot_SymbolID = new slot_SymbolID(dataPlayer);
-                this._resultSymbol = GetData.bet_array;
-
-                this._reward = new Player_Reward(GetData.pay_out2, GetData.pay_out3, GetData.total_payout);
-                this._gameCon.updateDataTotalBet();
-                this._dataPlayer.balance = GetData.balance;
+                    if(response.error == "false"){                    
+                    dataReelSymbol = response.player_data;                    
+                    }
             });
-        return true;
-    }
-
-    public slotGetSymbolValue(): number[] {
-
-        return this._resultSymbol;
-    }
-
-    public rewardValue() {
-
-        return this._reward;
-    }
+        return dataReelSymbol;
+    }    
 }
+

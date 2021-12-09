@@ -10,7 +10,7 @@ export class CreateBet implements bet_Order {
     }
 }
 
-export class slot_SymbolID implements slotSymbol {
+export class IResultReelSpin implements slotSymbol {
 
     balance: number;
     bet_array: number[] = new Array();
